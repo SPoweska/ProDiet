@@ -1,0 +1,42 @@
+﻿@page "/register"
+@inject  Domain.Interfaces.IUserRepository iUserRepository
+<h3>RegistrationPage</h3>
+@if (_user != null)
+{
+    <EditForm Model="_user" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <div class="form-group">
+        <label for="Email">Name</label>
+        <InputText type="email" id="Email" @bind-Value="_user.Email" placeholder="Email" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="FirstName">Name</label>
+        <InputText id="FirstName" @bind-Value="_user.FristName" placeholder="First Name" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="LastName">Name</label>
+        <InputText id="LastName" @bind-Value="_user.LastName" placeholder="Last Name" class="form-control"></InputText>
+    </div>    
+    <div class="form-group">
+        <label for="Password">Name</label>
+        <InputText type="password" id="Password" @bind-Value="_user.Password" placeholder="Password" class="form-control"></InputText>
+    </div>       
+    <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+}
+
+@code {
+    private User _user;
+    protected override void OnInitialized()
+    {
+        _user = new User();
+        base.OnInitialized();
+    }
+
+    private void OnValidSubmit()
+    {
+        iUserRepository.CreateUser(_user);
+    }
+
+}
