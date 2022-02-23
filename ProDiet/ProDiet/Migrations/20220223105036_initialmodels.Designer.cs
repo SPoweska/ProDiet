@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220223105036_initialmodels")]
+    partial class initialmodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,16 +269,16 @@ namespace ProDiet.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<float?>("BMI")
+                    b.Property<float>("BMI")
                         .HasColumnType("real");
 
-                    b.Property<float?>("BMR")
+                    b.Property<float>("BMR")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("Birth_Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<float?>("CPM")
+                    b.Property<float>("CPM")
                         .HasColumnType("real");
 
                     b.Property<string>("Email")
@@ -293,26 +295,22 @@ namespace ProDiet.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InterviewId")
+                    b.Property<int>("InterviewId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("PAL")
+                    b.Property<float>("PAL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("PPM")
+                    b.Property<float>("PPM")
                         .HasColumnType("real");
 
                     b.Property<string>("Phone_Number")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserDieteticianId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
@@ -322,8 +320,6 @@ namespace ProDiet.Migrations
                     b.HasIndex("GenderId");
 
                     b.HasIndex("InterviewId");
-
-                    b.HasIndex("UserDieteticianId");
 
                     b.ToTable("Patients");
                 });
@@ -402,19 +398,13 @@ namespace ProDiet.Migrations
 
                     b.HasOne("ProDiet.Models.Interview", "Interview")
                         .WithMany()
-                        .HasForeignKey("InterviewId");
-
-                    b.HasOne("ProDiet.Models.User", "UserDietetician")
-                        .WithMany()
-                        .HasForeignKey("UserDieteticianId")
+                        .HasForeignKey("InterviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Gender");
 
                     b.Navigation("Interview");
-
-                    b.Navigation("UserDietetician");
                 });
 #pragma warning restore 612, 618
         }
