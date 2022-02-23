@@ -2,7 +2,7 @@
 
 namespace ProDiet.Models
 {
-    public class Patient
+    public class Patient:AuditableEntity
     {
         [Key]
         public int Id { get; set; }
@@ -40,6 +40,7 @@ namespace ProDiet.Models
 
         //public List<DietPlan> DietPlans { get; set; }
         [Required]
+
         public User UserDietetician { get; set; }
         //public ApplicationUser UserPatient { get; set; }
 

@@ -5,8 +5,8 @@
 @using ProDiet.Data
 @inject WeatherForecastService ForecastService
 
-<AuthorizeView>
-    <Authorized>
+<PatientizeView>
+    <Patientized>
         <h1>Weather forecast</h1>
 
         <p>This component demonstrates fetching data from a service.</p>
@@ -39,11 +39,11 @@
                 </tbody>
             </table>
         }
-    </Authorized>
-    <NotAuthorized>
+    </Patientized>
+    <NotPatientized>
         <div>You are not allowed here</div>
-    </NotAuthorized>
-</AuthorizeView>
+    </NotPatientized>
+</PatientizeView>
 @code {
     private WeatherForecast[]? forecasts;
 

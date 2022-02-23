@@ -1,0 +1,42 @@
+﻿@page "/patients"
+@using ProDiet.Services
+@using Microsoft.AspNetCore.Components
+@using ProDiet.Models
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Http;
+@inject UserManager<IdentityUser> userManager;
+@inject IPatientStoresService iPatientStoresService;
+@inject IHttpContextAccessor httpContextAccessor
+
+<EditForm Model="_patient" OnValidSubmit="OnValidSubmit">
+    @*<DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>*@
+    <div class="form-group">
+        <label for="FirstName">FirstName</label>
+        <InputText id="FirstName" @bind-Value="_patient.FirstName" placeholder="First name" class="form-control"></InputText>
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+
+@code
+{
+
+    //private UserManager<User> _userManager;
+    private ProDiet.Models.Patient _patient;
+    protected override void OnInitialized()
+    {
+        _patient = new ProDiet.Models.Patient();
+        base.OnInitialized();
+    }
+
+    private void OnValidSubmit()
+    {
+        
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        iPatientStoresService.AddPatient(_patient, id);
+    }
+
+}

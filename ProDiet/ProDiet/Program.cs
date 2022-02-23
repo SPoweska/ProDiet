@@ -4,6 +4,8 @@ using ProDiet.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProDiet.Areas.Identity;
+using ProDiet.Models;
+using ProDiet.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");builder.Services.AddDbContext<ProDietContext>(options =>
@@ -13,7 +15,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<IPatientStoresService,PatientStoresService>();
 builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<UserManager<IdentityUser>>();
 
 var app = builder.Build();
 
@@ -32,6 +37,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UsePatientization();
 app.MapBlazorHub();
 app.MapRazorPages();
 app.MapFallbackToPage("/_Host");
