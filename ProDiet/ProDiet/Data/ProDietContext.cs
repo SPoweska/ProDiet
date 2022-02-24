@@ -14,7 +14,6 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<User> Users { get; set; }
     //public DbSet<AuditableEntity> AuditableEntities { get; set; }
 
-    public DbSet<Gender> Genders { get; set; }
     public DbSet<Interview> Interviews { get; set; }
     public DbSet<Patient> Patients { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProDiet.Data.Enums;
 
 namespace ProDiet.Models
 {
@@ -14,19 +15,18 @@ namespace ProDiet.Models
         public string LastName { get; set; }
 
         [Required]
-        public Gender Gender { get; set; }
+        public string Gender { get; set; }
 
         [Required]
-        public DateTime Birth_Date { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public Interview? Interview { get; set; }
-        [Required]
         public int Height { get; set; }
-        [Required]
+        
         public int Weight { get; set; }
 
         [Required]
-        public string Phone_Number { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public string Email { get; set; }
@@ -36,13 +36,8 @@ namespace ProDiet.Models
         public float? PAL { get; set; }
         public float? PPM { get; set; }
         public float? CPM { get; set; }
-
-
         //public List<DietPlan> DietPlans { get; set; }
-        [Required]
-
-        public User UserDietetician { get; set; }
-        //public ApplicationUser UserPatient { get; set; }
+       
 
     }
 }

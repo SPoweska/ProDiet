@@ -27,16 +27,18 @@ namespace ProDiet.Services
             }
         }
 
-        public void AddPatient(Patient patient,string id)
+        public void AddPatient(Patient patient)
         {
             try
             {
+                //patient.CreatedBy = id;
+                //patient.CreatedAt = DateTime.Now;
                 db.Patients.Add(patient);
                 db.SaveChanges();
             }
-            catch
+            catch(Exception ex)
             {
-                Exception ex = new Exception("Error while adding patient");
+                //Exception ex = new Exception("Error while adding patient");
                 throw ex;
             }
         }
@@ -45,6 +47,8 @@ namespace ProDiet.Services
         {
             try
             {
+                //patient.CreatedBy = id;
+                //patient.CreatedAt = DateTime.Now; //do zrobienia
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
             }
