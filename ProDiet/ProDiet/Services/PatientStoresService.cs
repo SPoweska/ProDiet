@@ -27,6 +27,19 @@ namespace ProDiet.Services
             }
         }
 
+        public List<Patient> GetAllUsersPatients(string UserId)
+        {
+            try
+            {
+                return db.Patients.Where(x => x.CreatedBy == UserId).AsNoTracking().ToList();
+            }
+            catch
+            {
+                Exception ex = new Exception("Error while loading patients");
+                throw ex;
+            }
+        }
+
         public void AddPatient(Patient patient)
         {
             try

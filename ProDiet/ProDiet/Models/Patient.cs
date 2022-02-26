@@ -17,8 +17,8 @@ namespace ProDiet.Models
         [Required]
         public string Gender { get; set; }
 
-        [Required]
-        public DateTime BirthDate { get; set; }
+        [Required] 
+        public DateTime BirthDate { get; set; } = DateTime.Now;
 
         public Interview? Interview { get; set; }
         public int Height { get; set; }

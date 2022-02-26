@@ -11,63 +11,46 @@
 @inject IPatientStoresService iPatientStoresService;
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager;
-@*@inject AddPatientModal addPatientModal;*@
 
 
 <button type="button" class="btn btn-primary" data-toggle="modal" @onclick="()=>OpenDialog()">
     Dodaj nowego pacjenta
 </button>
 
+@if (_patients == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Email</th>
+            <th>Numer Telefonu</th>
+            <th>Data dodania</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var _patient in _patients)
+        {
+            <tr>
+                <td>@_patient.FirstName</td>
+                <td>@_patient.LastName</td>
+                <td>@_patient.Email</td>
+                <td>@_patient.PhoneNumber</td>
+                <td>@_patient.CreatedAt.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
 
 
 
-@*<EditForm Model="_patient" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
-    <div class="form-group">
-        <div>
-            <h4>Dane pacjenta</h4>
-            <div class="row">
-                <div class="col-sm-6">
-                    <label for="FirstName">Imię</label>
-                    <InputText id="FirstName" @bind-Value="_patient.FirstName" placeholder="First name" class="form-control">
-                    </InputText>
-                </div>
-                <div class="col-sm-6">
-                    <label for="LastName">Nazwisko</label>
-                    <InputText id="LastName" @bind-Value="_patient.LastName" placeholder="Last name" class="form-control"></InputText>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <label for="Gender">Płeć</label>
-                    <InputSelect id="Gender" @bind-Value="_patient.Gender" placeholder="Gender" class="form-control">
-                        @foreach (var gender in Enum.GetValues(typeof(Gender)))
-                        {
-                            <option value="@gender">@gender</option>
-                        }
-                    </InputSelect>
-                </div>
-                <div class="col-sm-6">
-                    <label for="DateOfBirth">Data urodzenia</label>
-                    <InputDate @bind-Value="_patient.BirthDate" >
-                    </InputDate>
-                </div>
-            </div>
-            <div class="row"><div class="col-sm-6">
-                    <label for="Email">Adres e-mail</label>
-                    <InputText id="Email" @bind-Value="_patient.Email" placeholder="Email" class="form-control"></InputText>
-                </div>
-                <div class="col-sm-6">
-                    <label for="PhoneNumber">Numer telefonu</label>
-                    <InputText id="PhoneNumber" @bind-Value="_patient.PhoneNumber" placeholder="PhoneNumber" class="form-control"></InputText>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button type="submit">Submit</button>
-</EditForm>*@
 @if (DialogOpen)
 {
     <AddPatientModal  OnClose="@OnDialogClose"></AddPatientModal>
@@ -78,7 +61,7 @@
 @code
 {
 
-    private ProDiet.Models.Patient _patient;
+    private List<ProDiet.Models.Patient> _patients;
 
     public bool DialogOpen { get; set; }
 
@@ -86,6 +69,7 @@
     {
         DialogOpen = false;
         StateHasChanged();
+        OnInitialized();
     }
 
     private void OpenDialog()
@@ -96,23 +80,15 @@
 
 
 
-
-    protected override void OnInitialized()
+    protected override void OnInitialized( )
     {
-        _patient = new ProDiet.Models.Patient();
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        _patients = iPatientStoresService.GetAllUsersPatients(id);
         base.OnInitialized();
     }
 
-    private void OnValidSubmit()
-    {
-        
-        var user = httpContextAccessor.HttpContext.User;
-        var id = userManager.GetUserId(user);
-        _patient.CreatedBy = id;
-        _patient.CreatedAt = DateTime.Now;
-        iPatientStoresService.AddPatient(_patient);
-        navigationManager.NavigateTo("/patient");
-    }
+    
 
     
 
