@@ -13,7 +13,7 @@
 @inject NavigationManager navigationManager;
 
 
-<button type="button" class="btn btn-primary" data-toggle="modal" @onclick="()=>OpenDialog()">
+<button type="button" class="btn btn-primary" data-toggle="modal" @onclick="()=>OpenAddPatientDialog()">
     Dodaj nowego pacjenta
 </button>
 
@@ -31,6 +31,7 @@ else
             <th>Email</th>
             <th>Numer Telefonu</th>
             <th>Data dodania</th>
+            <th>&nbsp;</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,8 @@ else
                 <td>@_patient.Email</td>
                 <td>@_patient.PhoneNumber</td>
                 <td>@_patient.CreatedAt.ToShortDateString()</td>
+                <td><button class="btn btn-info">Edytuj</button></td>
+                <td><button class="btn btn-danger" @onclick="() => OpenDeleteDialog(_patient)">Skasuj</button></td>
             </tr>
         }
         </tbody>
@@ -51,9 +54,13 @@ else
 
 
 
-@if (DialogOpen)
+@if (DialogAddPatientOpen)
 {
-    <AddPatientModal  OnClose="@OnDialogClose"></AddPatientModal>
+    <AddPatientModal  OnClose="@OnDialogAddPatientClose"></AddPatientModal>
+}
+@if (DeleteDialogOpen)
+{
+    <DeleteConfirmationModal Title="Czy na pewno chcesz skasować pacjenta?" Patient="patient" OnClose="@OnDeleteDialogClose"></DeleteConfirmationModal>
 }
 
 
@@ -61,33 +68,64 @@ else
 @code
 {
 
+
     private List<ProDiet.Models.Patient> _patients;
+    //private ProDiet.Models.Patient _patientToDelete;
 
-    public bool DialogOpen { get; set; }
+    public bool DialogAddPatientOpen { get; set; }
+    public bool DeleteDialogOpen { get; set; }
 
-    private void OnDialogClose(bool accepted)
+    public ProDiet.Models.Patient patient { get; set; }
+
+    [Parameter]
+    public EventCallback<ProDiet.Models.Patient> OnPatientDeleteCallback { get; set; }
+
+
+    private async void OnDialogAddPatientClose(bool accepted)
     {
-        DialogOpen = false;
+        DialogAddPatientOpen = false;
         StateHasChanged();
-        OnInitialized();
+        await OnInitializedAsync();
     }
 
-    private void OpenDialog()
+    private void OpenAddPatientDialog()
     {
-        DialogOpen = true;
+        DialogAddPatientOpen = true;
+        StateHasChanged();
+    }
+
+    private async void OnDeleteDialogClose(bool accepted)
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+        OnInitializedAsync();
+        navigationManager.NavigateTo("/patients", true);
+
+    }
+
+    private void OpenDeleteDialog(ProDiet.Models.Patient _patient)
+    {
+        patient = _patient;
+
+        DeleteDialogOpen = true;
+
         StateHasChanged();
     }
 
 
 
-    protected override void OnInitialized( )
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
         _patients = iPatientStoresService.GetAllUsersPatients(id);
         base.OnInitialized();
     }
-
     
 
     

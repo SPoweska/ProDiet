@@ -33,9 +33,9 @@ namespace ProDiet.Services
             {
                 return db.Patients.Where(x => x.CreatedBy == UserId).AsNoTracking().ToList();
             }
-            catch
+            catch (Exception ex)
             {
-                Exception ex = new Exception("Error while loading patients");
+                
                 throw ex;
             }
         }
@@ -71,6 +71,7 @@ namespace ProDiet.Services
                 throw ex;
             }
         }
+        
 
         public async void DeletePatient(int id)
         {
