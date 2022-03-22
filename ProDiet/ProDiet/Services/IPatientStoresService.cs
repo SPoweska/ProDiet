@@ -10,6 +10,8 @@ namespace ProDiet.Services
         public void UpdatePatient(Patient patient);
         public void DeletePatient(int id);
         public Task<Patient> GetPatientData(int id);
+        public Task<bool> CheckOwner(string ownerId, int patientId);
+
 
     }
 }

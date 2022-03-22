@@ -7,10 +7,10 @@
 @using Microsoft.AspNetCore.Http;
 @using ProDiet.Data.Enums
 @using ProDiet.Pages.Components
-@inject UserManager<IdentityUser> userManager;
-@inject IPatientStoresService iPatientStoresService;
+@inject UserManager<IdentityUser> userManager
+@inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
-@inject NavigationManager navigationManager;
+@inject NavigationManager navigationManager
 
 
 <button type="button" class="btn btn-primary" data-toggle="modal" @onclick="()=>OpenAddPatientDialog()">
@@ -70,8 +70,6 @@ else
 
 
     private List<ProDiet.Models.Patient> _patients;
-    //private ProDiet.Models.Patient _patientToDelete;
-
     public bool DialogAddPatientOpen { get; set; }
     public bool DeleteDialogOpen { get; set; }
 

@@ -1,6 +1,90 @@
-﻿
-<h3>PatientDetails</h3>
+﻿@page "/patientdetails/{Id:int}"
+
+@using ProDiet.Services
+@using Microsoft.AspNetCore.Components
+@using ProDiet.Models
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Http;
+@using ProDiet.Data.Enums
+@using ProDiet.Pages.Components
+@inject UserManager<IdentityUser> userManager
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+
+
+@if (_patient==null)
+{
+    <p><em>Nie możesz wyświetlić danych tego pacjenta</em></p>
+}
+
+else
+{
+
+    <h3>PatientDetails</h3>
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
+
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Email</th>
+            <th>Numer Telefonu</th>
+            <th>Data dodania</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+                <td>@_patient.FirstName</td>
+                <td>@_patient.LastName</td>
+                <td>@_patient.Email</td>
+                <td>@_patient.PhoneNumber</td>
+                <td>@_patient.CreatedAt.ToShortDateString()</td>
+        </tr>
+        </tbody>
+    </table>
+}
+
 
 @code {
+    private ProDiet.Models.Patient _patient { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool _checkOwner = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, Id);
+        if (_checkOwner)
+        {
+            _patient = await iPatientStoresService.GetPatientData(Id);
+        }
+        else
+        {
+            _patient = null;
+        }
+
+        base.OnInitializedAsync();
+    }
+    
 
 }
