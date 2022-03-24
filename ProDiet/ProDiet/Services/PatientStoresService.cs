@@ -95,7 +95,7 @@ namespace ProDiet.Services
         {
             try
             {
-                Patient? patient = await db.Patients.FirstOrDefaultAsync(x=>x.Id==id);
+                Patient? patient = await db.Patients.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (patient != null)
                 {
@@ -112,6 +112,28 @@ namespace ProDiet.Services
                 throw;
             }
         }
+
+        //public Patient GetPatientData(int id)
+        //{
+        //    try
+        //    {
+        //        Patient patient = db.Patients.FirstOrDefault(x => x.Id == id);
+
+        //        if (patient != null)
+        //        {
+        //            db.Entry(patient).State = EntityState.Detached;
+        //            return patient;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentNullException();
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
 
         public async Task<bool> CheckOwner(string ownerId, int patientId)
         {

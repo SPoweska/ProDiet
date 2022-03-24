@@ -20,7 +20,7 @@ namespace ProDiet.Models
         [Required] 
         public DateTime BirthDate { get; set; } = DateTime.Now;
 
-        public Interview? Interview { get; set; }
+        public ICollection<Interview> Interview { get; set; }=new List<Interview>();
         public int Height { get; set; }
         
         public int Weight { get; set; }

@@ -22,40 +22,41 @@
 else
 {
 
-    <h3>PatientDetails</h3>
-    <div>
-        <div>
-            <div>
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <MudTabPanel Text="Dane pacjenta">
+            <MudCardContent>
                 <div>
                     <div>
-
-                    </div> 
+                        <div class="d-inline pa-1 mud-theme-primary">Imię</div>
+                        <div class="d-inline pa-1 mud-theme-dark">@_patient.FirstName</div>
+                    </div>
+                    <div>
+                        <div class="d-inline pa-1 mud-theme-primary">Nazwisko</div>
+                        <div class="d-inline pa-1 mud-theme-dark">@_patient.LastName</div>
+                    </div>
+                    <div>
+                        <div class="d-inline pa-1 mud-theme-primary">Email</div>
+                        <div class="d-inline pa-1 mud-theme-dark">@_patient.Email</div>
+                    </div>
+                    <div>
+                        <div class="d-inline pa-1 mud-theme-primary">Numer telefonu</div>
+                        <div class="d-inline pa-1 mud-theme-dark">@_patient.PhoneNumber</div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-    </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Email</th>
-            <th>Numer Telefonu</th>
-            <th>Data dodania</th>
-            <th>&nbsp;</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-                <td>@_patient.FirstName</td>
-                <td>@_patient.LastName</td>
-                <td>@_patient.Email</td>
-                <td>@_patient.PhoneNumber</td>
-                <td>@_patient.CreatedAt.ToShortDateString()</td>
-        </tr>
-        </tbody>
-    </table>
+            </MudCardContent>
+        </MudTabPanel>
+        <MudTabPanel Text="Tab Two">
+            <MudText>Content Two</MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Tab Three">
+            <MudText>Content Three</MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Tab Disabled" Disabled="true">
+            <MudText>Content Disabled</MudText>
+        </MudTabPanel>
+    </MudTabs>
+    
+    
 }
 
 

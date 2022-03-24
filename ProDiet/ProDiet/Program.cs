@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ProDiet.Areas.Identity;
 using ProDiet.Models;
 using ProDiet.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");builder.Services.AddDbContext<ProDietContext>(options =>
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IPatientStoresService,PatientStoresService>();
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<UserManager<IdentityUser>>();
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

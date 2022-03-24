@@ -8,5 +8,8 @@ namespace ProDiet.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        public Patient Patient { get; set; }
+        public int PatientId { get; set; }
     }
 }
