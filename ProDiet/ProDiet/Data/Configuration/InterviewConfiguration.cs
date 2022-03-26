@@ -11,7 +11,7 @@ namespace ProDiet.Data.Configuration
 
         public void Configure(EntityTypeBuilder<Interview> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.InterviewId);
             builder.ToTable("Interview");
             builder.HasOne(x => x.Patient)
                 .WithMany(x => x.Interview).HasForeignKey(x => x.PatientId).OnDelete(DeleteBehavior.Cascade);

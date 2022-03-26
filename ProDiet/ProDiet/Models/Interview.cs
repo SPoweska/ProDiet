@@ -7,9 +7,9 @@ namespace ProDiet.Models
     public class Interview:AuditableEntity
     {
         [Key]
-        public int Id { get; set; }
-        [Required]
+        public int InterviewId { get; set; }
         public Patient Patient { get; set; }
+        [Required]
         public int PatientId { get; set; }
     }
 }

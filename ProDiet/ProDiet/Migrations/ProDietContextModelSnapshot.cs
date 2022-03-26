@@ -230,13 +230,107 @@ namespace ProDiet.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ProDiet.Models.Interview", b =>
+            modelBuilder.Entity("ProDiet.Data.Models.Alergene", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AlergeneId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AlergeneId"), 1L, 1);
+
+                    b.Property<string>("AlergeneName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AlergeneId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Alergene", (string)null);
+                });
+
+            modelBuilder.Entity("ProDiet.Data.Models.Intolerance", b =>
+                {
+                    b.Property<int>("IntoleranceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IntoleranceId"), 1L, 1);
+
+                    b.Property<string>("IntoleranceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IntoleranceId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Intolerance", (string)null);
+                });
+
+            modelBuilder.Entity("ProDiet.Data.Models.Nutrient", b =>
+                {
+                    b.Property<int>("NutrientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NutrientId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.HasKey("NutrientId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Nutrients", (string)null);
+                });
+
+            modelBuilder.Entity("ProDiet.Models.HomeMeasurement", b =>
+                {
+                    b.Property<int>("MeasurementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MeasurementId"), 1L, 1);
+
+                    b.Property<float>("Mass")
+                        .HasColumnType("real");
+
+                    b.Property<string>("MeasurementName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MeasurementId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("HomeMeasurement", (string)null);
+                });
+
+            modelBuilder.Entity("ProDiet.Models.Interview", b =>
+                {
+                    b.Property<int>("InterviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InterviewId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -254,7 +348,7 @@ namespace ProDiet.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("InterviewId");
 
                     b.HasIndex("PatientId");
 
@@ -331,6 +425,55 @@ namespace ProDiet.Migrations
                     b.ToTable("Patient", (string)null);
                 });
 
+            modelBuilder.Entity("ProDiet.Models.Product", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
+
+                    b.Property<float>("Calories")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Carbohydrates")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Fats")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("Fiber")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductCategory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Proteins")
+                        .HasColumnType("real");
+
+                    b.HasKey("ProductId");
+
+                    b.ToTable("Product", (string)null);
+                });
+
             modelBuilder.Entity("ProDiet.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -395,6 +538,50 @@ namespace ProDiet.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProDiet.Data.Models.Alergene", b =>
+                {
+                    b.HasOne("ProDiet.Models.Product", "Product")
+                        .WithMany("Alergenes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ProDiet.Data.Models.Intolerance", b =>
+                {
+                    b.HasOne("ProDiet.Models.Product", "Product")
+                        .WithMany("Intolerances")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ProDiet.Data.Models.Nutrient", b =>
+                {
+                    b.HasOne("ProDiet.Models.Product", "Product")
+                        .WithMany("Nutrients")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ProDiet.Models.HomeMeasurement", b =>
+                {
+                    b.HasOne("ProDiet.Models.Product", "Product")
+                        .WithMany("HomeMeasurement")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ProDiet.Models.Interview", b =>
                 {
                     b.HasOne("ProDiet.Models.Patient", "Patient")
@@ -409,6 +596,17 @@ namespace ProDiet.Migrations
             modelBuilder.Entity("ProDiet.Models.Patient", b =>
                 {
                     b.Navigation("Interview");
+                });
+
+            modelBuilder.Entity("ProDiet.Models.Product", b =>
+                {
+                    b.Navigation("Alergenes");
+
+                    b.Navigation("HomeMeasurement");
+
+                    b.Navigation("Intolerances");
+
+                    b.Navigation("Nutrients");
                 });
 #pragma warning restore 612, 618
         }
