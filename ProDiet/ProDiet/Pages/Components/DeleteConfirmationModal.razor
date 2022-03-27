@@ -54,7 +54,7 @@
         ModalOk();
     }
 
-    private void DeletePatient(ProDiet.Models.Patient patient)
+    private async Task DeletePatient(ProDiet.Models.Patient patient)
     {
         iPatientStoresService.DeletePatient(patient.Id);
     }

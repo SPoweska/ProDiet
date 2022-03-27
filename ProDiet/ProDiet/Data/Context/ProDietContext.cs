@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProDiet.Data.Configuration;
+using ProDiet.Data.Models;
 using ProDiet.Models;
 
 namespace ProDiet.Data;
@@ -15,6 +16,11 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<User> Users { get; set; }
     public DbSet<Interview> Interviews { get; set; }
     public DbSet<Patient> Patients { get; set; }
+    public DbSet<Alergene> Alergenes { get; set; }
+    public DbSet<HomeMeasurement> HomeMeasurements { get; set; }
+    public DbSet<Nutrient> Nutrients { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Intolerance> Intolerances { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

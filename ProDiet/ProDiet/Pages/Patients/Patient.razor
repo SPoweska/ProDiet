@@ -70,20 +70,25 @@ else
 
 
     private List<ProDiet.Models.Patient> _patients;
+    //private string userId;
     public bool DialogAddPatientOpen { get; set; }
     public bool DeleteDialogOpen { get; set; }
 
     public ProDiet.Models.Patient patient { get; set; }
 
+
+
     [Parameter]
     public EventCallback<ProDiet.Models.Patient> OnPatientDeleteCallback { get; set; }
 
 
-    private async void OnDialogAddPatientClose(bool accepted)
+    private async Task OnDialogAddPatientClose(bool accepted)
     {
         DialogAddPatientOpen = false;
         StateHasChanged();
+        navigationManager.NavigateTo("/patients", true);
         await OnInitializedAsync();
+
     }
 
     private void OpenAddPatientDialog()
@@ -92,12 +97,13 @@ else
         StateHasChanged();
     }
 
-    private async void OnDeleteDialogClose(bool accepted)
+    private async Task OnDeleteDialogClose(bool accepted)
     {
         DeleteDialogOpen = false;
         StateHasChanged();
-        OnInitializedAsync();
-        navigationManager.NavigateTo("/patients", true);
+        //navigationManager.NavigateTo("/patients", true);
+        await OnInitializedAsync();
+
 
     }
 
@@ -110,21 +116,30 @@ else
         StateHasChanged();
     }
 
+    //private async Task LoadPatients(string userId)
+    //{
+    //    _patients = await iPatientStoresService.GetAllUsersPatients(userId);
+    //}
 
 
 
 
 
 
-
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var user = httpContextAccessor.HttpContext.User;
+    //    userId = userManager.GetUserId(user);
+    //    await LoadPatients(userId);
+    //    await base.OnInitializedAsync();
+    //}
     protected override async Task OnInitializedAsync()
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
-        _patients = iPatientStoresService.GetAllUsersPatients(id);
-        base.OnInitialized();
+        _patients = await iPatientStoresService.GetAllUsersPatients(id);
+        await base.OnInitializedAsync();
     }
-    
 
     
 

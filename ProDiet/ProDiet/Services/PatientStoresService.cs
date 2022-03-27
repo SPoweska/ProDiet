@@ -14,11 +14,12 @@ namespace ProDiet.Services
             db = _db;
         }
 
-        public List<Patient> GetAllPatients()
+        public async Task<List<Patient>> GetAllPatients()
         {
             try
             {
-                return db.Patients.AsNoTracking().ToList();
+                List<Patient> patients = await db.Patients.AsNoTracking().ToListAsync();
+                return patients;
             }
             catch
             {
@@ -27,11 +28,12 @@ namespace ProDiet.Services
             }
         }
 
-        public List<Patient> GetAllUsersPatients(string UserId)
+        public async Task<List<Patient>> GetAllUsersPatients(string UserId)
         {
             try
             {
-                return db.Patients.Where(x => x.CreatedBy == UserId).AsNoTracking().ToList();
+                List<Patient> patients = await db.Patients.Where(x => x.CreatedBy == UserId).AsNoTracking().ToListAsync();
+                return patients;
             }
             catch (Exception ex)
             {
@@ -40,14 +42,12 @@ namespace ProDiet.Services
             }
         }
 
-        public void AddPatient(Patient patient)
+        public async Task AddPatient(Patient patient)
         {
             try
             {
-                //patient.CreatedBy = id;
-                //patient.CreatedAt = DateTime.Now;
-                db.Patients.Add(patient);
-                db.SaveChanges();
+                await db.Patients.AddAsync(patient);
+                await db.SaveChangesAsync();
             }
             catch(Exception ex)
             {
@@ -56,28 +56,45 @@ namespace ProDiet.Services
             }
         }
 
-        public void UpdatePatient(Patient patient)
+        public async Task UpdatePatient(Patient patient)
         {
             try
             {
-                //patient.CreatedBy = id;
-                //patient.CreatedAt = DateTime.Now; //do zrobienia
                 db.Entry(patient).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                Exception ex = new Exception("Error while editing patient");
+
                 throw ex;
             }
         }
-        
 
-        public async void DeletePatient(int id)
+
+        //public async Task DeletePatient(int id)
+        //{
+        //    try
+        //    {
+        //       Patient? patient = db.Patients.FirstOrDefault(x => x.Id == id);
+
+        //        if (patient != null)
+        //        {
+        //            db.Patients.Remove(patient);
+        //        }
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+        //}
+
+        public void DeletePatient(int id)
         {
             try
             {
-               Patient? patient = await db.Patients.FirstOrDefaultAsync(x => x.Id == id);
+                Patient? patient = db.Patients.FirstOrDefault(x => x.Id == id);
 
                 if (patient != null)
                 {
@@ -90,6 +107,8 @@ namespace ProDiet.Services
                 throw;
             }
         }
+
+
 
         public async Task<Patient> GetPatientData(int id)
         {
@@ -107,33 +126,13 @@ namespace ProDiet.Services
                     throw new ArgumentNullException();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+
+                throw ex;
             }
         }
-
-        //public Patient GetPatientData(int id)
-        //{
-        //    try
-        //    {
-        //        Patient patient = db.Patients.FirstOrDefault(x => x.Id == id);
-
-        //        if (patient != null)
-        //        {
-        //            db.Entry(patient).State = EntityState.Detached;
-        //            return patient;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentNullException();
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        throw;
-        //    }
-        //}
+        
 
         public async Task<bool> CheckOwner(string ownerId, int patientId)
         {
