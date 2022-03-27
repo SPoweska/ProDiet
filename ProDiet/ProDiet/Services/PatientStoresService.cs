@@ -102,9 +102,10 @@ namespace ProDiet.Services
                 }
                 db.SaveChanges();
             }
-            catch
+            catch (Exception e)
             {
-                throw;
+
+                throw e;
             }
         }
 

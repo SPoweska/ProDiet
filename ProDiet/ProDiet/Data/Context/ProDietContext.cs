@@ -21,6 +21,8 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<Nutrient> Nutrients { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Intolerance> Intolerances { get; set; }
+    public DbSet<Dish> Dishes { get; set; }
+    public DbSet<UsedProduct> UsedProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
