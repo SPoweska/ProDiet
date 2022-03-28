@@ -90,17 +90,17 @@ namespace ProDiet.Services
         //    }
         //}
 
-        public void DeletePatient(int id)
+        public async Task DeletePatient(int id)
         {
             try
             {
-                Patient? patient = db.Patients.FirstOrDefault(x => x.Id == id);
+                Patient? patient = await db.Patients.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (patient != null)
                 {
                     db.Patients.Remove(patient);
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             catch (Exception e)
             {

@@ -10,17 +10,21 @@ using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");builder.Services.AddDbContext<ProDietContext>(options =>
-    options.UseSqlServer(connectionString));builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    options.UseSqlServer(connectionString),ServiceLifetime.Transient);builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ProDietContext>();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IPatientStoresService,PatientStoresService>();
+builder.Services.AddScoped<IDishStoresService, DishStoresService>();
+builder.Services.AddScoped<IProductStoresService, ProductStoresService>();
+builder.Services.AddScoped<IUsedProductStoresService, UsedProductStoresService>();
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<UserManager<IdentityUser>>();
 builder.Services.AddMudServices();
+
 
 var app = builder.Build();
 

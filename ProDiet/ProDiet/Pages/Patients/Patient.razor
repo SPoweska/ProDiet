@@ -1,4 +1,4 @@
-﻿@page "/patients"
+@page "/patients"
 @using ProDiet.Services
 @using Microsoft.AspNetCore.Components
 @using ProDiet.Models
@@ -86,8 +86,8 @@ else
     {
         DialogAddPatientOpen = false;
         StateHasChanged();
+        //await OnInitializedAsync();
         navigationManager.NavigateTo("/patients", true);
-        await OnInitializedAsync();
 
     }
 
@@ -101,8 +101,8 @@ else
     {
         DeleteDialogOpen = false;
         StateHasChanged();
-        //navigationManager.NavigateTo("/patients", true);
-        await OnInitializedAsync();
+        //await OnInitializedAsync();
+        navigationManager.NavigateTo("/patients", true);
 
 
     }

@@ -1,0 +1,91 @@
+﻿@page "/dish"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Razor.Language.Intermediate
+@using ProDiet.Data.Enums
+@using ProDiet.Services
+@using System.ComponentModel.DataAnnotations;
+@inject UserManager<IdentityUser> userManager;
+@inject IDishStoresService iDishStoresService;
+@inject IHttpContextAccessor httpContextAccessor;
+
+<h3>Dish</h3>
+<EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+                <MudTextField @bind-Value="_dish.DishName"
+                              For="@(() => _dish.DishName)"
+                              Immediate="true"
+                              Label="Nazwa dania"/>
+                <MudTextField @bind-Value="_dish.Servings"
+                              For="@(() => _dish.Servings)"
+                              Immediate="true"
+                              Label="Country"/>
+
+                <MudTextField @bind-Value="_dish.Weight"
+                              For="@(() => _dish.Weight)"
+                              Immediate="true"
+                              Label="Waga"/>
+
+                <MudTextField @bind-Value="_dish.Carbohydrates"
+                              For="@(() => _dish.Carbohydrates)"
+                              Immediate="true"
+                              Label="Węglowodany"/>
+                <MudTextField @bind-Value="_dish.Calories"
+                              For="@(() => _dish.Calories)"
+                              Immediate="true"
+                              Label="Kalorie"/>
+
+                <MudTextField @bind-Value="_dish.Fats"
+                              For="@(() => _dish.Fats)"
+                              Immediate="true"
+                              Label="Tłuszcz"/>
+
+                <MudTextField @bind-Value="_dish.Proteins"
+                              For="@(() => _dish.Proteins)"
+                              Immediate="true"
+                              Label="Białko"/>
+
+                <MudTextField @bind-Value="_dish.Fiber"
+                              For="@(() => _dish.Fiber)"
+                              Immediate="true"
+                              Label="Błonnik"/>
+                <MudTextField @bind-Value="_dish.PreparationMinutes"
+                              For="@(() => _dish.PreparationMinutes)"
+                              Immediate="true"
+                              Label="Czas przygotowania w minutach"/>
+                <MudTextField @bind-Value="_dish.Recipe"
+                              For="@(() => _dish.Recipe)"
+                              Immediate="true"
+                              Label="Wskazówki odnośnie przygotowania"/>
+            </MudCardContent>
+    </MudCard>
+</EditForm>
+
+
+@code {
+    private ProDiet.Models.Dish _dish;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dish = new ProDiet.Models.Dish();
+        await base.OnInitializedAsync();
+    }
+
+    private void OnValidSubmit()
+    {
+
+
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        _dish.CreatedBy = id;
+        _dish.CreatedAt = DateTime.Now;
+        iDishStoresService.AddDish(_dish);
+
+
+    }
+
+}

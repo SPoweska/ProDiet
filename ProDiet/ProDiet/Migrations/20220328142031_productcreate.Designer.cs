@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220328142031_productcreate")]
+    partial class productcreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -521,6 +523,7 @@ namespace ProDiet.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductCategory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductName")
