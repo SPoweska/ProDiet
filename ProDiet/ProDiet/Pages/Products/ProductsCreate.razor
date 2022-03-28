@@ -4,6 +4,7 @@
 @using ProDiet.Data.Enums
 @using ProDiet.Services
 @using System.ComponentModel.DataAnnotations;
+@inject NavigationManager navigationManager;
 @inject UserManager<IdentityUser> userManager;
 @inject IProductStoresService iProductStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
@@ -110,20 +111,16 @@
                         <MudImage Width="100" Height="100" Src="Icons/ProductCategories/candy.png"></MudImage>
                     </MudCard>
                 </MudRadio>
-                <div>
                 <MudRadio Placement="Placement.Top" Option="@("Suplementy i probiotyki")">Suplementy i probiotyki
                     <MudCard>
                         <MudImage Width="100" Height="100" Src="Icons/ProductCategories/drug.png"></MudImage>
                     </MudCard>
                 </MudRadio>
-                </div>
-                <div>
                 <MudRadio Placement="Placement.Top" Option="@("Inne")">Inne
                     <MudCard>
                         <MudImage Width="100" Height="100" Src="Icons/ProductCategories/others.png"></MudImage>
                     </MudCard>
                 </MudRadio>
-                </div>
             </MudRadioGroup>
         </MudCardContent>
     </MudCard><MudCardActions>
@@ -154,7 +151,8 @@
         _product.CreatedBy = id;
         _product.CreatedAt = DateTime.Now;
         iProductStoresService.AddProduct(_product);
-
+        Thread.Sleep(1000);
+        navigationManager.NavigateTo("/myproducts");
 
     }
 

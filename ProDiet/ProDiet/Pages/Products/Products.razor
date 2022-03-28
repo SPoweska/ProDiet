@@ -1,5 +1,70 @@
-﻿<h3>Products</h3>
+﻿@page "/myproducts"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Pages.Components
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IProductStoresService iProductStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+
+
+<h3>Produkty</h3>
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" @onclick="@(()=>navigationManager.NavigateTo("/createproduct"))">
+    Dodaj nowy produkt
+</button>
+
+@if (_products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Kaloryka</th>
+            <th>Węglowodany</th>
+            <th>Tłuszcz</th>
+            <th>Białko</th>
+            <th>Błonnik</th>
+            <th>Kategoria</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var _product in _products)
+        {
+            <tr>
+                <td>@_product.ProductName</td>
+                <td>@_product.Calories</td>
+                <td>@_product.Carbohydrates</td>
+                <td>@_product.Fats</td>
+                <td>@_product.Proteins</td>
+                <td>@_product.Fiber</td>
+                <td>@_product.ProductCategory</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<Models.Product> _products;
+    private Models.Product _product;
 
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        _products = await iProductStoresService.GetAllUsersProducts(id);
+        await base.OnInitializedAsync();
+    }
 }
