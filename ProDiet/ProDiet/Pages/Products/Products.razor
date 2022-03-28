@@ -1,4 +1,4 @@
-﻿@page "/myproducts"
+﻿@page "/products"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Identity
 @using ProDiet.Data.Enums
@@ -9,14 +9,14 @@
 @inject IProductStoresService iProductStoresService
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
+@inject IDialogService DialogService
 
 
 <h3>Produkty</h3>
 
-
-<button type="button" class="btn btn-primary" data-toggle="modal" @onclick="@(()=>navigationManager.NavigateTo("/createproduct"))">
+<MudButton @onclick="OpenDialog"  Variant="Variant.Filled" Color="Color.Primary">
     Dodaj nowy produkt
-</button>
+</MudButton>
 
 @if (_products == null)
 {
@@ -57,6 +57,16 @@ else
 @code {
     private List<Models.Product> _products;
     private Models.Product _product;
+    
+
+    public bool AddProductDialogOpen { get; set; }
+
+    
+
+    private async Task LoadProducts(string userId)
+    {
+        _products = await iProductStoresService.GetAllUsersProducts(userId);
+    }
 
 
 
@@ -67,4 +77,14 @@ else
         _products = await iProductStoresService.GetAllUsersProducts(id);
         await base.OnInitializedAsync();
     }
+
+    private void OpenDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+
+        DialogService.Show<ProductsCreateDialog>("Dodaj nowy produkt", closeOnEscapeKey);
+
+    }
 }
+
+
