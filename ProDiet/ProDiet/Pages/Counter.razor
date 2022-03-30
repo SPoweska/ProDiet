@@ -8,8 +8,36 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+
+@*<MudCard>
+                            <div>
+                                <div>
+                                    <button @onclick="AddRow"></button>
+                                </div>
+                                @for (var i = 0; 1 < 5; i++)
+                                {                                    
+                                    
+
+                                    <div>
+                                        <label>dsadsa</label>
+                                    </div>
+                                    <div>
+                                        <label>dsadsa</label>
+                                        
+                                    </div>
+                                    
+                                }
+                            </div>    
+                        </MudCard>*@
+
 @code {
     private int currentCount = 0;
+
+    //private async Task AddRow()
+    //{       
+    //    var i++;
+    //    await InvokeAsync(() => StateHasChanged());
+    //}
 
     private void IncrementCount()
     {

@@ -1,9 +1,12 @@
-﻿@page "/createproduct/{productId:int}"
+﻿@page "/createproduct"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Razor.Language.Intermediate
 @using ProDiet.Data.Enums
 @using ProDiet.Services
 @using System.ComponentModel.DataAnnotations;
+@using System.Threading
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Http
 @using Microsoft.IdentityModel.Tokens
 @using ProDiet.Data.Models
 @using ProDiet.Models
@@ -14,8 +17,10 @@
 @inject IHttpContextAccessor httpContextAccessor;
 
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog  DisableSidePadding="true">
         <DialogContent>
+            <MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll ; overflow-x:scroll" >
+
             <EditForm Model="_product" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
@@ -128,21 +133,101 @@
                                 </MudCard>
                             </MudRadio>
                         </MudRadioGroup>
+                        <MudCard>
+                            <div>Alergeny</div>
+                            <MudSelect T="string" Label="Alergeny" MultiSelection="true" @bind-Value="emptyvaluealergen" @bind-SelectedValues="selectedAlergens">
+                                @foreach (var alergen in alergenesArray)
+                                {
+                                    <MudSelectItem T="string" Value="@alergen">@alergen</MudSelectItem>
+                                }
+                            </MudSelect>
+                       </MudCard>
+                                <h7>Składniki odżywcze</h7>
+                                <MudCard>                                                                    
+                                    <MudFab
+                                    Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                                            @onclick="@(() => _product.Nutrients.Add(new Nutrient()))" >
+                                        Dodaj składnik
+                                    </MudFab>                                
+                                    <MudCard>                                    
+                                            @for (var i = 0; i < _product.Nutrients.Count; i++)
+                                            {
+                                                var index = i;
+                                                var nutrients = _product.Nutrients[i];
+            
+                                                <MudCard Outlined="true">
+                                                    <MudSelect Label="Nazwa składnika" @bind-Value="nutrients.Name">
+                                                        @foreach (string nutrient in alergenesArray)
+                                                        {
+                                                            <MudSelectItem T="string" Value="@nutrient">@nutrient</MudSelectItem>
+                                                        }
+                                                    </MudSelect>
+                                                </MudCard>                                                
+                                                <MudCard>
+                                                    <MudTextField T="float"
+                                                    @bind-Value="nutrients.Quantity"                                                 
+                                                     Immediate="true"
+                                                     Label="Ilość na 100g"/>
+                                                </MudCard>
+
+                                                <MudFab
+                                                Size="Size.Small"
+                                                StartIcon="@Icons.Filled.Delete"
+                                                Color="Color.Error"
+                                                @onclick="@(() => _product.Nutrients.RemoveAt(index))">
+                                                Skasuj
+                                                </MudFab>
+                                            }
+                                    </MudCard>
+                            </MudCard>
+                             <h7>Miary domowe</h7>
+                                <MudCard>                                                                    
+                                    <MudFab
+                                    Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                                            @onclick="@(() => _product.HomeMeasurement.Add(new HomeMeasurement()))" >
+                                        Dodaj składnik
+                                    </MudFab>                                
+                                    <MudCard>                                    
+                                            @for (var i = 0; i < _product.HomeMeasurement.Count; i++)
+                                            {
+                                                var index = i;
+                                                var homeMeasturements = _product.HomeMeasurement[i];
+            
+                                                <MudCard Outlined="true">
+                                                    <MudSelect Label="Nazwa składnika" @bind-Value="homeMeasturements.MeasurementName">
+                                                        @foreach (var measturement in Enum.GetValues(typeof(HomeMeasures)))
+                                                        {
+                                                            <MudSelectItem T="string" Value="@measturement.ToString()">@measturement</MudSelectItem>
+                                                        }
+                                                    </MudSelect>
+                                                </MudCard>                                                
+                                                <MudCard>
+                                                    <MudTextField T="float"
+                                                    @bind-Value="homeMeasturements.Mass"                                                 
+                                                     Immediate="true"
+                                                     Label="Masa w gramach"/>
+                                                </MudCard>
+
+                                                <MudFab
+                                                Size="Size.Small"
+                                                StartIcon="@Icons.Filled.Delete"
+                                                Color="Color.Error"
+                                                @onclick="@(() => _product.HomeMeasurement.RemoveAt(index))">
+                                                Skasuj
+                                                </MudFab>
+                                            }
+                                    </MudCard>
+                            </MudCard>
                     </MudCardContent>
                 </MudCard>
-                <MudCard>
-                    <MudSelect T="string" Label="Alergeny" MultiSelection="true" @bind-Value="emptyvaluealergen" @bind-SelectedValues="selectedAlergens">
-                        @foreach (var alergen in alergenesArray)
-                        {
-                            <MudSelectItem T="string" Value="@alergen">@alergen</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCard>
+                
+                
                 <DialogActions>
                     <MudButton OnClick="Cancel">Cancel</MudButton>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-                </DialogActions>
+                </DialogActions>                
             </EditForm>
+            </MudContainer>
         </DialogContent>
     </MudDialog>
 
@@ -162,6 +247,11 @@
     [CascadingParameter]
     MudDialogInstance mudDialog { get; set; }
 
+    public async Task AddNutrient()
+    {
+        _product.Nutrients.Add(new Nutrient());
+        await InvokeAsync(() => StateHasChanged());
+    }
 
     public IEnumerable<string> selectedAlergens { get; set; }
 

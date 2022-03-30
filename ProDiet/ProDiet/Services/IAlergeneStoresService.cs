@@ -1,4 +1,6 @@
-﻿using ProDiet.Data.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ProDiet.Data.Models;
 
 namespace ProDiet.Services
 {
