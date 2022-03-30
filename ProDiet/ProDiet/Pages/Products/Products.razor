@@ -63,10 +63,10 @@ else
 
     
 
-    private async Task LoadProducts(string userId)
-    {
-        _products = await iProductStoresService.GetAllUsersProducts(userId);
-    }
+    //private async Task LoadProducts(string userId)
+    //{
+    //    _products = await iProductStoresService.GetAllUsersProducts(userId);
+    //}
 
 
 
@@ -74,7 +74,8 @@ else
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
-        _products = await iProductStoresService.GetAllUsersProducts(id);
+        //_products = await iProductStoresService.GetAllUsersProducts(id);
+        _products = await iProductStoresService.GetAllProducts();
         await base.OnInitializedAsync();
     }
 

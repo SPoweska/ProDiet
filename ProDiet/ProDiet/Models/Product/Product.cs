@@ -24,7 +24,7 @@ namespace ProDiet.Models
         public ICollection<Intolerance>? Intolerances { get; set; }
         public ICollection<Nutrient>? Nutrients { get; set; } = new List<Nutrient>();
         public ICollection<HomeMeasurement>? HomeMeasurement { get; set; } = new List<HomeMeasurement>();
-        
+        [Required]
         public string ProductCategory { get; set; }
     }
 }
