@@ -117,7 +117,7 @@ namespace ProDiet.Services
         {
             try
             {
-                Product? product = await db.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+                Product? product = await db.Products.Include(x=>x.Alergenes).Include(x=>x.Nutrients).Include(x=>x.HomeMeasurement).FirstOrDefaultAsync(x => x.ProductId == id);
 
                 if (product != null)
                 {
@@ -141,7 +141,72 @@ namespace ProDiet.Services
             try
             {
                 db.Entry(product).State =EntityState.Modified;
+
+                foreach (var measturement in product.HomeMeasurement)
+                {
+                    if(measturement.MeasurementId != 0) 
+                    {
+                        db.Entry(measturement).State = EntityState.Modified; 
+                    }
+                    else
+                    {
+                        db.Entry(measturement).State = EntityState.Added;
+
+                    }
+
+                }
+
+                foreach (var alergene in product.Alergenes)
+                {
+                    if (alergene.AlergeneId != 0)
+                    {
+                        db.Entry(alergene).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(alergene).State = EntityState.Added;
+
+                    }
+                }
+
+                foreach (var nutrient in product.Nutrients)
+                {
+                    if (nutrient.NutrientId != 0)
+                    {
+                        db.Entry(nutrient).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(nutrient).State = EntityState.Added;
+
+                    }
+                }
+
+                var idsOfMeasurements = product.HomeMeasurement.Select(x => x.MeasurementId).ToList();
+                var measurementsToDelete = await db.HomeMeasurements.
+                    Where(x => !idsOfMeasurements.
+                    Contains(x.MeasurementId) && x.ProductId==product.ProductId).ToListAsync();
+
+                db.RemoveRange(measurementsToDelete);
+
+                var idsOfAlergenes = product.Alergenes.Select(x => x.AlergeneId).ToList();
+                var alergenesToDelete = await db.Alergenes.
+                    Where(x => !idsOfAlergenes.
+                    Contains(x.AlergeneId) && x.ProductId == product.ProductId).ToListAsync();
+
+                db.RemoveRange(alergenesToDelete);
+
+                var idsOfNutrients = product.Nutrients.Select(x => x.NutrientId).ToList();
+                var nutrientsToDelete = await db.Nutrients.
+                    Where(x => !idsOfNutrients.
+                    Contains(x.NutrientId) && x.ProductId == product.ProductId).ToListAsync();
+
+                db.RemoveRange(nutrientsToDelete);
+
+
                 await db.SaveChangesAsync();
+
+
             }
             catch (Exception ex)
             {

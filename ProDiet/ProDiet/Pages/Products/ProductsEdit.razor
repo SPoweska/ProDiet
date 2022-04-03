@@ -1,4 +1,4 @@
-﻿@page "/createproduct"
+﻿@page "/products/edit/{ProductId:int}"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Razor.Language.Intermediate
 @using ProDiet.Data.Enums
@@ -16,12 +16,15 @@
 @inject IAlergeneStoresService iAlergeneStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
 
+<h3>Edytuj produkt</h3>
+@if (_product == null)
+{
+    <p><em>Nie możesz edytować tego produktu</em></p>
+}
 
-    <MudDialog  DisableSidePadding="true">
-        <DialogContent>
-            <MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll ; overflow-x:scroll" >
-
-            <EditForm Model="_product" OnValidSubmit="OnValidSubmit">
+else
+{
+    <EditForm Model="_product" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
                 <MudCard >
@@ -244,33 +247,28 @@
                 </MudCard>
                 
                 
-                <DialogActions>
+                <MudCard>
                     <MudButton OnClick="Cancel">Cancel</MudButton>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-                </DialogActions>                
+                </MudCard>                
             </EditForm>
-            </MudContainer>
-        </DialogContent>
-    </MudDialog>
-
-
-
+}
 
 @code {
+    [Parameter] 
+    public int ProductId{ get; set; }
 
-    [Parameter]
-    public int productId { get; set; }
+    private string userId{ get; set; }
 
-    private ProDiet.Models.Product _product = new Product();
+    private Product _product;
 
+    private bool _checkOwner = false;
 
-    private string emptyvaluealergen { get; set; } = "Nie wybrano alergenu";
-
-    [CascadingParameter]
-    MudDialogInstance mudDialog { get; set; }
-
-
-    public IEnumerable<string> selectedAlergens { get; set; }
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/products", true);
+        
+    }
 
     private string[] alergenesArray =
     {
@@ -284,33 +282,41 @@
 
 
 
-
-    void Submit() => mudDialog.Close(DialogResult.Ok(true));
-    void Cancel() => mudDialog.Cancel();
-
-
-
-
     protected override async Task OnInitializedAsync()
     {
+        var user = httpContextAccessor.HttpContext.User;
+        userId = userManager.GetUserId(user);
+        _checkOwner= await iProductStoresService.CheckOwner(userId, ProductId);
+        if (_checkOwner)
+        {
+            _product = await iProductStoresService.GetProductData(ProductId);
+        }
+        else
+        {
+            _product = null;
+        }
+
+
         await base.OnInitializedAsync();
     }
+
 
 
     private void OnValidSubmit()
     {
 
 
-        var user = httpContextAccessor.HttpContext.User;
-        var id = userManager.GetUserId(user);
-        _product.CreatedBy = id;
-        _product.CreatedAt = DateTime.Now;
-        //_product.Alergenes = iAlergeneStoresService.ReturnListAddedAlergenes(selectedAlergens);
-        iProductStoresService.AddProduct(_product);
+        //var user = httpContextAccessor.HttpContext.User;
+        //var id = userManager.GetUserId(user);
+        _product.ModifiedBy = userId;
+        _product.ModifiedAt = DateTime.Now;
+        iProductStoresService.UpdateProduct(_product);
         Thread.Sleep(500);
-        Submit();
+        navigationManager.NavigateTo("/products", true);
+
 
 
     }
+
 
 }

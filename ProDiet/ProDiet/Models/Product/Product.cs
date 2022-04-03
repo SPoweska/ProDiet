@@ -20,8 +20,8 @@ namespace ProDiet.Models
         [Required]
         public float Calories { get; set; }
 
-        public ICollection<Alergene>? Alergenes { get; set; }
-        public ICollection<Intolerance>? Intolerances { get; set; }
+        public List<Alergene>? Alergenes { get; set; } = new List<Alergene>();
+        public List<Intolerance>? Intolerances { get; set; } = new List<Intolerance>();
         public List<Nutrient>? Nutrients { get; set; } = new List<Nutrient>();
         public List<HomeMeasurement>? HomeMeasurement { get; set; } = new List<HomeMeasurement>();
         [Required]
