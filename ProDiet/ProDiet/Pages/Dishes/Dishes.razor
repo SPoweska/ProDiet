@@ -1,0 +1,18 @@
+﻿@page "/dishes"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Pages.Components
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IProductStoresService iProductStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+
+<h3>Dishes</h3>
+
+@code {
+
+}

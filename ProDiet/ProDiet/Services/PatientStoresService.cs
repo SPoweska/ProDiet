@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProDiet.Data;
+using ProDiet.Migrations;
 using ProDiet.Models;
 
 namespace ProDiet.Services
@@ -61,6 +62,26 @@ namespace ProDiet.Services
             try
             {
                 db.Entry(patient).State = EntityState.Modified;
+                foreach (var bodyMeasurement in patient.BodyMeasurements)
+                {
+                    if (bodyMeasurement.MeasurementId != 0)
+                    {
+                        db.Entry(bodyMeasurement).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(bodyMeasurement).State = EntityState.Added;
+
+                    }
+
+                }
+
+                var idsOfBodyMeasurements = patient.BodyMeasurements.Select(x => x.MeasurementId).ToList();
+                var measurementsToDelete = await db.BodyMeasurements.
+                    Where(x => !idsOfBodyMeasurements.
+                        Contains(x.MeasurementId) && x.PatientId == patient.Id).ToListAsync();
+
+                db.RemoveRange(measurementsToDelete);
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -115,7 +136,7 @@ namespace ProDiet.Services
         {
             try
             {
-                Patient? patient = await db.Patients.FirstOrDefaultAsync(x => x.Id == id);
+                Patient? patient = await db.Patients.Include(x => x.BodyMeasurements).FirstOrDefaultAsync(x => x.Id == id);
 
                 if (patient != null)
                 {

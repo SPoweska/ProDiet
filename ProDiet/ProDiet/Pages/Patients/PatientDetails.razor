@@ -12,6 +12,7 @@
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
+@inject IDialogService DialogService
 
 
 @if (_patient==null)
@@ -45,8 +46,44 @@ else
                 </div>
             </MudCardContent>
         </MudTabPanel>
-        <MudTabPanel Text="Tab Two">
-            <MudText>Content Two</MudText>
+        <MudTabPanel Text="Pomiary">
+        <MudCardContent>
+            <MudButton @onclick="()=>OpenAddPatientDialog()"  Variant="Variant.Filled" Color="Color.Primary">
+                Dodaj nowy pomiar ciała
+            </MudButton>  
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Waga ciała</th>
+                        <th>Wzrost</th>
+                        <th>Obwód talii</th>
+                        <th>Obwód bioder</th>
+                        <th>Błonnik</th>
+                        <th>TBF</th>
+                        <th>TBW</th>
+                        <th>TBM</th>
+                        <th>Data pomiaru</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var _bodyMeasurement in _patient.BodyMeasurements)
+                    {
+                        <tr>
+                            <td>@_bodyMeasurement.BodyWeight</td>
+                            <td>@_bodyMeasurement.Height</td>
+                            <td>@_bodyMeasurement.Waist</td>
+                            <td>@_bodyMeasurement.Hips</td>
+                            <td>@_bodyMeasurement.TotalBodyFat</td>
+                            <td>@_bodyMeasurement.TotalBodyWater</td>
+                            <td>@_bodyMeasurement.TotalBoneMineral</td>
+                            <td>@_bodyMeasurement.MeasurementDate</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </MudCardContent>
         </MudTabPanel>
         <MudTabPanel Text="Tab Three">
             <MudText>Content Three</MudText>
@@ -56,6 +93,11 @@ else
         </MudTabPanel>
     </MudTabs>
     
+
+    @if (DialogAddBodyMeasurementOpen)
+    {
+        <AddBodyMeasurementDialog patientId="Id"  OnClose="@OnDialogAddBodyMeasurementClose"></AddBodyMeasurementDialog>
+    }
     
 }
 
@@ -67,6 +109,26 @@ else
     public int Id { get; set; }
 
     private bool _checkOwner = false;
+
+    //public bool AddBodyMeasurementDialogOpen { get; set; }
+
+    public bool DialogAddBodyMeasurementOpen { get; set; }
+
+    private async Task OnDialogAddBodyMeasurementClose(bool accepted)
+    {
+        DialogAddBodyMeasurementOpen = false;
+        StateHasChanged();
+    //await OnInitializedAsync();
+        navigationManager.NavigateTo("/patientdetails/{Id}", true);
+
+    }
+
+    private void OpenAddPatientDialog()
+    {
+        DialogAddBodyMeasurementOpen = true;
+        StateHasChanged();
+    }
+
 
 
 
@@ -86,6 +148,13 @@ else
 
         base.OnInitializedAsync();
     }
-    
+
+    //private void OpenDialog( ProDiet.Models.Patient patient)
+    //{
+    //    var parameters = new DialogParameters { ["patient"]=_patient };
+    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+    //    DialogService.Show<AddBodyMeasurementDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
+
+    }
 
 }

@@ -23,6 +23,7 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<Intolerance> Intolerances { get; set; }
     public DbSet<Dish> Dishes { get; set; }
     public DbSet<UsedProduct> UsedProducts { get; set; }
+    public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

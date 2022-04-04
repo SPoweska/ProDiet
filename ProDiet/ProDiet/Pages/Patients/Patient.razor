@@ -43,7 +43,7 @@ else
                 <td>@_patient.Email</td>
                 <td>@_patient.PhoneNumber</td>
                 <td>@_patient.CreatedAt.ToShortDateString()</td>
-                <td><button class="btn btn-info">Edytuj</button></td>
+                <td><button class="btn btn-info" @onclick="@(()=>navigationManager.NavigateTo($"/patientdetails/{_patient.Id}"))">Edytuj </button></td>
                 <td><button class="btn btn-danger" @onclick="() => OpenDeleteDialog(_patient)">Skasuj</button></td>
             </tr>
         }
