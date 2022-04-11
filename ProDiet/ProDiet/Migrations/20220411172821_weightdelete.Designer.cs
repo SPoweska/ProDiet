@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220411172821_weightdelete")]
+    partial class weightdelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,162 +455,18 @@ namespace ProDiet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DailySnacksAmount")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DietHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DigestiveDiseases")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Diseases")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FamilyDiseases")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("FoodHeatingAbility")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Goals")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HealthProblems")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastMealTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PALActivity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PhysicalActivity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedBreads")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedCarbProducts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedDairy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedDrinks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedFats")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedFish")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedMeat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedSnacks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferedSweeteners")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Profession")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Suplementation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TimeWhenEatsMost")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypicalEatingShedules")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnlikedFoods")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VisitGoal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VisitReason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyAlkohol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyBread")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyCandies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyDairy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyFastFoods")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyFish")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyFlourProducts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyMeat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WeeklyVegetables")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("InterviewId");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Interview", (string)null);
                 });
@@ -681,50 +539,6 @@ namespace ProDiet.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patient", (string)null);
-                });
-
-            modelBuilder.Entity("ProDiet.Models.PatientAlergene", b =>
-                {
-                    b.Property<int>("AlergeneId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AlergeneId"), 1L, 1);
-
-                    b.Property<string>("AlergeneName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AlergeneId");
-
-                    b.HasIndex("InterviewId");
-
-                    b.ToTable("PatientAlergene");
-                });
-
-            modelBuilder.Entity("ProDiet.Models.PatientIntolerance", b =>
-                {
-                    b.Property<int>("IntoleranceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IntoleranceId"), 1L, 1);
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IntoleranceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IntoleranceId");
-
-                    b.HasIndex("InterviewId");
-
-                    b.ToTable("PatientIntolerance");
                 });
 
             modelBuilder.Entity("ProDiet.Models.Product", b =>
@@ -924,34 +738,12 @@ namespace ProDiet.Migrations
             modelBuilder.Entity("ProDiet.Models.Interview", b =>
                 {
                     b.HasOne("ProDiet.Models.Patient", "Patient")
-                        .WithOne("Interview")
-                        .HasForeignKey("ProDiet.Models.Interview", "PatientId")
+                        .WithMany("Interview")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("ProDiet.Models.PatientAlergene", b =>
-                {
-                    b.HasOne("ProDiet.Models.Interview", "Interview")
-                        .WithMany("PatientAlergenes")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-                });
-
-            modelBuilder.Entity("ProDiet.Models.PatientIntolerance", b =>
-                {
-                    b.HasOne("ProDiet.Models.Interview", "Interview")
-                        .WithMany("PatientIntolerances")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("ProDiet.Models.UsedProduct", b =>
@@ -978,19 +770,11 @@ namespace ProDiet.Migrations
                     b.Navigation("UsedProducts");
                 });
 
-            modelBuilder.Entity("ProDiet.Models.Interview", b =>
-                {
-                    b.Navigation("PatientAlergenes");
-
-                    b.Navigation("PatientIntolerances");
-                });
-
             modelBuilder.Entity("ProDiet.Models.Patient", b =>
                 {
                     b.Navigation("BodyMeasurements");
 
-                    b.Navigation("Interview")
-                        .IsRequired();
+                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("ProDiet.Models.Product", b =>

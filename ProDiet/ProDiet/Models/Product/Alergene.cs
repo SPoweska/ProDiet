@@ -11,6 +11,7 @@ namespace ProDiet.Data.Models
         [Required]
         public string AlergeneName { get; set; }
         public Product Product { get; set; }
+
         public int ProductId { get; set; }
     }
 }

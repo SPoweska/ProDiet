@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProDiet.Data.Models;
 using ProDiet.Models;
 
 namespace ProDiet.Data.Configuration
@@ -13,8 +14,6 @@ namespace ProDiet.Data.Configuration
         {
             builder.HasKey(x => x.InterviewId);
             builder.ToTable("Interview");
-            builder.HasOne(x => x.Patient)
-                .WithMany(x => x.Interview).HasForeignKey(x => x.PatientId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

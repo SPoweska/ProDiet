@@ -1,4 +1,4 @@
-﻿@page "/patientdetails/{Id:int}"
+﻿@page "/patientdetails/{PatientId:int}"
 
 @using ProDiet.Services
 @using Microsoft.AspNetCore.Components
@@ -42,6 +42,10 @@ else
                     <div>
                         <div class="d-inline pa-1 mud-theme-primary">Numer telefonu</div>
                         <div class="d-inline pa-1 mud-theme-dark">@_patient.PhoneNumber</div>
+                    </div>
+                    <div>
+                        <MudButton @onclick="()=>OpenDialog(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
+                            Dodaj wywiad żywieniowy</MudButton>
                     </div>
                 </div>
             </MudCardContent>
@@ -106,7 +110,7 @@ else
     private ProDiet.Models.Patient _patient { get; set; }
 
     [Parameter]
-    public int Id { get; set; }
+    public int PatientId { get; set; }
 
     private bool _checkOwner = false;
 
@@ -137,10 +141,10 @@ else
     {
         var user = httpContextAccessor.HttpContext.User;
         var userId = userManager.GetUserId(user);
-        _checkOwner= await iPatientStoresService.CheckOwner(userId, Id);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
         if (_checkOwner)
         {
-            _patient = await iPatientStoresService.GetPatientData(Id);
+            _patient = await iPatientStoresService.GetPatientData(PatientId);
         }
         else
         {

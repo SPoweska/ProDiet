@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220411204039_interview")]
+    partial class interview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -607,8 +609,7 @@ namespace ProDiet.Migrations
 
                     b.HasKey("InterviewId");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Interview", (string)null);
                 });
@@ -924,8 +925,8 @@ namespace ProDiet.Migrations
             modelBuilder.Entity("ProDiet.Models.Interview", b =>
                 {
                     b.HasOne("ProDiet.Models.Patient", "Patient")
-                        .WithOne("Interview")
-                        .HasForeignKey("ProDiet.Models.Interview", "PatientId")
+                        .WithMany("Interview")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -989,8 +990,7 @@ namespace ProDiet.Migrations
                 {
                     b.Navigation("BodyMeasurements");
 
-                    b.Navigation("Interview")
-                        .IsRequired();
+                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("ProDiet.Models.Product", b =>
