@@ -9,10 +9,7 @@ namespace ProDiet.Models
         [Required]
         public string DishName { get; set; }
 
-        public ICollection<UsedProduct>? UsedProducts { get; set; } = new List<UsedProduct>();
-
-        [Required] 
-        public float Weight { get; set; }
+        public List<UsedProduct>? UsedProducts { get; set; } = new List<UsedProduct>();
 
         [Required]
         public float Carbohydrates { get; set; }

@@ -48,7 +48,7 @@ else
         </MudTabPanel>
         <MudTabPanel Text="Pomiary">
         <MudCardContent>
-            <MudButton @onclick="()=>OpenAddPatientDialog()"  Variant="Variant.Filled" Color="Color.Primary">
+            <MudButton @onclick="()=>OpenDialog(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
                 Dodaj nowy pomiar ciała
             </MudButton>  
 
@@ -94,10 +94,10 @@ else
     </MudTabs>
     
 
-    @if (DialogAddBodyMeasurementOpen)
+   @* @if (DialogAddBodyMeasurementOpen)
     {
-        <AddBodyMeasurementDialog patientId="Id"  OnClose="@OnDialogAddBodyMeasurementClose"></AddBodyMeasurementDialog>
-    }
+        <AddBodyMeasurementDialog patient="_patient"  OnClose="@OnDialogAddBodyMeasurementClose"></AddBodyMeasurementDialog>
+    }*@
     
 }
 
@@ -112,22 +112,23 @@ else
 
     //public bool AddBodyMeasurementDialogOpen { get; set; }
 
-    public bool DialogAddBodyMeasurementOpen { get; set; }
+    //public bool DialogAddBodyMeasurementOpen { get; set; }
 
-    private async Task OnDialogAddBodyMeasurementClose(bool accepted)
-    {
-        DialogAddBodyMeasurementOpen = false;
-        StateHasChanged();
-    //await OnInitializedAsync();
-        navigationManager.NavigateTo("/patientdetails/{Id}", true);
+    //private async Task OnDialogAddBodyMeasurementClose(bool accepted)
+    //{
+    //    DialogAddBodyMeasurementOpen = false;
+    //    StateHasChanged();
+    ////await OnInitializedAsync();
+    //    navigationManager.NavigateTo("/patientdetails/{Id}", true);
 
-    }
+    //}
 
-    private void OpenAddPatientDialog()
-    {
-        DialogAddBodyMeasurementOpen = true;
-        StateHasChanged();
-    }
+
+    //private void OpenAddBodyMeasurementDialog()
+    //{
+    //    DialogAddBodyMeasurementOpen = true;
+    //    StateHasChanged();
+    //}
 
 
 
@@ -149,11 +150,11 @@ else
         base.OnInitializedAsync();
     }
 
-    //private void OpenDialog( ProDiet.Models.Patient patient)
-    //{
-    //    var parameters = new DialogParameters { ["patient"]=_patient };
-    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-    //    DialogService.Show<AddBodyMeasurementDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
+    private void OpenDialog( ProDiet.Models.Patient patient)
+    {
+        var parameters = new DialogParameters { ["patient"]=_patient };
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogService.Show<AddBodyMeasurementDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
 
     }
 

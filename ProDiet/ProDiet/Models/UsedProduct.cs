@@ -15,7 +15,7 @@ namespace ProDiet.Models
         public Dish Dish { get; set; }
         [Required]
         public int DishId { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
 
     }
 }

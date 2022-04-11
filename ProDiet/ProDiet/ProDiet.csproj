@@ -22,6 +22,7 @@
   <ItemGroup>
     <Folder Include="Areas\Data\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Pages\DietPlans\" />
     <Folder Include="wwwroot\Icons\ProductCategories\" />
   </ItemGroup>
 

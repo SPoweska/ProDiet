@@ -2,6 +2,7 @@
 @using ProDiet.Models
 @using ProDiet.Services
 @using System.Threading
+@using Microsoft.CodeAnalysis.VisualBasic.Syntax
 @inject NavigationManager navigationManager;
 @inject UserManager<IdentityUser> userManager;
 @inject IPatientStoresService iPatientStoresService;
@@ -11,12 +12,12 @@
 Do zrobienia, nie uruchamia się, *@
 
 
-<CascadingValue Value="this">
+@*<CascadingValue Value="this">
     <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <h4 class="modal-title">Dodawanie nowego pacjenta</h4>
+        <h4 class="modal-title">Dodawanie nowego pomiaru ciała</h4>
         <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
     </div>
     <div class="modal-body">
@@ -53,10 +54,11 @@ Do zrobienia, nie uruchamia się, *@
                               For="@(() => bodyMeasurement.TotalBoneMineral)"
                               Immediate="true"
                               Label="Masa kostna"/>
-                <MudDatePicker @bind-Value="bodyMeasurement.MeasurementDate"
-                               For="@(() => bodyMeasurement.MeasurementDate)"
-                               Immediate="true"
-                               Label="Data pomiaru"/>
+                <MudCard>
+                <label for="MeasurementDate">Data pomiaru</label>
+                <InputDate @bind-Value="bodyMeasurement.MeasurementDate">
+                </InputDate>
+                </MudCard>
             </MudCardContent>
 
         </MudCard>
@@ -72,108 +74,123 @@ Do zrobienia, nie uruchamia się, *@
     </div>
     </div>
 
-</CascadingValue>
+</CascadingValue>*@
 
 
 
-@*<MudDialog  DisableSidePadding="true">
-<DialogContent>
-<MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll ; overflow-x:scroll" >
+<MudDialog  DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 1500px; max-width: 1500px; overflow-y: scroll ; overflow-x:scroll" >
 
-<EditForm Model="bodyMeasurement" OnValidSubmit="OnValidSubmit">
-<DataAnnotationsValidator/>
-<ValidationSummary/>
-<MudCard >
-    <MudCardContent>
-        <MudTextField @bind-Value="bodyMeasurement.BodyWeight"
-                      For="@(() => bodyMeasurement.BodyWeight)"
-                      Immediate="true"
-                      Label="Masa ciała"/>
-        <MudTextField @bind-Value="bodyMeasurement.Height"
-                      For="@(() => bodyMeasurement.Height)"
-                      Immediate="true"
-                      Label="Wzrost"/>
-        <MudTextField @bind-Value="bodyMeasurement.Waist"
-                      For="@(() => bodyMeasurement.Waist)"
-                      Immediate="true"
-                      Label="Obwód talii"/>
-        <MudTextField @bind-Value="bodyMeasurement.Hips"
-                      For="@(() => bodyMeasurement.Hips)"
-                      Immediate="true"
-                      Label="Obwód bioder"/>
-        <MudTextField @bind-Value="bodyMeasurement.TotalBodyFat"
-                      For="@(() => bodyMeasurement.TotalBodyFat)"
-                      Immediate="true"
-                      Label="TBF"/>
-        <MudTextField @bind-Value="bodyMeasurement.TotalBodyWater"
-                      For="@(() => bodyMeasurement.TotalBodyWater)"
-                      Immediate="true"
-                      Label="TBW"/>
-        <MudTextField @bind-Value="bodyMeasurement.TotalBoneMineral"
-                      For="@(() => bodyMeasurement.TotalBoneMineral)"
-                      Immediate="true"
-                      Label="Masa kostna"/>
-        <MudDatePicker @bind-Value="bodyMeasurement.MeasurementDate"
-                       For="@(() => bodyMeasurement.MeasurementDate)"
-                       Immediate="true"
-                       Label="Data pomiaru"/>
-    </MudCardContent>
-
-</MudCard>
-                
-                
-<DialogActions>
-    <MudButton OnClick="Cancel">Cancel</MudButton>
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-</DialogActions>                
-</EditForm>
-</MudContainer>
-</DialogContent>
-</MudDialog>*@
+            <EditForm Model="bodyMeasurement" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+                <MudCard >
+                    <MudCardContent>
+                        <MudTextField @bind-Value="bodyMeasurement.BodyWeight"
+                                      For="@(() => bodyMeasurement.BodyWeight)"
+                                      Immediate="true"
+                                      Label="Masa ciała"/>
+                        <MudTextField @bind-Value="bodyMeasurement.Height"
+                                      For="@(() => bodyMeasurement.Height)"
+                                      Immediate="true"
+                                      Label="Wzrost"/>
+                        <MudTextField @bind-Value="bodyMeasurement.Waist"
+                                      For="@(() => bodyMeasurement.Waist)"
+                                      Immediate="true"
+                                      Label="Obwód talii"/>
+                        <MudTextField @bind-Value="bodyMeasurement.Hips"
+                                      For="@(() => bodyMeasurement.Hips)"
+                                      Immediate="true"
+                                      Label="Obwód bioder"/>
+                        <MudTextField @bind-Value="bodyMeasurement.TotalBodyFat"
+                                      For="@(() => bodyMeasurement.TotalBodyFat)"
+                                      Immediate="true"
+                                      Label="TBF"/>
+                        <MudTextField @bind-Value="bodyMeasurement.TotalBodyWater"
+                                      For="@(() => bodyMeasurement.TotalBodyWater)"
+                                      Immediate="true"
+                                      Label="TBW"/>
+                        <MudTextField @bind-Value="bodyMeasurement.TotalBoneMineral"
+                                      For="@(() => bodyMeasurement.TotalBoneMineral)"
+                                      Immediate="true"
+                                      Label="Masa kostna"/>
+                        @*<div class="col-sm-6">*@
+                        <label for="MeasurementDate">Data pomiaru</label>
+                        <InputDate @bind-Value="bodyMeasurement.MeasurementDate">
+                        </InputDate>
+                        @*</div>*@
+        
+                    </MudCardContent>
+                </MudCard>
+                <MudCardActions>
+                    <MudButton OnClick="Cancel">Cancel</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+                </MudCardActions> 
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+    
+</MudDialog>
 
 @code {
 
-    //[Parameter]
-    //public ProDiet.Models.Patient patient { get; set; }
-    public ProDiet.Models.Patient patient { get; set; }
-
     [Parameter]
-    public int patientId { get; set; }
+    public ProDiet.Models.Patient patient { get; set; }
+    //public ProDiet.Models.Patient patient { get; set; }
 
-    private BodyMeasurement bodyMeasurement = new BodyMeasurement();
+    //[Parameter]
+    //public int patientId { get; set; }
+
+    public BodyMeasurement bodyMeasurement;
 
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
 
-    public void ShowModal(RenderFragment content)
-    {
-        StateHasChanged();
-    }
+    //public void ShowModal(RenderFragment content)
+    //{
+    //    StateHasChanged();
+    //}
 
-    private Task ModalOk()
-    {
-        return OnClose.InvokeAsync(true);
+    //private Task ModalOk()
+    //{
+    //    return OnClose.InvokeAsync(true);
 
-    }
+    //}
 
-    private Task ModalCancel()
-    {
-        return OnClose.InvokeAsync(false);
-    }
+    //private Task ModalCancel()
+    //{
+    //    return OnClose.InvokeAsync(false);
+    //}
 
     protected override async Task OnInitializedAsync()
     {
-        patient = await iPatientStoresService.GetPatientData(patientId);
+        try
+        {
+            if (patient != null)
+            {
+                bodyMeasurement = new BodyMeasurement();
+                Thread.Sleep(500);
+            }
+        }
+        catch (Exception e)
+        {
+            
+            throw;
+        }
+
+
+
         await base.OnInitializedAsync();
     }
 
 
-    //[CascadingParameter]
-    //MudDialogInstance mudDialog { get; set; }
+    [CascadingParameter]
+    MudDialogInstance mudDialog { get; set; }
 
 
-    //void Submit() => mudDialog.Close(DialogResult.Ok(true));
-    //void Cancel() => mudDialog.Cancel();
+    void Submit() => mudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => mudDialog.Cancel();
 
 
 
@@ -193,7 +210,8 @@ Do zrobienia, nie uruchamia się, *@
         patient.BodyMeasurements.Add(bodyMeasurement);
         await iPatientStoresService.UpdatePatient(patient);
         Thread.Sleep(500);
-        await ModalOk();
+        Submit();
+    //await ModalOk();
 
 
     }
