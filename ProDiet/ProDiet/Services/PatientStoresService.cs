@@ -47,6 +47,8 @@ namespace ProDiet.Services
         {
             try
             {
+
+                patient.Interview = new Interview(){CreatedAt = patient.CreatedAt, CreatedBy = patient.CreatedBy};
                 await db.Patients.AddAsync(patient);
                 await db.SaveChangesAsync();
             }
@@ -56,6 +58,7 @@ namespace ProDiet.Services
                 throw ex;
             }
         }
+        
 
         public async Task UpdatePatient(Patient patient)
         {
@@ -90,6 +93,8 @@ namespace ProDiet.Services
                 throw ex;
             }
         }
+
+
 
 
         //public async Task DeletePatient(int id)
@@ -136,7 +141,11 @@ namespace ProDiet.Services
         {
             try
             {
-                Patient? patient = await db.Patients.Include(x => x.BodyMeasurements).FirstOrDefaultAsync(x => x.Id == id);
+                Patient? patient = await db.Patients.Include(x => x.BodyMeasurements)
+                    .Include(x=>x.Interview)
+                    .Include(x=>x.PatientAlergenes)
+                    .Include(x=>x.PatientIntolerances)
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (patient != null)
                 {
@@ -178,6 +187,8 @@ namespace ProDiet.Services
                 throw e;
             }
         }
+
+
     }
 }
 

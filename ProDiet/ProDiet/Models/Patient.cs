@@ -23,6 +23,8 @@ namespace ProDiet.Models
         public Interview Interview { get; set; }
 
         public List<BodyMeasurement> BodyMeasurements { get; set; } = new List<BodyMeasurement>();
+        public List<PatientIntolerance> PatientIntolerances { get; set; } = new List<PatientIntolerance>();
+        public List<PatientAlergene> PatientAlergenes { get; set; } = new List<PatientAlergene>();
         public int Height { get; set; }
         
         public int Weight { get; set; }

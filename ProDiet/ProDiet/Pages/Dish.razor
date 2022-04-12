@@ -6,6 +6,7 @@
 @using System.ComponentModel.DataAnnotations;
 @using Microsoft.AspNetCore.Components
 @using ProDiet.Data.Configuration
+@using ProDiet.Migrations
 @using ProDiet.Models
 @inject UserManager<IdentityUser> userManager;
 @inject IDishStoresService iDishStoresService;
@@ -37,13 +38,14 @@
                         var usedProducts = _dish.UsedProducts[i];
             
                         <MudCard Outlined="true">
-                            <MudSelect Label="Nazwa produktu" @bind-Value="usedProducts.ProductId">
+                            <MudSelect
+                                Label="Nazwa produktu" @bind-Value="usedProducts.ProductId">
                                 @foreach (var product in _productsList)
                                 {
                                     <MudSelectItem T="int" Value="@product.ProductId">@product.ProductName</MudSelectItem>
                                 }
                             </MudSelect>
-                            
+
                         </MudCard>                                                
                         <MudCard>
                             <MudTextField T="int"
@@ -139,6 +141,12 @@
         _productsList = await iProductStoresService.GetAllProducts();
         
         await base.OnInitializedAsync();
+    }
+
+    private async Task<Product> SelectedProductDataLoad(int selectedProductId)
+    {
+        Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
+        return selectedProduct;
     }
 
     private void OnValidSubmit()

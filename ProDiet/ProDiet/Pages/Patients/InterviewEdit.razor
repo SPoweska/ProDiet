@@ -1,0 +1,177 @@
+﻿@page "/Patient/{PatientId:int}/Interview"
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Services
+@inject NavigationManager navigationManager;
+@inject UserManager<IdentityUser> userManager;
+@inject IPatientStoresService iPatientStoresService;
+@inject IInterviewStoresService iInterviewStoresService;
+@inject IHttpContextAccessor httpContextAccessor;
+
+<h3>Edytuj wywiad żywieniowy pacjenta :</h3>
+@if (_patient == null)
+{
+    <p><em>Nie możesz edytować tego produktu</em></p>
+}
+else
+{
+    <MudCard>                                                                    
+        <MudFab
+            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+            @onclick="@(() => _patient.PatientAlergenes.Add(new PatientAlergene()))" >
+            Dodaj alergen
+        </MudFab>                                
+        <MudCard>                                    
+            @for (var i = 0; i < _patient.PatientAlergenes.Count; i++)
+            {
+                var index = i;
+                var patientAlergene = _patient.PatientAlergenes[i];
+
+                <MudCard Outlined="true">
+                    <MudSelect Label="Nazwa alergenu" @bind-Value="patientAlergene.AlergeneName">
+                        @foreach (var alergene in Enum.GetValues(typeof(Alergenes)))
+                        {
+                            <MudSelectItem T="string" Value="@alergene.ToString()">@alergene</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudCard>
+                <MudFab
+                    Size="Size.Small"
+                    StartIcon="@Icons.Filled.Delete"
+                    Color="Color.Error"
+                    @onclick="@(() => _patient.PatientAlergenes.RemoveAt(index))">
+                    Skasuj
+                </MudFab>
+            }
+        </MudCard>
+    </MudCard>
+
+
+    <MudCard>                                                                    
+        <MudFab
+            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+            @onclick="@(() => _patient.PatientIntolerances.Add(new PatientIntolerance()))" >
+            Dodaj nietolerancję
+        </MudFab>                                
+        <MudCard>                                    
+            @for (var i = 0; i < _patient.PatientIntolerances.Count; i++)
+            {
+                var index = i;
+                var patientIntolerance = _patient.PatientIntolerances[i];
+
+                <MudCard Outlined="true">
+                    <MudSelect Label="Nazwa nietolerancji" @bind-Value="patientIntolerance.IntoleranceName">
+                        @foreach (var intolerance in Enum.GetValues(typeof(Intolerances)))
+                        {
+                            <MudSelectItem T="string" Value="@intolerance.ToString()">@intolerance</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudCard>
+                <MudFab
+                    Size="Size.Small"
+                    StartIcon="@Icons.Filled.Delete"
+                    Color="Color.Error"
+                    @onclick="@(() => _patient.PatientIntolerances.RemoveAt(index))">
+                    Skasuj
+                </MudFab>
+            }
+        </MudCard>
+    </MudCard>
+
+@*
+    <EditForm Model="_interview" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <MudCard >
+            <MudCardContent>
+                <MudTextField @bind-Value="_patient.ProductName"
+                              For="@(() => _patient.ProductName)"
+                              Immediate="true"
+                              Label="Nazwa produktu"/>
+                <MudTextField @bind-Value="_patient.Carbohydrates"
+                              For="@(() => _patient.Carbohydrates)"
+                              Immediate="true"
+                              Label="Węglowodany"/>
+                <MudTextField @bind-Value="_patient.Fats"
+                              For="@(() => _patient.Fats)"
+                              Immediate="true"
+                              Label="Tłuszcz"/>
+                <MudTextField @bind-Value="_patient.Proteins"
+                              For="@(() => _patient.Proteins)"
+                              Immediate="true"
+                              Label="Białko"/>
+                <MudTextField @bind-Value="_patient.Fiber"
+                              For="@(() => _patient.Fiber)"
+                              Immediate="true"
+                              Label="Błonnik"/>
+                <MudTextField @bind-Value="_patient.Calories"
+                              For="@(() => _patient.Calories)"
+                              Immediate="true"
+                              Label="Kalorie"/>
+            </MudCardContent>
+        </MudCard>
+
+
+        <MudCardActions>
+            <MudButton OnClick="Cancel">Anuluj</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+        </MudCardActions>
+    </EditForm>*@
+}
+
+@code {
+    [Parameter] 
+    public int patientId{ get; set; }
+
+    private string userId{ get; set; }
+
+    private ProDiet.Models.Patient _patient;
+    private ProDiet.Models.Interview _interview;
+
+    private bool _checkOwner = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, patientId);
+        if (_checkOwner)
+        {
+            _patient = await iPatientStoresService.GetPatientData(patientId);
+            _interview = await iInterviewStoresService.GetInterviewData(patientId);
+        }
+        else
+        {
+            _patient = null;
+        }
+
+
+        await base.OnInitializedAsync();
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo($"/patientdetails/{patientId}", true);
+        
+    }
+
+    private void OnValidSubmit()
+    {
+
+
+    //var user = httpContextAccessor.HttpContext.User;
+    //var id = userManager.GetUserId(user);
+        _patient.ModifiedBy = userId;
+        _patient.ModifiedAt = DateTime.Now;
+        iPatientStoresService.UpdatePatient(_patient);
+        Thread.Sleep(500);
+        navigationManager.NavigateTo($"/patientdetails/{patientId}", true);
+
+
+
+    }
+
+
+}

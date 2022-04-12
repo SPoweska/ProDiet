@@ -9,8 +9,8 @@ namespace ProDiet.Models
         public int IntoleranceId { get; set; }
         [Required]
         public string IntoleranceName { get; set; }
-        public Interview Interview { get; set; }
-        [ForeignKey("InterviewId")]
-        public int InterviewId { get; set; }
+        public Patient Patient { get; set; }
+        [ForeignKey("PatientId")]
+        public int PatientId { get; set; }
     }
 }
