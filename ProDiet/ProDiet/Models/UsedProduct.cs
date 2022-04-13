@@ -18,6 +18,15 @@ namespace ProDiet.Models
         [Required]
         public int DishId { get; set; }
         public int Quantity { get; set; }
+        [Required]
+        public float Carbohydrates { get; set; }
+        [Required]
+        public float Fats { get; set; }
+        [Required]
+        public float Proteins { get; set; }
+        public float? Fiber { get; set; }
+        [Required]
+        public float Calories { get; set; }
 
     }
 }

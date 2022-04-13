@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Razor.Language.Intermediate
 @using ProDiet.Data.Enums
+@using ProDiet.Pages.Dishes
 @using ProDiet.Services
 @using System.ComponentModel.DataAnnotations;
 @using Microsoft.AspNetCore.Components
@@ -35,31 +36,11 @@
                     @for (var i = 0; i < _dish.UsedProducts.Count; i++)
                     {
                         var index = i;
-                        var usedProducts = _dish.UsedProducts[i];
+                        var usedProduct = _dish.UsedProducts[i];
             
-                        <MudCard Outlined="true">
-                            <MudSelect
-                                Label="Nazwa produktu" @bind-Value="usedProducts.ProductId">
-                                @foreach (var product in _productsList)
-                                {
-                                    <MudSelectItem T="int" Value="@product.ProductId">@product.ProductName</MudSelectItem>
-                                }
-                            </MudSelect>
-
-                        </MudCard>                                                
-                        <MudCard>
-                            <MudTextField T="int"
-                                          @bind-Value="usedProducts.Quantity"                                                 
-                                          Immediate="true"
-                                          Label="Masa w gramach"/>
-                        </MudCard>
-                        <MudCard>
-                                    <MudTextField T="int"
-                                    @bind-Value="usedProducts.Quantity"                                                 
-                                    Immediate="true"
-                                    Label="Masa w gramach"/>
-                        </MudCard>
-
+                        <CascadingValue Value="usedProduct">
+                        <UsedProductComponent productList="_productsList"></UsedProductComponent>
+                        </CascadingValue>
 
                         <MudFab
                             Size="Size.Small"
@@ -143,11 +124,11 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task<Product> SelectedProductDataLoad(int selectedProductId)
-    {
-        Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
-        return selectedProduct;
-    }
+    //private async Task<Product> SelectedProductDataLoad(int selectedProductId)
+    //{
+    //    Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
+    //    return selectedProduct;
+    //}
 
     private void OnValidSubmit()
     {

@@ -1,0 +1,86 @@
+﻿@using ProDiet.Models
+@using ProDiet.Services
+@inject IProductStoresService iProductStoresService;
+
+<MudCard Outlined="true">
+    <MudSelect
+        ValueChanged="( int i) => OnProductSelected(i)"
+        T="int"
+        Label="Nazwa produktu"
+        Value="usedProduct.ProductId"
+        Text="@selectedProduct.ProductName">
+        @foreach (var product in productList)
+        {
+            <MudSelectItem T="int" Value="@product.ProductId">@product.ProductName</MudSelectItem>
+
+        }
+    </MudSelect>
+    <MudTextField T="float"
+                  @bind-Value="selectedProduct.Calories"                                                 
+                  Immediate="true"
+                  Label="Kalorie na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="selectedProduct.Carbohydrates"                                                 
+                  Immediate="true"
+                  Label="Węglowodany na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="selectedProduct.Fats"                                                 
+                  Immediate="true"
+                  Label="Tłuszcz na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="selectedProduct.Proteins"                                                 
+                  Immediate="true"
+                  Label="Białko na 100g"/>
+
+</MudCard>                                                
+<MudCard>
+    <MudTextField T="int"
+                  @bind-Value="usedProduct.Quantity"                                                 
+                  Immediate="true"
+                  Label="Masa w gramach"/>
+    <MudTextField T="float"
+                  @bind-Value="usedProduct.Calories"                                                 
+                  Immediate="true"
+                  Label="Kalorie na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="usedProduct.Carbohydrates"                                                 
+                  Immediate="true"
+                  Label="Węglowodany na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="usedProduct.Fats"                                                 
+                  Immediate="true"
+                  Label="Tłuszcz na 100g"/>
+    <MudTextField T="float"
+                  @bind-Value="usedProduct.Proteins"                                                 
+                  Immediate="true"
+                  Label="Białko na 100g"/>
+</MudCard>
+
+
+
+
+
+@code {
+    [CascadingParameter]
+    public UsedProduct usedProduct { get; set; }
+    [Parameter]
+    public List<Product> productList { get; set; }
+
+    public Product selectedProduct= new Product();
+
+    protected  override async  Task OnInitializedAsync()
+    {
+
+        await this.InvokeAsync(StateHasChanged);
+        //selectedProduct = await iProductStoresService.GetProductData(productId);
+        await base.OnInitializedAsync();
+
+    }
+
+    public async void OnProductSelected(int productId)
+    {
+        selectedProduct = await iProductStoresService.GetProductData(productId);
+        usedProduct.ProductId = productId;
+         await this.InvokeAsync(StateHasChanged);
+    }
+}
