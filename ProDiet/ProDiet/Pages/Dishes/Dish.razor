@@ -15,7 +15,7 @@
 @inject IHttpContextAccessor httpContextAccessor;
 @inject NavigationManager navigationManager;
 
-<h3>Dish</h3>
+<h3>Utwórz nowe danie</h3>
 <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudCard>
@@ -113,7 +113,7 @@
 
     private void Cancel()
     {
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/mydishes");
     }
 
     protected override async Task OnInitializedAsync()
@@ -132,15 +132,12 @@
 
     private void OnValidSubmit()
     {
-
-
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
         _dish.CreatedBy = id;
         _dish.CreatedAt = DateTime.Now;
         iDishStoresService.AddDish(_dish);
-        navigationManager.NavigateTo("/");
-
+        navigationManager.NavigateTo("/mydishes");
 
     }
 

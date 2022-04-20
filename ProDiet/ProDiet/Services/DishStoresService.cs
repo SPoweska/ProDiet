@@ -111,6 +111,26 @@ namespace ProDiet.Services
             try
             {
                 db.Entry(dish).State = EntityState.Modified;
+
+                foreach (var usedProduct in dish.UsedProducts)
+                {
+                    if (usedProduct.ProductId != 0)
+                    {
+                        db.Entry(usedProduct).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(usedProduct).State = EntityState.Added;
+
+                    }
+
+                }
+                var idsOfUsedProducts =  dish.UsedProducts.Select(x => x.UsedProductId).ToList();
+                var usedProductsToDelete = await db.UsedProducts.
+                    Where(x => !idsOfUsedProducts.
+                        Contains(x.UsedProductId) && x.DishId == dish.DishId).ToListAsync();
+
+                db.RemoveRange(usedProductsToDelete);
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)

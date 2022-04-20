@@ -1,4 +1,4 @@
-﻿@page "/dishes"
+﻿@page "/mydishes"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Identity
 @using ProDiet.Data.Enums
@@ -7,12 +7,60 @@
 @using ProDiet.Services
 @inject UserManager<IdentityUser> userManager
 @inject IProductStoresService iProductStoresService
+@inject IDishStoresService iDishStoresService
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 
-<h3>Dishes</h3>
+<h3>Moje dania</h3>
+
+@if (_dishes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Kcal</th>
+            <th>Węglowodany</th>
+            <th>Tłuszcz</th>
+            <th>Białko</th>
+            <th>Liczba porcji</th>
+            <th>Rodzaj dania</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var _dish in _dishes)
+        {
+            <tr>
+                <td>@_dish.DishName</td>
+                <td>@_dish.Calories</td>
+                <td>@_dish.Carbohydrates</td>
+                <td>@_dish.Fats</td>
+                <td>@_dish.Proteins</td>
+                <td>@_dish.Servings</td>
+                <td>@_dish.MealType</td>
+                <td><button class="btn btn-info" @onclick="@(()=>navigationManager.NavigateTo($"/mydishes/editdish/{_dish.DishId}"))">Edytuj danie</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<ProDiet.Models.Dish> _dishes;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        _dishes = await iDishStoresService.GetAllUserDishes(id);
+        await base.OnInitializedAsync();
+    }
 
 }
