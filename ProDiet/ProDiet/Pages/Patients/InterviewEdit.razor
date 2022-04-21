@@ -9,10 +9,12 @@
 @inject IInterviewStoresService iInterviewStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
 
+@*//Do zrobienia*@
+
 <h3>Edytuj wywiad żywieniowy pacjenta :</h3>
 @if (_patient == null)
 {
-    <p><em>Nie możesz edytować tego produktu</em></p>
+    <p><em>Nie możesz dodać planu żywieniowego dla tego pacjenta</em></p>
 }
 else
 {
@@ -79,13 +81,13 @@ else
         </MudCard>
     </MudCard>
 
-@*
-    <EditForm Model="_interview" OnValidSubmit="OnValidSubmit">
+
+@*    <EditForm Model="_interview" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
         <MudCard >
             <MudCardContent>
-                <MudTextField @bind-Value="_patient.ProductName"
+                <MudTextField @bind-Value="_interview."
                               For="@(() => _patient.ProductName)"
                               Immediate="true"
                               Label="Nazwa produktu"/>
@@ -141,10 +143,6 @@ else
         {
             _patient = await iPatientStoresService.GetPatientData(patientId);
             _interview = await iInterviewStoresService.GetInterviewData(patientId);
-        }
-        else
-        {
-            _patient = null;
         }
 
 

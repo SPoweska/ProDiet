@@ -37,7 +37,7 @@ namespace ProDiet.Models
 
         public float? BMI { get; set; }
         public float? BMR { get; set; }
-        public float? PAL { get; set; }
+        public float? PAL { get; set; } //Współczynnik aktywności fizycznej
         public float? PPM { get; set; }
         public float? CPM { get; set; }
         //public List<DietPlan> DietPlans { get; set; }
