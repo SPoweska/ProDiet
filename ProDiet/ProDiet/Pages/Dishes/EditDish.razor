@@ -147,7 +147,7 @@ else
     //    return selectedProduct;
     //}
 
-    private void OnValidSubmit()
+    private async Task OnValidSubmit()
     {
 
 
@@ -155,8 +155,7 @@ else
         var id = userManager.GetUserId(user);
         _dish.ModifiedBy = id;
         _dish.ModifiedAt = DateTime.Now;
-        iDishStoresService.UpdateDish(_dish);
-        Thread.Sleep(5000);
+        await iDishStoresService.UpdateDish(_dish);
         navigationManager.NavigateTo("/mydishes");
 
 

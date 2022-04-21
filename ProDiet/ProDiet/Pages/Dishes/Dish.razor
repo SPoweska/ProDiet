@@ -130,13 +130,13 @@
     //    return selectedProduct;
     //}
 
-    private void OnValidSubmit()
+    private async Task OnValidSubmit()
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
         _dish.CreatedBy = id;
         _dish.CreatedAt = DateTime.Now;
-        iDishStoresService.AddDish(_dish);
+        await iDishStoresService.AddDish(_dish);
         navigationManager.NavigateTo("/mydishes");
 
     }

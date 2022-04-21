@@ -16,18 +16,22 @@
         }
     </MudSelect>
     <MudTextField T="float"
+                  ReadOnly="true"
                   @bind-Value="selectedProduct.Calories"                                                 
                   Immediate="true"
                   Label="Kalorie na 100g"/>
     <MudTextField T="float"
+                  ReadOnly="true"
                   @bind-Value="selectedProduct.Carbohydrates"                                                 
                   Immediate="true"
                   Label="Węglowodany na 100g"/>
     <MudTextField T="float"
+                  ReadOnly="true"
                   @bind-Value="selectedProduct.Fats"                                                 
                   Immediate="true"
                   Label="Tłuszcz na 100g"/>
     <MudTextField T="float"
+                  ReadOnly="true"
                   @bind-Value="selectedProduct.Proteins"                                                 
                   Immediate="true"
                   Label="Białko na 100g"/>
@@ -66,18 +70,30 @@
     [Parameter]
     public List<Product> productList { get; set; }
 
-    public Product selectedProduct= new Product();
+    public int selectedProductId;
+
+    public Product selectedProduct = new Product();
 
     protected  override async  Task OnInitializedAsync()
     {
+        selectedProductId = usedProduct.ProductId;
+
+        if (selectedProductId!=0)
+        {
+            Thread.Sleep(500);
+            selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
+        }
 
         await this.InvokeAsync(StateHasChanged);
+
+    //OnProductSelected(usedProduct.ProductId);
+
         //selectedProduct = await iProductStoresService.GetProductData(productId);
         await base.OnInitializedAsync();
 
     }
 
-    public async void OnProductSelected(int productId)
+    public async Task OnProductSelected(int productId)
     {
         selectedProduct = await iProductStoresService.GetProductData(productId);
         usedProduct.ProductId = productId;

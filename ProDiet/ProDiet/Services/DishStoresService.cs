@@ -114,7 +114,7 @@ namespace ProDiet.Services
 
                 foreach (var usedProduct in dish.UsedProducts)
                 {
-                    if (usedProduct.ProductId != 0)
+                    if (usedProduct.UsedProductId != 0)
                     {
                         db.Entry(usedProduct).State = EntityState.Modified;
                     }
