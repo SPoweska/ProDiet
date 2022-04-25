@@ -40,8 +40,8 @@ namespace ProDiet.Models
         public float? PAL { get; set; } //Współczynnik aktywności fizycznej
         public float? PPM { get; set; }
         public float? CPM { get; set; }
-        //public List<DietPlan> DietPlans { get; set; }
-       
+        public List<DietPlan.DietPlan> DietPlans { get; set; }
+
 
     }
 }

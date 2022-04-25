@@ -6,6 +6,7 @@ namespace ProDiet.Models.DietPlan
     {
         [Key]
         public int MealId { get; set; }
+        public DietPlan DietPlan { get; set; }
         [Required]
         public int DietPlanId { get; set; }//dorobić konfiguracje
         [Required]

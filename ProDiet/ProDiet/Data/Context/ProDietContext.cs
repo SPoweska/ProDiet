@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProDiet.Data.Configuration;
 using ProDiet.Data.Models;
 using ProDiet.Models;
+using ProDiet.Models.DietPlan;
 
 namespace ProDiet.Data;
 
@@ -24,6 +25,11 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<Dish> Dishes { get; set; }
     public DbSet<UsedProduct> UsedProducts { get; set; }
     public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
+    public DbSet<DietPlan> DietPlans { get; set; }
+    public DbSet<DietPlanDay> DietPlanDays { get; set; }
+    public DbSet<DietPlanDayDish> DietPlanDayDishes { get; set; }
+    public DbSet<DietPlanShoppingList> DietPlanShoppingLists { get; set; }
+    public DbSet<Meal> Meals { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

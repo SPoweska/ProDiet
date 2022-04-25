@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220425125002_dietplan")]
+    partial class dietplan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,16 +396,11 @@ namespace ProDiet.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Recommendations")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DietPlanId");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("DietPlans");
                 });
@@ -426,7 +423,7 @@ namespace ProDiet.Migrations
                     b.Property<DateTime?>("DietPlanDayDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DietPlanId")
+                    b.Property<int?>("DietPlanId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -1088,26 +1085,11 @@ namespace ProDiet.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("ProDiet.Models.DietPlan.DietPlan", b =>
-                {
-                    b.HasOne("ProDiet.Models.Patient", "Patient")
-                        .WithMany("DietPlans")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("ProDiet.Models.DietPlan.DietPlanDay", b =>
                 {
-                    b.HasOne("ProDiet.Models.DietPlan.DietPlan", "DietPlan")
+                    b.HasOne("ProDiet.Models.DietPlan.DietPlan", null)
                         .WithMany("DietPlanDays")
-                        .HasForeignKey("DietPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DietPlan");
+                        .HasForeignKey("DietPlanId");
                 });
 
             modelBuilder.Entity("ProDiet.Models.DietPlan.DietPlanDayDish", b =>
@@ -1242,8 +1224,6 @@ namespace ProDiet.Migrations
             modelBuilder.Entity("ProDiet.Models.Patient", b =>
                 {
                     b.Navigation("BodyMeasurements");
-
-                    b.Navigation("DietPlans");
 
                     b.Navigation("Interview")
                         .IsRequired();
