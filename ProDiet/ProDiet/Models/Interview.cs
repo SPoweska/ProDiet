@@ -10,7 +10,7 @@ namespace ProDiet.Models
     {
         [Key]
         public int InterviewId { get; set; }
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
         [Required]
         [ForeignKey("PatientId")]
         public int PatientId { get; set; }

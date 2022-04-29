@@ -20,7 +20,7 @@ namespace ProDiet.Services
 
         public async Task UpdateInterview(Interview interview)
         {
-            if (interview == null)
+            if (interview != null)
             {
                 try
                 {
@@ -31,10 +31,6 @@ namespace ProDiet.Services
                 {
                     throw ex;
                 }
-            }
-            else
-            {
-                throw new ArgumentNullException();
             }
         }
 

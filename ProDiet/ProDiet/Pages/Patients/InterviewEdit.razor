@@ -293,12 +293,11 @@ else
         
     }
 
-    private void OnValidSubmit()
+    private async void OnValidSubmit()
     {
         _interview.ModifiedBy = userId;
         _interview.ModifiedAt = DateTime.Now;
-        iInterviewStoresService.UpdateInterview(_interview);
-        Thread.Sleep(500);
+        await iInterviewStoresService.UpdateInterview(_interview);
         navigationManager.NavigateTo($"/patientdetails/{patientId}", true);
 
 
