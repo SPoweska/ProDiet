@@ -12,7 +12,6 @@ namespace ProDiet.Models.DietPlan
 
         public DietPlan DietPlan { get; set; }
         [Required]
-        [ForeignKey("DietPlanId")]
         public int DietPlanId { get; set; }
         public DateTime ? DietPlanDayDate { get; set; }
         public List<Dish> Dish { get; set; }

@@ -21,8 +21,9 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IPatientStoresService,PatientStoresService>();
 builder.Services.AddScoped<IDishStoresService, DishStoresService>();
 builder.Services.AddScoped<IProductStoresService, ProductStoresService>();
+builder.Services.AddScoped<IInterviewStoresService, InterviewStoresService>();
 //builder.Services.AddScoped<IUsedProductStoresService, UsedProductStoresService>();
-builder.Services.AddScoped<IAlergeneStoresService, AlergeneStoresService>();
+
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<UserManager<IdentityUser>>();

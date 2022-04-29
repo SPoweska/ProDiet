@@ -44,7 +44,7 @@ else
                         <div class="d-inline pa-1 mud-theme-dark">@_patient.PhoneNumber</div>
                     </div>
                     <div>
-                        <MudButton @onclick="()=>OpenDialog(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
+                        <MudButton @onclick="()=>OpenInterview()"  Variant="Variant.Filled" Color="Color.Primary">
                             Dodaj wywiad żywieniowy</MudButton>
                     </div>
                 </div>
@@ -134,7 +134,10 @@ else
     //    StateHasChanged();
     //}
 
-
+    public void OpenInterview()
+    {
+        navigationManager.NavigateTo($"/Patient/{PatientId}/Interview");
+    }
 
 
     protected override async Task OnInitializedAsync()

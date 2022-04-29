@@ -85,6 +85,10 @@ namespace ProDiet.Services
                         Contains(x.MeasurementId) && x.PatientId == patient.Id).ToListAsync();
 
                 db.RemoveRange(measurementsToDelete);
+
+
+
+
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)

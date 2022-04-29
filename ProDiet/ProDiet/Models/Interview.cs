@@ -21,13 +21,14 @@ namespace ProDiet.Models
         public string? VisitGoal { get; set; }
         public string? Diseases { get; set; }
         public string? Suplementation { get; set; }
-        public string? PALActivity { get; set; }
+        [Required]
+        public int PALActivity { get; set; } = 3;
         public string? FamilyDiseases { get; set; }
         public string? DigestiveDiseases { get; set; }
         public string? HealthProblems { get; set; }
         public string? DietHistory { get; set; }
         public string? Profession { get; set; }
-        public bool? FoodHeatingAbility { get; set; }
+        public bool FoodHeatingAbility { get; set; }=false;
         public string? TypicalEatingShedules { get; set; }
         public string? LastMealTime { get; set; }
         public string? DailySnacksAmount { get; set; }

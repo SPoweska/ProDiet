@@ -13,7 +13,6 @@
 @inject NavigationManager navigationManager;
 @inject UserManager<IdentityUser> userManager;
 @inject IProductStoresService iProductStoresService;
-@inject IAlergeneStoresService iAlergeneStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
 
 
@@ -243,7 +242,7 @@
     </MudCardContent>
     </MudCard>
     <MudCard>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="Cancel">Wyjdź</MudButton>
         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
     </MudCard>   
                                
@@ -307,7 +306,6 @@
         var id = userManager.GetUserId(user);
         _product.CreatedBy = id;
         _product.CreatedAt = DateTime.Now;
-        //_product.Alergenes = iAlergeneStoresService.ReturnListAddedAlergenes(selectedAlergens);
         iProductStoresService.AddProduct(_product);
         Thread.Sleep(500);
         Submit();

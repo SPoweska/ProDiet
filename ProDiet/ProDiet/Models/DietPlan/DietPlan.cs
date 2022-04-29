@@ -13,6 +13,8 @@ namespace ProDiet.Models.DietPlan
         [Required]
         [ForeignKey("PatientId")]
         public int PatientId { get; set; }
+        [Required]
+        public int PlanDaysCount { get; set; }
 
         public List<DietPlanDay>? DietPlanDays { get; set; } = new List<DietPlanDay>(); //konfiguracja
         public DateTime? DietPlanStartTime { get;}=DateTime.Now;

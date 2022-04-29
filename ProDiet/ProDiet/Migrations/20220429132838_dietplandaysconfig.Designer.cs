@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220429132838_dietplandaysconfig")]
+    partial class dietplandaysconfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -397,9 +399,6 @@ namespace ProDiet.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlanDaysCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Recommendations")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -682,8 +681,8 @@ namespace ProDiet.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PALActivity")
-                        .HasColumnType("int");
+                    b.Property<string>("PALActivity")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
