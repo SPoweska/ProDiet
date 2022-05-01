@@ -22,6 +22,7 @@ builder.Services.AddScoped<IPatientStoresService,PatientStoresService>();
 builder.Services.AddScoped<IDishStoresService, DishStoresService>();
 builder.Services.AddScoped<IProductStoresService, ProductStoresService>();
 builder.Services.AddScoped<IInterviewStoresService, InterviewStoresService>();
+builder.Services.AddScoped<IDietPlanStoresService, DietPlanStoresService>();
 //builder.Services.AddScoped<IUsedProductStoresService, UsedProductStoresService>();
 
 builder.Services.AddScoped<TokenProvider>();

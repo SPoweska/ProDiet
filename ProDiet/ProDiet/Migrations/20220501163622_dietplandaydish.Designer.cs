@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220501163622_dietplandaydish")]
+    partial class dietplandaydish
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,12 +421,6 @@ namespace ProDiet.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DietPlanDayId"), 1L, 1);
 
-                    b.Property<float>("Calories")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Carbohydrates")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -438,20 +434,11 @@ namespace ProDiet.Migrations
                     b.Property<int>("DietPlanId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Fats")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Fiber")
-                        .HasColumnType("real");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Proteins")
-                        .HasColumnType("real");
 
                     b.HasKey("DietPlanDayId");
 
@@ -468,12 +455,6 @@ namespace ProDiet.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DayDishId"), 1L, 1);
 
-                    b.Property<float>("Calories")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Carbohydrates")
-                        .HasColumnType("real");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -487,23 +468,11 @@ namespace ProDiet.Migrations
                     b.Property<int>("DishId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Fats")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Fiber")
-                        .HasColumnType("real");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Proteins")
-                        .HasColumnType("real");
-
-                    b.Property<int>("Servings")
-                        .HasColumnType("int");
 
                     b.HasKey("DayDishId");
 
