@@ -1,0 +1,190 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+
+
+
+<h3>Dodawanie nowego jadłospisu dla pacjenta: @_patient.FirstName+" "+@_patient.LastName</h3>
+<EditForm Model="_dietPlan">
+    <MudCard>
+        <h2>Ustawienia jadłospisu</h2>
+        <MudNumericField 
+            ValueChanged="( int i) => OnDayCountChanged(i)"
+            T="int" 
+            Value="planDaysCount" 
+            Label="Podaj liczbę dni jadłospisu" 
+            Min="1" 
+            Max="14" 
+            Variant="Variant.Outlined" />
+
+        <MudDateRangePicker Label=Wybierz datę ważności jadłospisu @bind-DateRange="_dateRange"></MudDateRangePicker>
+    
+        <MudTextField @bind-Value="_patient.PPM"
+                      For="@(() => _patient.PPM)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="PPM"/>
+        <MudTextField @bind-Value="_patient.CPM"
+                      For="@(() => _patient.CPM)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="CPM"/>
+        <MudTextField @bind-Value="_dietPlan.DailyCalories"
+                      For="@(() => _dietPlan.DailyCalories)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="CPM"/>
+        <MudInputLabel>Udział energii poszczególnych makroskładników(%):</MudInputLabel>
+        <MudNumericField 
+            ValueChanged="( int i) => OnCarbPercentChanged(i)"
+            T="int" 
+            Value="carbPercent"
+            Label="Węglowodany"
+            Min="1"
+            Max=@maxCarbPercent
+            Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="_dietPlan.DailyCarbohydrates"
+                      For="@(() => _dietPlan.DailyCarbohydrates)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="Kcal"/>
+        <MudNumericField
+            ValueChanged="( int i) => OnProteinPercentChanged(i)"
+            T="int"
+            Value="proteinPercent" 
+            Label="Białko" 
+            Min="1" 
+            Max=@maxProteinPercent 
+            Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="_dietPlan.DailyProteins"
+                      For="@(() => _dietPlan.DailyProteins)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="Kcal"/>
+
+        <MudNumericField 
+            ValueChanged="( int i) => OnFatPercentChanged(i)"
+            T="int"
+            Value="fatPercent" 
+            Label="Tłuszcz" 
+            Min="1" 
+            Max=@maxFatPercent 
+            Variant="Variant.Outlined" />
+        <MudTextField 
+            @bind-Value="_dietPlan.DailyFats"
+            For="@(() => _dietPlan.DailyFats)"
+            Immediate="true"
+            Disabled="true"
+            Label="Kcal"/>
+        <MudCard
+            Outlined="true">
+            <MudFab
+                Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                @onclick="@(() => _dietPlan.Meals.Add(new Meal()))" >
+                Dodaj rodzaj posiłku
+            </MudFab> 
+            @for (var i = 0; i < _dietPlan.Meals.Count; i++)
+            {
+                var index = i;
+                var meal = _dietPlan.Meals[i];
+
+                <CascadingValue Value="meal">
+                    <MealPartialComponent></MealPartialComponent>
+                </CascadingValue>
+
+                <MudFab
+                    Size="Size.Small"
+                    StartIcon="@Icons.Filled.Delete"
+                    Color="Color.Error"
+                    @onclick="@(() => _dietPlan.Meals.RemoveAt(index))">
+                    Skasuj
+                </MudFab>
+            }
+        </MudCard>
+        <MudTextField @bind-Value="_dietPlan.Recommendations"
+                      For="@(() => _dietPlan.Recommendations)"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="Zalecenia ogólne"/>
+    </MudCard>
+    
+
+</EditForm>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Patient _patient { get; set; }
+    [Parameter]
+    public DietPlan _dietPlan { get; set; }
+
+    static int planDaysCount = 7;
+    static int carbPercent = 50;
+    static int proteinPercent = 15;
+    static int fatPercent = 35;
+    public int percentSum = 100;
+    public int maxCarbPercent = 50;
+    public int maxFatPercent = 35;
+    public int maxProteinPercent = 15;
+
+    private DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(planDaysCount).Date);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        if (_dietPlan.DietPlanId == null)
+        {
+            _dietPlan = new DietPlan() {PatientId = _patient.Id};
+        }
+        await base.OnInitializedAsync();
+    }
+
+    public async Task OnDayCountChanged(int dayCount)
+    {
+        planDaysCount = dayCount;
+        _dateRange=new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(planDaysCount).Date);
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+
+    public async Task OnCarbPercentChanged(int carbPercent)
+    {
+        percentSum = carbPercent + fatPercent + proteinPercent;
+        if (percentSum < 100)
+        {
+            maxCarbPercent = 100 - percentSum;
+        }
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+
+    public async Task OnFatPercentChanged(int fatPercent)
+    {
+        percentSum = carbPercent + fatPercent + proteinPercent;
+        if (percentSum < 100)
+        {
+            maxFatPercent = 100 - percentSum;
+        }
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+
+    public async Task OnProteinPercentChanged(int proteinPercent)
+    {
+        percentSum = carbPercent + fatPercent + proteinPercent;
+        if (percentSum < 100)
+        {
+            maxProteinPercent = 100 - percentSum;
+        }
+        await this.InvokeAsync(StateHasChanged);
+    }
+}

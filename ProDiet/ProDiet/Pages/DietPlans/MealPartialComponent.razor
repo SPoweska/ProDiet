@@ -1,0 +1,40 @@
+﻿@using ProDiet.Models.DietPlan
+@using ProDiet.Data.Enums
+<h3>MealPartialComponent</h3>
+
+<MudCard Outlined="true">
+    <MudSelect
+        T="string"
+        Label="Nazwa produktu"
+        Value="meal.MealName"
+        Text="@meal.MealName">
+        @foreach (var mealtype in Enum.GetValues(typeof(MealType)))
+        {
+            <MudSelectItem T="string" Value="@meal.MealName">@meal.MealName</MudSelectItem>
+
+        }
+    </MudSelect>
+    <MudNumericField
+        T="float"
+        Value="meal.MealDailySharePercent" 
+        Label="Udział procentowy" 
+        Min="1" 
+        Max=@maxMealDailySharePercent 
+        Variant="Variant.Outlined" />
+</MudCard>
+
+@code {
+
+    [CascadingParameter]
+    public Meal meal { get; set; }
+    [CascadingParameter]
+    public int maxMealDailySharePercent { get; set; }
+
+    protected  override async  Task OnInitializedAsync()
+    {
+        await this.InvokeAsync(StateHasChanged);
+        await base.OnInitializedAsync();
+
+    }
+
+}
