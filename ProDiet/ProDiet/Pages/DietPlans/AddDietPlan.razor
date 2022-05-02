@@ -229,7 +229,7 @@ else
         var userId = userManager.GetUserId(user);
         _dietPlan.CreatedBy = userId;
         _dietPlan.CreatedAt = DateTime.Now;
-        for (var i = 0; i < _dietPlan.PlanDaysCount-1; i++)
+        for (var i = 0; i < _dietPlan.PlanDaysCount; i++)
         {
             _dietPlan.DietPlanDays.Add(new DietPlanDay()
             {
