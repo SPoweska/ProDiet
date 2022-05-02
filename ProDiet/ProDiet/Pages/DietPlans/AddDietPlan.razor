@@ -1,18 +1,31 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@page "/patientdetails/{PatientId:int}/AddDietPlan"
+@using Microsoft.AspNetCore.Identity
 @using ProDiet.Models
 @using ProDiet.Models.DietPlan
 @using ProDiet.Services
 @inject UserManager<IdentityUser> userManager
 @inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 
 
-
+@if (_patient == null)
+{
+    <p><em>Nie możesz wyświetlić danych tego pacjenta</em></p>
+}
+else
+{
 <h3>Dodawanie nowego jadłospisu dla pacjenta: @_patient.FirstName+" "+@_patient.LastName</h3>
-<EditForm Model="_dietPlan">
+<EditForm Model="_dietPlan" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
     <MudCard>
         <h2>Ustawienia jadłospisu</h2>
+        <MudTextField @bind-Value="_dietPlan.DietPlanName"
+                      For="@(() => _dietPlan.DietPlanName)"
+                      Immediate="true"
+                      Label="PPM"/>
         <MudNumericField 
             ValueChanged="( int i) => OnDayCountChanged(i)"
             T="int" 
@@ -112,9 +125,15 @@
                       Disabled="true"
                       Label="Zalecenia ogólne"/>
     </MudCard>
+    <MudCard>
+        <MudButton OnClick="Cancel">Wyjdź</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+    </MudCard>
     
 
 </EditForm>
+}
+
 
 
 
@@ -122,9 +141,14 @@
 
 @code {
     [Parameter]
+    public int PatientId { get; set; }
+    
     public Patient _patient { get; set; }
     [Parameter]
     public DietPlan _dietPlan { get; set; }
+
+    private bool _checkOwner = false;
+    private string userId{ get; set; }
 
     static int planDaysCount = 7;
     static int carbPercent = 50;
@@ -140,17 +164,22 @@
     protected override async Task OnInitializedAsync()
     {
         var user = httpContextAccessor.HttpContext.User;
-        var id = userManager.GetUserId(user);
-        if (_dietPlan.DietPlanId == null)
+        var userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
+        if (_checkOwner==true)
         {
-            _dietPlan = new DietPlan() {PatientId = _patient.Id};
-        }
+            _patient = await iPatientStoresService.GetPatientData(PatientId);
+            _dietPlan = new DietPlan() {PatientId = _patient.Id, PlanDaysCount = planDaysCount};
+        }        
+        
         await base.OnInitializedAsync();
     }
 
     public async Task OnDayCountChanged(int dayCount)
     {
+        
         planDaysCount = dayCount;
+        _dietPlan.PlanDaysCount = dayCount;
         _dateRange=new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(planDaysCount).Date);
         await this.InvokeAsync(StateHasChanged);
     }
@@ -186,5 +215,33 @@
             maxProteinPercent = 100 - percentSum;
         }
         await this.InvokeAsync(StateHasChanged);
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}", true);
+    }
+
+
+    private async void OnValidSubmit()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var userId = userManager.GetUserId(user);
+        _dietPlan.CreatedBy = userId;
+        _dietPlan.CreatedAt = DateTime.Now;
+        for (var i = 0; i < _dietPlan.PlanDaysCount-1; i++)
+        {
+            _dietPlan.DietPlanDays.Add(new DietPlanDay()
+            {
+                CreatedAt = DateTime.Now,
+                CreatedBy = _dietPlan.CreatedBy,
+                DietPlanDayDate = _dietPlan.DietPlanStartTime.Value.AddDays(i)
+            });
+        }
+        await iDietPlanStoresService.AddDietPlan(_dietPlan);
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}", true);
+
+
+
     }
 }

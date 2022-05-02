@@ -89,7 +89,10 @@ else
                 </table>
             </MudCardContent>
         </MudTabPanel>
-        <MudTabPanel Text="Tab Three">
+        <MudTabPanel Text="Jadłospisy">
+            <MudCardContent>
+                <MudButton OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
+            </MudCardContent>
             <MudText>Content Three</MudText>
         </MudTabPanel>
         <MudTabPanel Text="Tab Disabled" Disabled="true">
@@ -136,7 +139,12 @@ else
 
     public void OpenInterview()
     {
-        navigationManager.NavigateTo($"/Patient/{PatientId}/Interview");
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/Interview");
+    }
+    
+    public void OpenDietPlanCreator()
+    {
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/AddDietPlan");
     }
 
 
