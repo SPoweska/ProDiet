@@ -33,7 +33,8 @@
                 <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
             }
         </MudSelect>
-        if(selectedDish.DishId != null){
+        @if(selectedDish.DishId != null)
+        {
         <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
             <DataAnnotationsValidator/>
             <MudCard>
@@ -123,20 +124,30 @@
                 </MudCardContent>
             </MudCard>
             <MudCard>
-                <MudButton OnClick="Cancel">Cancel</MudButton>
+                <MudButton OnClick="Cancel">Anuluj</MudButton>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
             </MudCard>
-        </EditForm>
-        }
-    </MudContainer>
+            </EditForm>
+            }
+            else
+            {
+                <MudCard Outlined="true">
+                    <h3>Wybierz produkt z listy</h3>
+                    <MudButton OnClick="Cancel">Anuluj</MudButton>
+                </MudCard>
+            }
+        </MudContainer>
 </DialogContent>
     
 </MudDialog>
 
 
 @code {
-    private ProDiet.Models.Dish _dish;
+    [Parameter]
+    public ProDiet.Models.Dish _dish { get; set; }
+
     private List<Product> _productsList;
+
     [Parameter]
     public string userId { get; set; }
 
@@ -147,13 +158,22 @@
     public List<Dish> userDishesList { get; set; } = new List<Dish>();
     public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
 
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [CascadingParameter]
+    MudDialogInstance mudDialog { get; set; }
 
 
-
-    private void Cancel()
+    void Submit()
     {
-        navigationManager.NavigateTo("/mydishes");
-    }
+        mudDialog.Close(DialogResult.Ok(_dish.DishId));
+    } 
+
+    void Cancel() => mudDialog.Cancel();
+
+
+
+
 
     private void OnProductsListChanged()
     {
@@ -170,6 +190,9 @@
     {
         _dish = new ProDiet.Models.Dish();
         _productsList = await iProductStoresService.GetAllProducts();
+        allDishesList = await iDishStoresService.GetAllDishes();
+        userDishesList = await iDishStoresService.GetAllUserDishes(userId);
+        dishesList = allDishesList;
         
         await base.OnInitializedAsync();
     }
@@ -187,18 +210,11 @@
         _dish.CreatedBy = id;
         _dish.CreatedAt = DateTime.Now;
         await iDishStoresService.AddDish(_dish);
-        navigationManager.NavigateTo("/mydishes");
+        Submit();
 
     }
 
-    protected override async Task OnInitializedAsync()
-    {
 
-        allDishesList = await iDishStoresService.GetAllDishes();
-        userDishesList = await iDishStoresService.GetAllUserDishes(userId);
-        dishesList = allDishesList;
-        await base.OnInitializedAsync();
-    }
 
     public async Task OnlyMyDishesCheck(bool i)
     {
@@ -217,6 +233,7 @@
     public async Task OnDishSelected(int i)
     {
         selectedDish = await iDishStoresService.GetDish(i);
+        _dish = selectedDish;
         await this.InvokeAsync(StateHasChanged);
     }
 

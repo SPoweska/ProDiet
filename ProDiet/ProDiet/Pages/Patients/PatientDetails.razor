@@ -128,10 +128,7 @@ else
     </MudTabs>
 
 
-   @* @if (DialogAddBodyMeasurementOpen)
-    {
-        <AddBodyMeasurementDialog patient="_patient"  OnClose="@OnDialogAddBodyMeasurementClose"></AddBodyMeasurementDialog>
-    }*@
+
     
 }
 
@@ -145,25 +142,6 @@ else
     private bool _checkOwner = false;
 
 
-    //public bool AddBodyMeasurementDialogOpen { get; set; }
-
-    //public bool DialogAddBodyMeasurementOpen { get; set; }
-
-    //private async Task OnDialogAddBodyMeasurementClose(bool accepted)
-    //{
-    //    DialogAddBodyMeasurementOpen = false;
-    //    StateHasChanged();
-    ////await OnInitializedAsync();
-    //    navigationManager.NavigateTo("/patientdetails/{Id}", true);
-
-    //}
-
-
-    //private void OpenAddBodyMeasurementDialog()
-    //{
-    //    DialogAddBodyMeasurementOpen = true;
-    //    StateHasChanged();
-    //}
 
     public void OpenInterview()
     {

@@ -2,8 +2,10 @@
 @using Microsoft.AspNetCore.Components
 @using ProDiet.Data.Enums
 @using ProDiet.Models
+@using ProDiet.Pages.DietPlans.Modals
 @using ProDiet.Services
 @inject IDishStoresService iDishStoresService;
+@inject IDialogService DialogService
 
 @*Edycja posiłku*@
 
@@ -20,27 +22,15 @@
                 }
             </MudSelect>
             <MudCard Outlined="true">
-
-                <h1>Wybierz danie z listy lub utwórz nowe</h1>
-                <MudCheckBox CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
-                <MudSelect
-                    T="int"
-                    ValueChanged="(int i) => OnDishSelected(i)"
-                    Label="Wybierz danie z listy"
-                    Value="selectedDish.DishId">
-                    @foreach (var dish in dishesList)
-                    {
-                        <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
-                    }
-                </MudSelect>
                 @if (selectedDish.DishId == 0)
                 {
-                    <CascadingValue Value="_dayMeal.MealDish">
-                        <EditDishPartialComponent userId="userId"></EditDishPartialComponent>
-                    </CascadingValue>
+                    <h1>Wybierz danie z listy lub utwórz nowe</h1>
+                    <MudButton Color="Color.Success" @onclick="()=>OpenDialogSearchDish(userId, selectedDish)">Chcę wybrać i edytowac jedno z dostępnych dań </MudButton>
+                    <MudButton Color="Color.Primary" @onclick="()=>OpenDialogNewDish(userId, selectedDish)">Chcę utworzyć nowe danie </MudButton>
                 }
                 else
                 {
+
 
                 }
             </MudCard>
@@ -56,46 +46,45 @@
     public DayMeal _dayMeal { get; set; }
     private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
     [Parameter]
-    public string userId { get; set; }
-
-    public bool onlyMyDishes = false;
-
-    public List<Dish> dishesList { get; set; } = new List<Dish>();
-    public List<Dish> allDishesList { get; set; } = new List<Dish>();
-    public List<Dish> userDishesList { get; set; } = new List<Dish>();
+    public string userId { get; set; }    
     public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
     
 
+    private async Task OpenDialogSearchDish(string userId, Dish selectedDish )
+    {
+        var parameters = new DialogParameters { ["userId"] =userId, ["_dish"]=selectedDish};
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog=DialogService.Show <EditExistingDishDialog> ("Edytuj istniejące danie",parameters, closeOnEscapeKey);
+        var resultDishId = await dialog.Result;
+        if (!resultDishId.Cancelled)
+        {
+            
+            selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
+            await this.InvokeAsync(StateHasChanged);
+        }
 
+    }
+
+    private async Task OpenDialogNewDish(string userId, Dish selectedDish  )
+    {
+        var parameters = new DialogParameters {["userId"] =userId  ,["_dish"]=selectedDish};
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialogBody=DialogService.Show<CreateNewDishDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
+        var resultDishId = await dialogBody.Result;
+        if (!resultDishId.Cancelled)
+        {
+            selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
+            await this.InvokeAsync(StateHasChanged);
+        }
+
+    }
 
 
     protected override async Task OnInitializedAsync()
     {
 
-        allDishesList = await iDishStoresService.GetAllDishes();
-        userDishesList = await iDishStoresService.GetAllUserDishes(userId);
-        dishesList = allDishesList;
         await base.OnInitializedAsync();
     }
 
-    public async Task OnlyMyDishesCheck(bool i)
-    {
-        onlyMyDishes = i;
-        if (onlyMyDishes == true)
-        {
-            dishesList = userDishesList;
-        }
-        else
-        {
-            dishesList = allDishesList;
-        }
-        await this.InvokeAsync(StateHasChanged);
-
-    }
-    public async Task OnDishSelected(int i)
-    {
-        selectedDish = await iDishStoresService.GetDish(i);
-        await this.InvokeAsync(StateHasChanged);
-    }
 
 }
