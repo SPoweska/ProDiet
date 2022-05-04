@@ -3,8 +3,8 @@
     public enum Gender
     {
         Kobieta,
-        Mężczyzna,
-        Inna
+        Mężczyzna
+        
         
     }
 }

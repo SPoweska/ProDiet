@@ -1,0 +1,30 @@
+﻿@using ProDiet.Models.DietPlan
+@using MudBlazor.Extensions
+
+
+<MudCard Outlined="true">
+    <MudCardContent>
+    <div class="card-title">@_dietPlanDay.DietPlanDayDate.ToString()</div>
+    <hr/>
+    <MudText>Kaloryka: @_dietPlanDay.Calories kcal</MudText>
+    <hr/>
+    <MudText>Węglowodany: @_dietPlanDay.Carbohydrates g</MudText>
+    <hr/>
+    <MudText>Białko: @_dietPlanDay.Proteins g</MudText>
+    <hr/>
+    <MudText>Tłuszcze: @_dietPlanDay.Fats g</MudText>
+    
+    </MudCardContent>
+</MudCard>
+
+
+@code {
+    [Parameter]
+    public DietPlanDay _dietPlanDay { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+}

@@ -7,7 +7,9 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Http;
 @using ProDiet.Data.Enums
+@using ProDiet.Models.DietPlan
 @using ProDiet.Pages.Components
+@using ProDiet.Pages.DietPlans
 @inject UserManager<IdentityUser> userManager
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
@@ -51,10 +53,10 @@ else
             </MudCardContent>
         </MudTabPanel>
         <MudTabPanel Text="Pomiary">
-        <MudCardContent>
-            <MudButton @onclick="()=>OpenDialog(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
-                Dodaj nowy pomiar ciała
-            </MudButton>  
+            <MudCardContent>
+                <MudButton @onclick="()=>OpenDialogBodyMeasurement(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
+                    Dodaj nowy pomiar ciała
+                </MudButton>  
 
                 <table class="table">
                     <thead>
@@ -91,15 +93,39 @@ else
         </MudTabPanel>
         <MudTabPanel Text="Jadłospisy">
             <MudCardContent>
-                <MudButton OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Kaloryka</th>
+                        <th>Liczba dni</th>
+                        <th>Data rozpoczęcia</th>
+                        <th>Data zakończenia</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var dietPlan in _patient.DietPlans)
+                    {
+                        <tr>
+                            <td>@dietPlan.DietPlanName</td>
+                            <td>@dietPlan.DailyCalories</td>
+                            <td>@dietPlan.PlanDaysCount</td>
+                            <td>@dietPlan.DietPlanStartTime</td>
+                            <td>@dietPlan.DietPlanEndTime</td>
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>OpenDialogDeleteDietPlan(dietPlan)"> Skasuj plan</MudButton>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             </MudCardContent>
-            <MudText>Content Three</MudText>
         </MudTabPanel>
         <MudTabPanel Text="Tab Disabled" Disabled="true">
             <MudText>Content Disabled</MudText>
         </MudTabPanel>
     </MudTabs>
-    
+
 
    @* @if (DialogAddBodyMeasurementOpen)
     {
@@ -116,6 +142,7 @@ else
     public int PatientId { get; set; }
 
     private bool _checkOwner = false;
+
 
     //public bool AddBodyMeasurementDialogOpen { get; set; }
 
@@ -165,12 +192,32 @@ else
         base.OnInitializedAsync();
     }
 
-    private void OpenDialog( ProDiet.Models.Patient patient)
+    private async Task OpenDialogBodyMeasurement( ProDiet.Models.Patient patient)
     {
         var parameters = new DialogParameters { ["patient"]=_patient };
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        DialogService.Show<AddBodyMeasurementDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
+        var dialogBody=DialogService.Show<AddBodyMeasurementDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
+        var resultBody = await dialogBody.Result;
+        if (!resultBody.Cancelled)
+        {
+            await this.InvokeAsync(StateHasChanged);
+        }
 
     }
+
+    private async Task OpenDialogDeleteDietPlan( DietPlan dietPlan)
+    {
+        var parameters = new DialogParameters { ["dietPlan"]=dietPlan };
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog= DialogService.Show<DeleteDietPlanConfirmation>("title",parameters, closeOnEscapeKey);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await this.InvokeAsync(StateHasChanged);
+        }
+
+    }
+    
+
 
 }

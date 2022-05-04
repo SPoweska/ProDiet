@@ -8,79 +8,11 @@
 @inject IPatientStoresService iPatientStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
 
-@*
-Do zrobienia, nie uruchamia się, *@
-
-
-@*<CascadingValue Value="this">
-    <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
-    <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h4 class="modal-title">Dodawanie nowego pomiaru ciała</h4>
-        <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-    </div>
-    <div class="modal-body">
-        <EditForm Model="bodyMeasurement" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator/>
-        <ValidationSummary/>
-        <MudCard >
-            <MudCardContent>
-                <MudTextField @bind-Value="bodyMeasurement.BodyWeight"
-                              For="@(() => bodyMeasurement.BodyWeight)"
-                              Immediate="true"
-                              Label="Masa ciała"/>
-                <MudTextField @bind-Value="bodyMeasurement.Height"
-                              For="@(() => bodyMeasurement.Height)"
-                              Immediate="true"
-                              Label="Wzrost"/>
-                <MudTextField @bind-Value="bodyMeasurement.Waist"
-                              For="@(() => bodyMeasurement.Waist)"
-                              Immediate="true"
-                              Label="Obwód talii"/>
-                <MudTextField @bind-Value="bodyMeasurement.Hips"
-                              For="@(() => bodyMeasurement.Hips)"
-                              Immediate="true"
-                              Label="Obwód bioder"/>
-                <MudTextField @bind-Value="bodyMeasurement.TotalBodyFat"
-                              For="@(() => bodyMeasurement.TotalBodyFat)"
-                              Immediate="true"
-                              Label="TBF"/>
-                <MudTextField @bind-Value="bodyMeasurement.TotalBodyWater"
-                              For="@(() => bodyMeasurement.TotalBodyWater)"
-                              Immediate="true"
-                              Label="TBW"/>
-                <MudTextField @bind-Value="bodyMeasurement.TotalBoneMineral"
-                              For="@(() => bodyMeasurement.TotalBoneMineral)"
-                              Immediate="true"
-                              Label="Masa kostna"/>
-                <MudCard>
-                <label for="MeasurementDate">Data pomiaru</label>
-                <InputDate @bind-Value="bodyMeasurement.MeasurementDate">
-                </InputDate>
-                </MudCard>
-            </MudCardContent>
-
-        </MudCard>
-
-
-        <MudCard>
-            <MudButton OnClick="ModalCancel">Anuluj</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-        </MudCard>
-    </EditForm>
-    </div>
-    </div>
-    </div>
-    </div>
-
-</CascadingValue>*@
-
 
 
 <MudDialog  DisableSidePadding="true">
     <DialogContent>
-        <MudContainer Style="max-height: 1500px; max-width: 1500px; overflow-y: scroll ; overflow-x:scroll" >
+        <MudContainer Style="max-height: 1700px; max-width: 1700px; overflow-y: scroll ; overflow-x:scroll" >
 
             <EditForm Model="bodyMeasurement" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator/>
@@ -215,5 +147,7 @@ Do zrobienia, nie uruchamia się, *@
 
 
     }
+
+
 
 }

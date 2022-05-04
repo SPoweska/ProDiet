@@ -40,7 +40,7 @@ namespace ProDiet.Services
         {
             try
             {
-                DietPlan? dietPlan = await db.DietPlans.Include(x => x.DietPlanDays).Include(x=>x.Meals).FirstOrDefaultAsync(x => x.DietPlanId == dietPlanId);
+                DietPlan? dietPlan = await db.DietPlans.Include(x => x.DietPlanDays).FirstOrDefaultAsync(x => x.DietPlanId == dietPlanId);
 
                 if (dietPlan != null)
                 {
@@ -79,25 +79,6 @@ namespace ProDiet.Services
             {
                 db.Entry(dietPlan).State = EntityState.Modified;
 
-                foreach (var meal in dietPlan.Meals)
-                {
-                    if (meal.MealId != 0)
-                    {
-                        db.Entry(meal).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        db.Entry(meal).State = EntityState.Added;
-
-                    }
-
-                }
-                var idsOfMeals = dietPlan.Meals.Select(x => x.MealId).ToList();
-                var mealsToDelete = await db.Meals.
-                    Where(x => !idsOfMeals.
-                        Contains(x.MealId) && x.DietPlanId == dietPlan.DietPlanId).ToListAsync();
-
-                db.RemoveRange(mealsToDelete);
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -127,31 +108,54 @@ namespace ProDiet.Services
             }
         }
 
+        public async Task<DietPlanDay> GetDietPlanDay(int dietPlanDayId)
+        {
+            try
+            {
+                DietPlanDay dietPlanDay= await db.DietPlanDays.FirstOrDefaultAsync(x=>x.DietPlanDayId==dietPlanDayId)
+
+                if (dietPlanDay != null)
+                {
+                    //db.Entry(dish).State = EntityState.Detached;
+                    return dietPlanDay;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task UpdateDietPlanDay(DietPlanDay dietPlanDay)
         {
             try
             {
                 db.Entry(dietPlanDay).State = EntityState.Modified;
 
-                foreach (var dietPlanDish in dietPlanDay.DietPlanDayDish)
+                foreach (var dietPlanDayMeal in dietPlanDay.DietPlanDayMeals)
                 {
-                    if (dietPlanDish.DayDishId != 0)
+                    if (dietPlanDayMeal.DietPlanDayId != 0)
                     {
-                        db.Entry(dietPlanDish).State = EntityState.Modified;
+                        db.Entry(dietPlanDayMeal).State = EntityState.Modified;
                     }
                     else
                     {
-                        db.Entry(dietPlanDish).State = EntityState.Added;
+                        db.Entry(dietPlanDayMeal).State = EntityState.Added;
 
                     }
 
                 }
-                var idsOfDayDishes = dietPlanDay.DietPlanDayDish.Select(x => x.DayDishId).ToList();
-                var dayDishesToDelete = await db.DietPlanDayDishes.
-                    Where(x => !idsOfDayDishes.
-                        Contains(x.DayDishId) && x.DietPlanDayId == dietPlanDay.DietPlanDayId).ToListAsync();
+                var idsOfDayMeals = dietPlanDay.DietPlanDayMeals.Select(x => x.DietPlanDayId).ToList();
+                var dayMealsToDelete = await db.DietPlanDayDishes.
+                    Where(x => !idsOfDayMeals.
+                        Contains(x.DayMealId) && x.DayMealId == dietPlanDay.DietPlanDayId).ToListAsync();
 
-                db.RemoveRange(dayDishesToDelete);
+                db.RemoveRange(dayMealsToDelete);
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)

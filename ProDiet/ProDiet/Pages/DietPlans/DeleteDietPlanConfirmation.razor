@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject NavigationManager navigationManager;
+@inject UserManager<IdentityUser> userManager;
+@inject IDietPlanStoresService iDietPlanStoresService;
+@inject IHttpContextAccessor httpContextAccessor;
+
+<MudDialog  DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 400px; max-width: 400px">
+            <MudCard >
+                    <h3>Czy na pewno chcesz skasować ten plan dietetyczny?</h3>
+            </MudCard>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Class="btn btn-light" OnClick="Cancel">Anuluj</MudButton>
+                    <MudButton  Variant="Variant.Filled"  Class="btn btn-danger" OnClick="DeleteDietPlan">Tak</MudButton>
+                </MudCardActions>
+        </MudContainer>
+    </DialogContent>
+    
+</MudDialog>
+
+@code {
+
+    [Parameter]
+    public DietPlan dietPlan { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [CascadingParameter]
+    MudDialogInstance mudDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    
+
+
+    void Ok() => mudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => mudDialog.Cancel();
+
+    private async Task DeleteDietPlan()
+    {        
+        await iDietPlanStoresService.DeleteDietPlan(dietPlan.DietPlanId);
+        Ok();
+    }
+
+}

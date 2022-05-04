@@ -3,7 +3,7 @@
     public enum MealType
     {
         Śniadanie,
-        Śniadanie2,
+        DrugieŚniadanie,
         Lunch,
         Obiad,
         Przekąska,

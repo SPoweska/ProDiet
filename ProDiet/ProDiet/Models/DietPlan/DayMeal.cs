@@ -1,21 +1,21 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProDiet.Models.DietPlan
 {
-    public class DietPlanDay : AuditableEntity
+    public class DayMeal : AuditableEntity
     {
         [Key]
+        public int MealId { get; set; }
+        [Required]
+        public string Name { get; set; }
+
+        public DietPlanDay DietPlanDay { get; set; }
+        [Required]
+        [ForeignKey("DietPlanDayId")]
         public int DietPlanDayId { get; set; }
 
-        public DietPlan DietPlan { get; set; }
-        [Required]
-        public int DietPlanId { get; set; }
-        public DateTime ? DietPlanDayDate { get; set; }
-        public List<DayMeal> DietPlanDayMeals { get; set; }
-
+        public List<DietPlanDayDish> MealDishes { get; set; }
         [Required]
         public float Carbohydrates { get; set; }
         [Required]

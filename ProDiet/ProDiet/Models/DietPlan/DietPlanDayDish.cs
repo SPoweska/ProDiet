@@ -10,10 +10,10 @@ namespace ProDiet.Models.DietPlan
         public Dish Dish { get; set; }
         [Required]
         public int DishId { get; set; }
-        public DietPlanDay DietPlanDay { get; set; }
+        public DayMeal DayMeal { get; set; }
         [Required]
-        [ForeignKey("DietPlanDayId")]
-        public int DietPlanDayId { get; set; }
+        [ForeignKey("DayMealId")]
+        public int DayMealId { get; set; }
 
         [Required]
         public float Carbohydrates { get; set; }

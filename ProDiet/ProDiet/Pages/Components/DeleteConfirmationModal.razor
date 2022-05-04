@@ -1,4 +1,5 @@
 ﻿@using ProDiet.Services
+@using ProDiet.Models.DietPlan
 @inject IPatientStoresService iPatientStoresService;
 
 
@@ -45,19 +46,28 @@
 
     private Task ModalOk()
     {
-        DeletePatient(Patient);
-        return OnClose.InvokeAsync(true);
+        if(Patient!=null)
+        {
+            DeletePatient(Patient);
+            return OnClose.InvokeAsync(true);
+            
+
+        }
+        else
+        {
+            return OnClose.InvokeAsync(false);
+        }
+        
     }
 
-    private void DeletePatient()
-    {
-        ModalOk();
-    }
+    
 
     private async Task DeletePatient(ProDiet.Models.Patient patient)
     {
-        iPatientStoresService.DeletePatient(patient.Id);
+        await iPatientStoresService.DeletePatient(patient.Id);
     }
+
+    
     
 
 }

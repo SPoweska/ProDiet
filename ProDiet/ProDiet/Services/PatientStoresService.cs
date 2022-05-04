@@ -101,24 +101,6 @@ namespace ProDiet.Services
 
 
 
-        //public async Task DeletePatient(int id)
-        //{
-        //    try
-        //    {
-        //       Patient? patient = db.Patients.FirstOrDefault(x => x.Id == id);
-
-        //        if (patient != null)
-        //        {
-        //            db.Patients.Remove(patient);
-        //        }
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //}
 
         public async Task DeletePatient(int id)
         {
@@ -149,6 +131,7 @@ namespace ProDiet.Services
                     .Include(x=>x.Interview)
                     .Include(x=>x.PatientAlergenes)
                     .Include(x=>x.PatientIntolerances)
+                    .Include(x=>x.DietPlans)
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (patient != null)

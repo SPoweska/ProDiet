@@ -30,9 +30,6 @@ namespace ProDiet.Models.DietPlan
         [Required]
         public float DailyCalories { get; set; }
 
-        [Required] 
-        public List<Meal> Meals { get; set; } = new List<Meal>();//konfiguracja
-
         public string? Recommendations { get; set; }
 
     }

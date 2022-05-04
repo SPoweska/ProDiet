@@ -27,9 +27,9 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
     public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
     public DbSet<DietPlan> DietPlans { get; set; }
     public DbSet<DietPlanDay> DietPlanDays { get; set; }
+    public DbSet<DayMeal> DayMeals { get; set; }
     public DbSet<DietPlanDayDish> DietPlanDayDishes { get; set; }
     public DbSet<DietPlanShoppingList> DietPlanShoppingLists { get; set; }
-    public DbSet<Meal> Meals { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

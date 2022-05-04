@@ -1,0 +1,52 @@
+﻿@page "/patientdetails/{PatientId:int}/EditDietPlan/{DietPlanId:int}/EditDietDay/{DietPlanDayId:int}"
+
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+
+@if (_dietPlanDay == null)
+{
+    <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
+}
+else
+{
+    <h3>Edycja dnia jadłospisu: @_dietPlanDay.DietPlanDayDate</h3>
+
+    
+
+}
+
+
+@code {
+
+    [Parameter]
+    public int PatientId { get; set; }
+    [Parameter]
+    public int DietPlanId { get; set; }
+    [Parameter]
+    public int DietPlanDayId { get; set; }
+    private bool _checkOwner = false;
+    private DietPlanDay _dietPlanDay { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
+        if (_checkOwner==true)
+        {
+
+            _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
+        }        
+        
+        await base.OnInitializedAsync();
+    }
+
+}

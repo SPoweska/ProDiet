@@ -1,5 +1,68 @@
-﻿<h3>EditDietPlan</h3>
+﻿@page "/patientdetails/{PatientId:int}/EditDietPlan/{DietPlanId:int}"
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+
+@if (_dietPlan == null)
+{
+    <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
+}
+else
+{
+    <h3>Edycja jadłospisu: @_dietPlan.DietPlanName</h3>
+
+    <MudGrid Spacing="3" Justify="Justify.Center">
+        @foreach (var Day in _dietPlan.DietPlanDays)
+        {
+            <MudItem>
+                <DietPlanDayCardPartial @onclick="() => NavigateToDietDay(Day)" _dietPlanDay="Day"></DietPlanDayCardPartial>
+            </MudItem>
+        }
+    </MudGrid>
+
+}
+
+
+
+
+
 
 @code {
+    [Parameter]
+    public int PatientId { get; set; }
+    [Parameter]
+    public int DietPlanId { get; set; }
+
+    private bool _checkOwner = false;
+    private string userId { get; set; }
+    private DietPlan _dietPlan { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
+        if (_checkOwner==true)
+        {
+
+            _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
+        }        
+        
+        await base.OnInitializedAsync();
+    }
+
+
+    public async Task NavigateToDietDay(DietPlanDay Day)
+    {
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/EditDietPlan/{_dietPlan.DietPlanId}/EditDietDay/{Day.DietPlanDayId}", true);
+
+    }
+
 
 }
