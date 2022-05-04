@@ -1,21 +1,12 @@
-﻿@page "/dish"
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Razor.Language.Intermediate
-@using ProDiet.Data.Enums
-@using ProDiet.Pages.Dishes
+﻿@using ProDiet.Pages.Dishes
 @using ProDiet.Services
-@using System.ComponentModel.DataAnnotations;
-@using Microsoft.AspNetCore.Components
-@using ProDiet.Data.Configuration
-@using ProDiet.Migrations
+@using ProDiet.Data.Enums
 @using ProDiet.Models
-@inject UserManager<IdentityUser> userManager;
 @inject IDishStoresService iDishStoresService;
 @inject IProductStoresService iProductStoresService;
-@inject IHttpContextAccessor httpContextAccessor;
-@inject NavigationManager navigationManager;
 
-<h3>Utwórz nowe danie</h3>
+@*Edycja/tworzenie dania w środku posiłku*@
+
 <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudCard>
@@ -39,7 +30,7 @@
                         var usedProduct = _dish.UsedProducts[i];
             
                         <CascadingValue Value="usedProduct">
-                            <UsedProductComponent productList="_productsList" OnDataChange="@OnProductsListChanged"></UsedProductComponent>
+                        <UsedProductComponent productList="_productsList"></UsedProductComponent>
                         </CascadingValue>
 
                         <MudFab
@@ -56,30 +47,25 @@
 
             <MudTextField @bind-Value="_dish.Carbohydrates"
                           For="@(() => _dish.Carbohydrates)"
-                          Disabled="true"
                           Immediate="true"
                           Label="Węglowodany"/>
             <MudTextField @bind-Value="_dish.Calories"
                           For="@(() => _dish.Calories)"
-                          Disabled="true"
                           Immediate="true"
                           Label="Kalorie"/>
 
             <MudTextField @bind-Value="_dish.Fats"
                           For="@(() => _dish.Fats)"
-                          Disabled="true"
                           Immediate="true"
                           Label="Tłuszcz"/>
 
             <MudTextField @bind-Value="_dish.Proteins"
                           For="@(() => _dish.Proteins)"
-                          Disabled="true"
                           Immediate="true"
                           Label="Białko"/>
 
             <MudTextField @bind-Value="_dish.Fiber"
                           For="@(() => _dish.Fiber)"
-                          Disabled="true"
                           Immediate="true"
                           Label="Błonnik"/>
             <MudTextField @bind-Value="_dish.Servings"
@@ -105,57 +91,36 @@
         </MudCardContent>
     </MudCard>
     <MudCard>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Zapisz danie</MudButton>
     </MudCard> 
 </EditForm>
 
-
 @code {
-    private ProDiet.Models.Dish _dish;
+    [CascadingParameter]
+    public ProDiet.Models.Dish _dish { get; set; }
     private List<Product> _productsList;
+    public ProDiet.Models.Dish _dishbeforeEdit { get; set; }
 
-
-
-
-    private void Cancel()
-    {
-        navigationManager.NavigateTo("/mydishes");
-    }
-
-    private void OnProductsListChanged()
-    {
-        foreach (var usedProduct in _dish.UsedProducts)
-        {
-            _dish.Proteins += (usedProduct.Proteins)/4;
-            _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-            _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-        }
-        _dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
-    }
+    [Parameter]
+    public string userId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _dish = new ProDiet.Models.Dish();
+        _dishbeforeEdit = _dish;
         _productsList = await iProductStoresService.GetAllProducts();
-        
         await base.OnInitializedAsync();
     }
 
-    //private async Task<Product> SelectedProductDataLoad(int selectedProductId)
-    //{
-    //    Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
-    //    return selectedProduct;
-    //}
-
     private async Task OnValidSubmit()
     {
-        var user = httpContextAccessor.HttpContext.User;
-        var id = userManager.GetUserId(user);
-        _dish.CreatedBy = id;
-        _dish.CreatedAt = DateTime.Now;
-        await iDishStoresService.AddDish(_dish);
-        navigationManager.NavigateTo("/mydishes");
+        if (_dishbeforeEdit != _dish)
+        {
+            _dish.CreatedBy = userId;
+            _dish.CreatedAt = DateTime.Now;
+            await iDishStoresService.AddDish(_dish);
+
+        }
+
 
     }
 

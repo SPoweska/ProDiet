@@ -38,20 +38,25 @@
 
 </MudCard>                                                
 <MudCard>
-    <MudTextField T="int"
-                  @bind-Value="usedProduct.Quantity"                                                 
+    <MudTextField
+        ValueChanged="(int i) => CalculateNutrients(i)"
+                    T="int"
+                  Value="usedProduct.Quantity"                                                 
                   Immediate="true"
                   Label="Masa w gramach"/>
     <MudTextField T="float"
-                  @bind-Value="usedProduct.Calories"                                                 
+                  @bind-Value="usedProduct.Calories" 
+                  Disabled="true"
                   Immediate="true"
                   Label="Kalorie na 100g"/>
     <MudTextField T="float"
-                  @bind-Value="usedProduct.Carbohydrates"                                                 
+                  @bind-Value="usedProduct.Carbohydrates" 
+                  Disabled="true"
                   Immediate="true"
                   Label="Węglowodany na 100g"/>
     <MudTextField T="float"
-                  @bind-Value="usedProduct.Fats"                                                 
+                  @bind-Value="usedProduct.Fats"
+                  Disabled="true"
                   Immediate="true"
                   Label="Tłuszcz na 100g"/>
     <MudTextField T="float"
@@ -70,6 +75,9 @@
     [Parameter]
     public List<Product> productList { get; set; }
 
+    [Parameter]
+    public Action OnDataChange { get; set; }
+
     public int selectedProductId;
 
     public Product selectedProduct = new Product();
@@ -86,11 +94,13 @@
 
         await this.InvokeAsync(StateHasChanged);
 
-    //OnProductSelected(usedProduct.ProductId);
-
-        //selectedProduct = await iProductStoresService.GetProductData(productId);
         await base.OnInitializedAsync();
 
+    }
+
+    public async Task DataChange()
+    {
+        OnDataChange?.Invoke();
     }
 
     public async Task OnProductSelected(int productId)
@@ -99,4 +109,16 @@
         usedProduct.ProductId = productId;
          await this.InvokeAsync(StateHasChanged);
     }
+    public async Task CalculateNutrients(int quantity)
+    {
+        usedProduct.Quantity = quantity;
+        usedProduct.Carbohydrates =(selectedProduct.Carbohydrates * usedProduct.Quantity) / 100 ;
+        usedProduct.Fats = (selectedProduct.Fats * usedProduct.Quantity) / 100;
+        usedProduct.Proteins =(selectedProduct.Proteins * usedProduct.Quantity) / 100;
+        usedProduct.Calories = (selectedProduct.Calories * usedProduct.Quantity) / 100;
+        await this.InvokeAsync(StateHasChanged);
+        await DataChange();
+
+    }
+
 }

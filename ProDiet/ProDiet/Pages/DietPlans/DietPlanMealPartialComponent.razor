@@ -1,0 +1,101 @@
+﻿@using ProDiet.Models.DietPlan
+@using Microsoft.AspNetCore.Components
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Services
+@inject IDishStoresService iDishStoresService;
+
+@*Edycja posiłku*@
+
+<MudCard>
+    
+    <EditForm Model="@_dayMeal">
+    <DataAnnotationsValidator/>
+    <MudCardContent>
+        <MudCard Outlined="true">
+            <MudSelect Label="Nazwa posiłku" @bind-Value="_dayMeal.Name">
+                @foreach (var mealType in mealList)
+                {
+                    <MudSelectItem T="string" Value="@mealType">@mealType</MudSelectItem>
+                }
+            </MudSelect>
+            <MudCard Outlined="true">
+
+                <h1>Wybierz danie z listy lub utwórz nowe</h1>
+                <MudCheckBox CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
+                <MudSelect
+                    T="int"
+                    ValueChanged="(int i) => OnDishSelected(i)"
+                    Label="Wybierz danie z listy"
+                    Value="selectedDish.DishId">
+                    @foreach (var dish in dishesList)
+                    {
+                        <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
+                    }
+                </MudSelect>
+                @if (selectedDish.DishId == 0)
+                {
+                    <CascadingValue Value="_dayMeal.MealDish">
+                        <EditDishPartialComponent userId="userId"></EditDishPartialComponent>
+                    </CascadingValue>
+                }
+                else
+                {
+
+                }
+            </MudCard>
+        </MudCard>
+    </MudCardContent>
+    </EditForm>
+</MudCard>
+
+@code 
+{
+
+    [CascadingParameter]
+    public DayMeal _dayMeal { get; set; }
+    private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
+    [Parameter]
+    public string userId { get; set; }
+
+    public bool onlyMyDishes = false;
+
+    public List<Dish> dishesList { get; set; } = new List<Dish>();
+    public List<Dish> allDishesList { get; set; } = new List<Dish>();
+    public List<Dish> userDishesList { get; set; } = new List<Dish>();
+    public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
+    
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        allDishesList = await iDishStoresService.GetAllDishes();
+        userDishesList = await iDishStoresService.GetAllUserDishes(userId);
+        dishesList = allDishesList;
+        await base.OnInitializedAsync();
+    }
+
+    public async Task OnlyMyDishesCheck(bool i)
+    {
+        onlyMyDishes = i;
+        if (onlyMyDishes == true)
+        {
+            dishesList = userDishesList;
+        }
+        else
+        {
+            dishesList = allDishesList;
+        }
+        await this.InvokeAsync(StateHasChanged);
+
+    }
+    public async Task OnDishSelected(int i)
+    {
+        selectedDish = await iDishStoresService.GetDish(i);
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+}

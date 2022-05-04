@@ -20,8 +20,8 @@ else
     <MudGrid Spacing="3" Justify="Justify.Center">
         @foreach (var Day in _dietPlan.DietPlanDays)
         {
-            <MudItem>
-                <DietPlanDayCardPartial @onclick="() => NavigateToDietDay(Day)" _dietPlanDay="Day"></DietPlanDayCardPartial>
+            <MudItem @onclick="() =>NavigateToDietDay(Day) ">
+                <DietPlanDayCardPartial _dietPlanDay="Day"></DietPlanDayCardPartial>
             </MudItem>
         }
     </MudGrid>

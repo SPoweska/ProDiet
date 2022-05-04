@@ -25,7 +25,5 @@ namespace ProDiet.Models.DietPlan
         [Required]
         public float Calories { get; set; }
 
-        [Required]
-        public int Servings { get; set; }
     }
 }

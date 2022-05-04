@@ -51,7 +51,8 @@ namespace ProDiet.Services
         {
             try
             {
-                List<Dish> dishes = await db.Dishes.AsNoTracking().ToListAsync();
+                List<Dish> dishes = await db.Dishes.AsNoTracking().Include(x=>x.UsedProducts)
+                    .ToListAsync();
                 return dishes;
             }
             catch (Exception ex)
@@ -65,7 +66,7 @@ namespace ProDiet.Services
         {
             try
             {
-                List<Dish> dishes = await db.Dishes.AsNoTracking().Where(x=>x.CreatedBy==userId).ToListAsync();
+                List<Dish> dishes = await db.Dishes.AsNoTracking().Include(x=>x.UsedProducts).Where(x=>x.CreatedBy==userId).ToListAsync();
 
                 if (dishes != null)
                 {

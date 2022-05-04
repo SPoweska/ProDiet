@@ -1,0 +1,223 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Data.Enums
+@using ProDiet.Data.Enums
+@using ProDiet.Pages.Dishes
+@using ProDiet.Services
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Components
+@using ProDiet.Data.Configuration
+@using ProDiet.Migrations
+@using ProDiet.Models
+@using Dish = ProDiet.Models.Dish
+@inject UserManager<IdentityUser> userManager;
+@inject IDishStoresService iDishStoresService;
+@inject IProductStoresService iProductStoresService;
+@inject IHttpContextAccessor httpContextAccessor;
+@inject NavigationManager navigationManager;
+
+
+<MudDialog  DisableSidePadding="true">
+<DialogContent>
+    <MudContainer Style="max-height: 1700px; max-width: 1700px; overflow-y: scroll; overflow-x: scroll">
+
+        <h5>Wybierz danie z listy a następnie je edytuj</h5>
+        <MudCheckBox CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
+        <MudSelect
+            T="int"
+            ValueChanged="(int i) => OnDishSelected(i)"
+            Label="Wybierz danie z listy"
+            Value="selectedDish.DishId">
+            @foreach (var dish in dishesList)
+            {
+                <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
+            }
+        </MudSelect>
+        if(selectedDish.DishId != null){
+        <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator/>
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField @bind-Value="_dish.DishName"
+                                  For="@(() => _dish.DishName)"
+                                  Immediate="true"
+                                  Label="Nazwa dania"/>
+
+                    <h7>Składniki</h7>
+                    <MudCard>
+                        <MudFab
+                            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                            @onclick="@(() => _dish.UsedProducts.Add(new UsedProduct()))">
+                            Dodaj składnik
+                        </MudFab>
+                        <MudCard>
+                            @for (var i = 0; i < _dish.UsedProducts.Count; i++)
+                            {
+                                var index = i;
+                                var usedProduct = _dish.UsedProducts[i];
+
+                                <CascadingValue Value="usedProduct">
+                                    <UsedProductComponent productList="_productsList" OnDataChange="@OnProductsListChanged"></UsedProductComponent>
+                                </CascadingValue>
+
+                                <MudFab
+                                    Size="Size.Small"
+                                    StartIcon="@Icons.Filled.Delete"
+                                    Color="Color.Error"
+                                    @onclick="@(() => _dish.UsedProducts.RemoveAt(index))">
+                                    Skasuj
+                                </MudFab>
+                            }
+                        </MudCard>
+                    </MudCard>
+
+
+                    <MudTextField @bind-Value="_dish.Carbohydrates"
+                                  For="@(() => _dish.Carbohydrates)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Węglowodany"/>
+                    <MudTextField @bind-Value="_dish.Calories"
+                                  For="@(() => _dish.Calories)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Kalorie"/>
+
+                    <MudTextField @bind-Value="_dish.Fats"
+                                  For="@(() => _dish.Fats)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Tłuszcz"/>
+
+                    <MudTextField @bind-Value="_dish.Proteins"
+                                  For="@(() => _dish.Proteins)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Białko"/>
+
+                    <MudTextField @bind-Value="_dish.Fiber"
+                                  For="@(() => _dish.Fiber)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Błonnik"/>
+                    <MudTextField @bind-Value="_dish.Servings"
+                                  For="@(() => _dish.Servings)"
+                                  Immediate="true"
+                                  Label="Liczba porcji"/>
+                    <MudTextField @bind-Value="_dish.PreparationMinutes"
+                                  For="@(() => _dish.PreparationMinutes)"
+                                  Immediate="true"
+                                  Label="Czas przygotowania w minutach"/>
+                    <MudTextField @bind-Value="_dish.Recipe"
+                                  For="@(() => _dish.Recipe)"
+                                  Immediate="true"
+                                  Label="Wskazówki odnośnie przygotowania"/>
+                    <MudCard Outlined="true">
+                        <MudSelect Label="Typ posiłku" @bind-Value="_dish.MealType">
+                            @foreach (var mealType in Enum.GetValues(typeof(MealType)))
+                            {
+                                <MudSelectItem T="string" Value="@mealType.ToString()">@mealType</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCard>
+                </MudCardContent>
+            </MudCard>
+            <MudCard>
+                <MudButton OnClick="Cancel">Cancel</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+            </MudCard>
+        </EditForm>
+        }
+    </MudContainer>
+</DialogContent>
+    
+</MudDialog>
+
+
+@code {
+    private ProDiet.Models.Dish _dish;
+    private List<Product> _productsList;
+    [Parameter]
+    public string userId { get; set; }
+
+    public bool onlyMyDishes = false;
+
+    public List<Dish> dishesList { get; set; } = new List<Dish>();
+    public List<Dish> allDishesList { get; set; } = new List<Dish>();
+    public List<Dish> userDishesList { get; set; } = new List<Dish>();
+    public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
+
+
+
+
+    private void Cancel()
+    {
+        navigationManager.NavigateTo("/mydishes");
+    }
+
+    private void OnProductsListChanged()
+    {
+        foreach (var usedProduct in _dish.UsedProducts)
+        {
+            _dish.Proteins += (usedProduct.Proteins)/4;
+            _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
+            _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
+        }
+        _dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dish = new ProDiet.Models.Dish();
+        _productsList = await iProductStoresService.GetAllProducts();
+        
+        await base.OnInitializedAsync();
+    }
+
+    //private async Task<Product> SelectedProductDataLoad(int selectedProductId)
+    //{
+    //    Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
+    //    return selectedProduct;
+    //}
+
+    private async Task OnValidSubmit()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        _dish.CreatedBy = id;
+        _dish.CreatedAt = DateTime.Now;
+        await iDishStoresService.AddDish(_dish);
+        navigationManager.NavigateTo("/mydishes");
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        allDishesList = await iDishStoresService.GetAllDishes();
+        userDishesList = await iDishStoresService.GetAllUserDishes(userId);
+        dishesList = allDishesList;
+        await base.OnInitializedAsync();
+    }
+
+    public async Task OnlyMyDishesCheck(bool i)
+    {
+        onlyMyDishes = i;
+        if (onlyMyDishes == true)
+        {
+            dishesList = userDishesList;
+        }
+        else
+        {
+            dishesList = allDishesList;
+        }
+        await this.InvokeAsync(StateHasChanged);
+
+    }
+    public async Task OnDishSelected(int i)
+    {
+        selectedDish = await iDishStoresService.GetDish(i);
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+}

@@ -115,6 +115,7 @@ else
                             <td>@dietPlan.DietPlanStartTime</td>
                             <td>@dietPlan.DietPlanEndTime</td>
                             <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>OpenDialogDeleteDietPlan(dietPlan)"> Skasuj plan</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="()=>EditDietPlan(dietPlan)"> Edytuj plan</MudButton>
                         </tr>
                     }
                     </tbody>
@@ -172,6 +173,10 @@ else
     public void OpenDietPlanCreator()
     {
         navigationManager.NavigateTo($"/patientdetails/{PatientId}/AddDietPlan");
+    }
+    public void EditDietPlan(DietPlan dietPlan)
+    {
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/EditDietPlan/{dietPlan.DietPlanId}");
     }
 
 

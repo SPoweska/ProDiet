@@ -112,7 +112,8 @@ namespace ProDiet.Services
         {
             try
             {
-                DietPlanDay dietPlanDay= await db.DietPlanDays.FirstOrDefaultAsync(x=>x.DietPlanDayId==dietPlanDayId)
+                DietPlanDay dietPlanDay =
+                    await db.DietPlanDays.Include(x=>x.DietPlanDayMeals).FirstOrDefaultAsync(x => x.DietPlanDayId == dietPlanDayId);
 
                 if (dietPlanDay != null)
                 {
@@ -157,6 +158,51 @@ namespace ProDiet.Services
 
                 db.RemoveRange(dayMealsToDelete);
                 await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<DayMeal> GetDietPlanDayMeal(int mealId)
+        {
+            try
+            {
+                DayMeal dietPlanDayMeal =
+                    await db.DayMeals.Include(x => x.MealDish).FirstOrDefaultAsync(x => x.MealId == mealId);
+
+                if (dietPlanDayMeal != null)
+                {
+                    //db.Entry(dish).State = EntityState.Detached;
+                    return dietPlanDayMeal;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task UpdateDietPlanDayMeal(DayMeal dayMeal)
+        {
+            try
+            {
+                     if (dayMeal.MealId != 0)
+                    {
+                        db.Entry(dayMeal).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(dayMeal).State = EntityState.Added;
+                    }
+                     await db.SaveChangesAsync();
             }
             catch (Exception ex)
             {

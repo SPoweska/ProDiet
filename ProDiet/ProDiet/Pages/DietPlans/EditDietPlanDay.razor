@@ -6,8 +6,13 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 @using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
 @using ProDiet.Models.DietPlan
 @using ProDiet.Services
+@using Microsoft.AspNetCore.Components
+
+
+@*Edycja dnia jadłospisu-> (dodawanie posiłków) DietPlanMealPartial*@
 
 @if (_dietPlanDay == null)
 {
@@ -16,6 +21,70 @@
 else
 {
     <h3>Edycja dnia jadłospisu: @_dietPlanDay.DietPlanDayDate</h3>
+    <EditForm Model="@_dietPlanDay" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+            <MudCard>
+                <MudCard>
+                    <MudFab
+                        Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                        @onclick="@(() => _dietPlanDay.DietPlanDayMeals.Add(new DayMeal()))">
+                        Dodaj posiłek
+                    </MudFab>
+                    <MudCard>
+                        @for (var i = 0; i < _dietPlanDay.DietPlanDayMeals.Count; i++)
+                        {
+                            var index = i;
+                            var dayMeal = _dietPlanDay.DietPlanDayMeals[i];
+
+                            <CascadingValue Value="dayMeal">
+                                <DietPlanMealPartialComponent userId="userId"></DietPlanMealPartialComponent>
+                            </CascadingValue>
+
+                            <MudFab
+                                Size="Size.Small"
+                                StartIcon="@Icons.Filled.Delete"
+                                Color="Color.Error"
+                                @onclick="@(() => _dietPlanDay.DietPlanDayMeals.RemoveAt(index))">
+                                Skasuj posiłek
+                            </MudFab>
+                        }
+                    </MudCard>
+                </MudCard>
+            </MudCard>
+
+
+            <MudTextField @bind-Value="_dietPlanDay.Carbohydrates"
+                          For="@(() => _dietPlanDay.Carbohydrates)"
+                          Immediate="true"
+                          Label="Węglowodany"/>
+            <MudTextField @bind-Value="_dietPlanDay.Calories"
+                          For="@(() => _dietPlanDay.Calories)"
+                          Immediate="true"
+                          Label="Kalorie"/>
+
+            <MudTextField @bind-Value="_dietPlanDay.Fats"
+                          For="@(() => _dietPlanDay.Fats)"
+                          Immediate="true"
+                          Label="Tłuszcz"/>
+
+            <MudTextField @bind-Value="_dietPlanDay.Proteins"
+                          For="@(() => _dietPlanDay.Proteins)"
+                          Immediate="true"
+                          Label="Białko"/>
+
+            <MudTextField @bind-Value="_dietPlanDay.Fiber"
+                          For="@(() => _dietPlanDay.Fiber)"
+                          Immediate="true"
+                          Label="Błonnik"/>
+        </MudCardContent>
+    </MudCard>
+    <MudCard>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+    </MudCard> 
+</EditForm>
 
     
 
@@ -32,6 +101,9 @@ else
     public int DietPlanDayId { get; set; }
     private bool _checkOwner = false;
     private DietPlanDay _dietPlanDay { get; set; }
+    private string userId { get; set; }
+
+    private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
 
 
 
@@ -47,6 +119,23 @@ else
         }        
         
         await base.OnInitializedAsync();
+    }
+
+
+    private async Task OnValidSubmit()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        userId = userManager.GetUserId(user);
+        _dietPlanDay.ModifiedBy = userId;
+        _dietPlanDay.ModifiedAt = DateTime.Now;
+        await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
+        //navigationManager.NavigateTo("/mydishes");
+
+    }
+
+    void Cancel()
+    {
+        
     }
 
 }
