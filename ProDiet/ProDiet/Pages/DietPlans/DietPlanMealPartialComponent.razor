@@ -5,6 +5,7 @@
 @using ProDiet.Pages.DietPlans.Modals
 @using ProDiet.Services
 @inject IDishStoresService iDishStoresService;
+@inject IDietPlanStoresService iDietPlanStoresService;
 @inject IDialogService DialogService
 
 @*Edycja posiłku*@
@@ -108,14 +109,18 @@
     [Parameter]
     public Dish selectedDish { get; set; } = new Dish();
     public Dish dish { get; set; }
+    public MealDish mealDish { get; set; }
+
     
 
     private async Task OpenDialogSearchDish(string userId, Dish selectedDish )
     {
-        var parameters = new DialogParameters { ["userId"] =userId, ["_dish"]=selectedDish};
+        mealDish = new MealDish();
+        var parameters = new DialogParameters { ["userId"] =userId, ["_dish"]=selectedDish, ["mealDish"]= mealDish, ["MealId"] =_dayMeal.MealId };
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         var dialog=DialogService.Show <EditExistingDishDialog> ("Edytuj istniejące danie",parameters, closeOnEscapeKey);
         var resultDishId = await dialog.Result;
+        
         if (!resultDishId.Cancelled)
         {
             
@@ -144,6 +149,9 @@
                 dish = selectedDish;
                 await this.InvokeAsync(StateHasChanged);
                 await ReloadData();
+                mealDish.DishId = dish.DishId;
+                _dayMeal.MealDish=mealDish;
+                await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
             }
             
         }

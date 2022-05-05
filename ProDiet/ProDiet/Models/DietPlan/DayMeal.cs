@@ -14,8 +14,8 @@ namespace ProDiet.Models.DietPlan
         [Required]
         [ForeignKey("DietPlanDayId")]
         public int DietPlanDayId { get; set; }
+        public MealDish MealDish { get; set; }
 
-        public List<MealDish> MealDish { get; set; }
         [Required]
         public float Carbohydrates { get; set; }
         [Required]

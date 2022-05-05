@@ -138,17 +138,24 @@ namespace ProDiet.Services
             {
                 db.Entry(dietPlanDay).State = EntityState.Modified;
 
+                foreach (var meal in dietPlanDay.DietPlanDayMeals)
+                {
+                    meal.Name = "Posiłek";
+                    meal.CreatedAt = DateTime.Now;
+                    meal.CreatedBy = dietPlanDay.CreatedBy;
+
+                }
                 foreach (var DayMeal in dietPlanDay.DietPlanDayMeals)
                 {
-                    if (DayMeal.DietPlanDayId != 0)
+                    if (DayMeal.MealId != 0)
                     {
                         db.Entry(DayMeal).State = EntityState.Modified;
                     }
                     else
                     {
                         db.Entry(DayMeal).State = EntityState.Added;
-
                     }
+
 
                 }
                 var idsOfDayMeals = dietPlanDay.DietPlanDayMeals.Select(x => x.DietPlanDayId).ToList();
@@ -157,6 +164,8 @@ namespace ProDiet.Services
                         Contains(x.MealId) && x.MealId == dietPlanDay.DietPlanDayId).ToListAsync();
 
                 db.RemoveRange(dayMealsToDelete);
+
+
                 await db.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -209,13 +218,40 @@ namespace ProDiet.Services
                     }
 
                 }
-                var idsOfMealDishes = dayMeal.MealDish.Select(x => x.MealDishId).ToList();
+                var idsOfMealDishes = dayMeal.MealDish.MealDishId;
                 var mealDishesToDelete = await db.MealDishes.
-                    Where(x => !idsOfMealDishes.
-                        Contains(x.MealDishId) && x.MealId == dayMeal.MealId).ToListAsync();
+                    Where(x => !idsOfMealDishes
+                        == x.MealDishId && x.MealId == dayMeal.MealId).ToListAsync();
 
                 db.RemoveRange(mealDishesToDelete);
                 await db.SaveChangesAsync();
+                
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+        public async Task<int> UpdateMealDish(MealDish mealDish)
+        {
+            try
+            {
+                if (mealDish.MealDishId != 0)
+                {
+                    db.Entry(mealDish).State = EntityState.Modified;
+                }
+                else
+                {
+                    db.Entry(mealDish).State = EntityState.Added;
+
+                }
+
+                await db.SaveChangesAsync();
+                return mealDish.MealDishId;
+
             }
             catch (Exception ex)
             {

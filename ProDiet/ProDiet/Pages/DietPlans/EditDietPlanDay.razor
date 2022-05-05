@@ -29,7 +29,7 @@ else
                 <MudCard>
                     <MudFab
                         Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-                        @onclick="@(() => _dietPlanDay.DietPlanDayMeals.Add(new DayMeal()))">
+                        @onclick="() => AddMeal()">
                         Dodaj posiłek
                     </MudFab>
                     <MudCard>
@@ -114,11 +114,19 @@ else
         _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
         if (_checkOwner==true)
         {
-
             _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
         }        
         
         await base.OnInitializedAsync();
+    }
+
+    private async Task AddMeal()
+    {
+        _dietPlanDay.DietPlanDayMeals.Add(new DayMeal(){CreatedBy = userId, CreatedAt = DateTime.Now});
+        //await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
+
+        
+
     }
 
 
@@ -126,10 +134,14 @@ else
     {
         var user = httpContextAccessor.HttpContext.User;
         userId = userManager.GetUserId(user);
+        _dietPlanDay= await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
         _dietPlanDay.ModifiedBy = userId;
         _dietPlanDay.ModifiedAt = DateTime.Now;
-        await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
-        //navigationManager.NavigateTo("/mydishes");
+        foreach (var meal in _dietPlanDay.DietPlanDayMeals)
+        {
+            await iDietPlanStoresService.UpdateDayMeal(meal);
+        }
+        
 
     }
 

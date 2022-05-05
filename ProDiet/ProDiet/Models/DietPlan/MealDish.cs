@@ -10,8 +10,6 @@ namespace ProDiet.Models.DietPlan
         public Dish Dish { get; set; }
         [Required]
         public int DishId { get; set; }
-        public DayMeal DayMeal { get; set; }
-        [Required]
         [ForeignKey("MealId")]
         public int MealId { get; set; }
 

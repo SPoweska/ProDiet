@@ -20,7 +20,7 @@
 
 @if (_products == null)
 {
-    <p><em>Loading...</em></p>
+    <p> Nie dodałeś jeszcze żadnych produktów</p>
 }
 else
 {
@@ -48,6 +48,7 @@ else
                 <td>@_product.Proteins</td>
                 <td>@_product.Fiber</td>
                 <td>@_product.ProductCategory</td>
+                <MudButton Variant="Variant.Filled" Color="Color.Success" @onclick="@(()=>navigationManager.NavigateTo($"/products/edit/{_product.ProductId}"))"> Edytuj produkt</MudButton>
             </tr>
         }
         </tbody>
@@ -79,11 +80,22 @@ else
         await base.OnInitializedAsync();
     }
 
-    private void OpenDialog()
+    private async Task Reload()
+    {
+        _products = await iProductStoresService.GetAllProducts();
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OpenDialog()
     {    
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
 
-        DialogService.Show<ProductsCreateDialog>("Dodaj nowy produkt", closeOnEscapeKey);
+        var dialog=DialogService.Show<ProductsCreateDialog>("Dodaj nowy produkt", closeOnEscapeKey);
+        var resultDishId = await dialog.Result;
+        if (resultDishId!=null)
+        {
+            await Reload();
+        }
 
     }
 }

@@ -9,11 +9,13 @@
 @using ProDiet.Data.Configuration
 @using ProDiet.Migrations
 @using ProDiet.Models
+@using ProDiet.Models.DietPlan
 @using Dish = ProDiet.Models.Dish
 @inject UserManager<IdentityUser> userManager;
 @inject IDishStoresService iDishStoresService;
 @inject IProductStoresService iProductStoresService;
 @inject IHttpContextAccessor httpContextAccessor;
+@inject IDietPlanStoresService iDietPlanStoresService;
 @inject NavigationManager navigationManager;
 
 
@@ -145,11 +147,15 @@
 @code {
     [Parameter]
     public ProDiet.Models.Dish _dish { get; set; }
+    [Parameter]
+    public MealDish mealDish { get; set; }
 
     private List<Product> _productsList;
 
     [Parameter]
     public string userId { get; set; }
+    [Parameter]
+    public int MealId { get; set; }
 
     public bool onlyMyDishes = false;
 
@@ -157,6 +163,9 @@
     public List<Dish> allDishesList { get; set; } = new List<Dish>();
     public List<Dish> userDishesList { get; set; } = new List<Dish>();
     public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
+    public int mealDishId { get; set; }
+    
+
 
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
@@ -166,6 +175,7 @@
 
     void Submit()
     {
+
         mudDialog.Close(DialogResult.Ok(_dish.DishId));
     } 
 
@@ -214,7 +224,16 @@
             _dish.CreatedAt = DateTime.Now;
             _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
         }
-        
+        mealDish.DishId = _dish.DishId;
+        mealDish.Calories = _dish.Calories;
+        mealDish.Proteins = _dish.Proteins;
+        mealDish.Fats = _dish.Fats;
+        mealDish.Carbohydrates = _dish.Carbohydrates;
+        mealDish.Fiber = _dish.Fiber;
+        mealDish.CreatedAt=DateTime.Now;
+        mealDish.CreatedBy = id;
+        mealDish.MealId = MealId;
+        mealDishId = await iDietPlanStoresService.UpdateMealDish(mealDish);
 
         Submit();
 

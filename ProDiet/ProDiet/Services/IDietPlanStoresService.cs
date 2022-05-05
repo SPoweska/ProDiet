@@ -12,8 +12,9 @@ namespace ProDiet.Services
         public Task DeleteDietPlan(int dietPlanId);
         public Task UpdateDietPlanDay(DietPlanDay dietPlanDay);
         public Task<DietPlanDay> GetDietPlanDay(int dietPlanDayId);
-        public Task UpdateDayMeal(DayMeal dayMeal);
+        public Task<DayMeal> UpdateDayMeal(DayMeal dayMeal);
         public Task<DayMeal> GetDayMeal(int mealId);
+        public Task<int> UpdateMealDish(MealDish mealDish);
 
 
     }

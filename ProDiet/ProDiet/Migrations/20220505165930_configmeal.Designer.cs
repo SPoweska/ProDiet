@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220505165930_configmeal")]
+    partial class configmeal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -404,7 +406,8 @@ namespace ProDiet.Migrations
 
                     b.HasIndex("DietPlanDayId");
 
-                    b.HasIndex("MealDishId");
+                    b.HasIndex("MealDishId")
+                        .IsUnique();
 
                     b.ToTable("DayMeals");
                 });
@@ -591,7 +594,7 @@ namespace ProDiet.Migrations
 
                     b.HasIndex("DishId");
 
-                    b.ToTable("MealDishes");
+                    b.ToTable("MealDishes", (string)null);
                 });
 
             modelBuilder.Entity("ProDiet.Models.Dish", b =>
@@ -1144,8 +1147,8 @@ namespace ProDiet.Migrations
                         .IsRequired();
 
                     b.HasOne("ProDiet.Models.DietPlan.MealDish", "MealDish")
-                        .WithMany()
-                        .HasForeignKey("MealDishId")
+                        .WithOne("DayMeal")
+                        .HasForeignKey("ProDiet.Models.DietPlan.DayMeal", "MealDishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1278,6 +1281,12 @@ namespace ProDiet.Migrations
             modelBuilder.Entity("ProDiet.Models.DietPlan.DietPlanShoppingList", b =>
                 {
                     b.Navigation("UsedProducts");
+                });
+
+            modelBuilder.Entity("ProDiet.Models.DietPlan.MealDish", b =>
+                {
+                    b.Navigation("DayMeal")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProDiet.Models.Dish", b =>
