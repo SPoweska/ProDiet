@@ -27,6 +27,22 @@ namespace ProDiet.Services
             }
         }
 
+        public async Task<int> AddDishReturnId(Dish dish)
+        {
+            try
+            {
+                await db.Dishes.AddAsync(dish);
+                await db.SaveChangesAsync();
+                return dish.DishId; 
+            }
+            catch (Exception ex)
+            {
+                //Exception ex = new Exception("Error while adding patient");
+                throw ex;
+            }
+        }
+
+
         public async Task DeleteDish(int dishId)
         {
             try

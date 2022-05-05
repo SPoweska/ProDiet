@@ -193,7 +193,7 @@
         allDishesList = await iDishStoresService.GetAllDishes();
         userDishesList = await iDishStoresService.GetAllUserDishes(userId);
         dishesList = allDishesList;
-        
+
         await base.OnInitializedAsync();
     }
 
@@ -207,9 +207,15 @@
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
-        _dish.CreatedBy = id;
-        _dish.CreatedAt = DateTime.Now;
-        await iDishStoresService.AddDish(_dish);
+        if (_dish != selectedDish)
+        {
+            _dish.DishId = 0;
+            _dish.CreatedBy = id;
+            _dish.CreatedAt = DateTime.Now;
+            _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
+        }
+        
+
         Submit();
 
     }

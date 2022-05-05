@@ -22,17 +22,74 @@
                 }
             </MudSelect>
             <MudCard Outlined="true">
-                @if (selectedDish.DishId == 0)
+                @if (dish != null)
+                {
+                    <MudTextField @bind-Value="dish.DishName"
+                                    For="@(() => dish.DishName)"
+                                    Disabled="true"
+                                    Immediate="true"
+                                    Label="Węglowodany"/>
+                    <MudTextField @bind-Value="dish.Carbohydrates"
+                                  For="@(() => dish.Carbohydrates)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Węglowodany"/>
+                    <MudTextField @bind-Value="dish.Calories"
+                                  For="@(() => dish.Calories)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Kalorie"/>
+
+                    <MudTextField @bind-Value="dish.Fats"
+                                  For="@(() => dish.Fats)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Tłuszcz"/>
+
+                    <MudTextField @bind-Value="dish.Proteins"
+                                  For="@(() => dish.Proteins)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Białko"/>
+
+                    <MudTextField @bind-Value="dish.Fiber"
+                                  For="@(() => dish.Fiber)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Błonnik"/>
+                    <MudTextField @bind-Value="dish.Servings"
+                                  For="@(() => dish.Servings)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Liczba porcji"/>
+                    <MudTextField @bind-Value="dish.PreparationMinutes"
+                                  For="@(() => dish.PreparationMinutes)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Czas przygotowania w minutach"/>
+                    <MudTextField @bind-Value="dish.Recipe"
+                                  For="@(() => dish.Recipe)"
+                                  Disabled="true"
+                                  Immediate="true"
+                                  Label="Wskazówki odnośnie przygotowania"/>
+                    <MudCard Outlined="true">
+                        <MudSelect Disabled="true" Label="Typ posiłku" @bind-Value="dish.MealType">
+                            @foreach (var mealType in Enum.GetValues(typeof(MealType)))
+                            {
+                                <MudSelectItem T="string" Value="@mealType.ToString()">@mealType</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCard>
+
+                }
+                else
                 {
                     <h1>Wybierz danie z listy lub utwórz nowe</h1>
                     <MudButton Color="Color.Success" @onclick="()=>OpenDialogSearchDish(userId, selectedDish)">Chcę wybrać i edytowac jedno z dostępnych dań </MudButton>
                     <MudButton Color="Color.Primary" @onclick="()=>OpenDialogNewDish(userId, selectedDish)">Chcę utworzyć nowe danie </MudButton>
                 }
-                else
-                {
-
-
-                }
+                
+                
             </MudCard>
         </MudCard>
     </MudCardContent>
@@ -46,8 +103,11 @@
     public DayMeal _dayMeal { get; set; }
     private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
     [Parameter]
-    public string userId { get; set; }    
-    public Dish selectedDish { get; set; } = new Dish(){DishId = 0};
+    public string userId { get; set; }
+
+    [Parameter]
+    public Dish selectedDish { get; set; } = new Dish();
+    public Dish dish { get; set; }
     
 
     private async Task OpenDialogSearchDish(string userId, Dish selectedDish )
@@ -60,7 +120,12 @@
         {
             
             selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
-            await this.InvokeAsync(StateHasChanged);
+            if (selectedDish.DishId != 0)
+            {
+                dish = selectedDish;
+                await this.InvokeAsync(StateHasChanged);
+                await ReloadData();
+            }
         }
 
     }
@@ -74,15 +139,26 @@
         if (!resultDishId.Cancelled)
         {
             selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
-            await this.InvokeAsync(StateHasChanged);
+            if (selectedDish.DishId != 0)
+            {
+                dish = selectedDish;
+                await this.InvokeAsync(StateHasChanged);
+                await ReloadData();
+            }
+            
         }
 
+    }
+
+    public async Task ReloadData()
+    {
+        await this.InvokeAsync(StateHasChanged);
     }
 
 
     protected override async Task OnInitializedAsync()
     {
-
+        await ReloadData();
         await base.OnInitializedAsync();
     }
 

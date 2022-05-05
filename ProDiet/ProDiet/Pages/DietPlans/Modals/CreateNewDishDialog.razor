@@ -115,15 +115,7 @@
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
             </MudCard>
             </EditForm>
-            }
-            else
-            {
-                <MudCard Outlined="true">
-                    <h3>Wybierz produkt z listy</h3>
-                    <MudButton OnClick="Cancel">Anuluj</MudButton>
-                </MudCard>
-            }
-        </MudContainer>
+    </MudContainer>
 </DialogContent>
     
 </MudDialog>
@@ -182,7 +174,8 @@
         var id = userManager.GetUserId(user);
         _dish.CreatedBy = id;
         _dish.CreatedAt = DateTime.Now;
-        await iDishStoresService.AddDish(_dish);
+        _dish.DishId= await iDishStoresService.AddDishReturnId(_dish);
+        Submit();
 
     }
 

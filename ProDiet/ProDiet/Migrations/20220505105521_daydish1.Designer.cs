@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProDiet.Data;
 
@@ -11,9 +12,10 @@ using ProDiet.Data;
 namespace ProDiet.Migrations
 {
     [DbContext(typeof(ProDietContext))]
-    partial class ProDietContextModelSnapshot : ModelSnapshot
+    [Migration("20220505105521_daydish1")]
+    partial class daydish1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,6 +356,58 @@ namespace ProDiet.Migrations
                     b.ToTable("BodyMeasurement", (string)null);
                 });
 
+            modelBuilder.Entity("ProDiet.Models.DietPlan.DayDish", b =>
+                {
+                    b.Property<int>("DayDishId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DayDishId"), 1L, 1);
+
+                    b.Property<float>("Calories")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Carbohydrates")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DayMealId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Fats")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("Fiber")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Proteins")
+                        .HasColumnType("real");
+
+                    b.HasKey("DayDishId");
+
+                    b.HasIndex("DayMealId")
+                        .IsUnique();
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DayDishes");
+                });
+
             modelBuilder.Entity("ProDiet.Models.DietPlan.DayMeal", b =>
                 {
                     b.Property<int>("MealId")
@@ -538,60 +592,6 @@ namespace ProDiet.Migrations
                     b.HasIndex("DietPlanId");
 
                     b.ToTable("DietPlanShoppingLists");
-                });
-
-            modelBuilder.Entity("ProDiet.Models.DietPlan.MealDish", b =>
-                {
-                    b.Property<int>("DayDishId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DayDishId"), 1L, 1);
-
-                    b.Property<float>("Calories")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Carbohydrates")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DayMealMealId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DishId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Fats")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Fiber")
-                        .HasColumnType("real");
-
-                    b.Property<int>("MealId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Proteins")
-                        .HasColumnType("real");
-
-                    b.HasKey("DayDishId");
-
-                    b.HasIndex("DayMealMealId");
-
-                    b.HasIndex("DishId");
-
-                    b.ToTable("MealDishes");
                 });
 
             modelBuilder.Entity("ProDiet.Models.Dish", b =>
@@ -1135,6 +1135,25 @@ namespace ProDiet.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("ProDiet.Models.DietPlan.DayDish", b =>
+                {
+                    b.HasOne("ProDiet.Models.DietPlan.DayMeal", "DayMeal")
+                        .WithOne("MealDish")
+                        .HasForeignKey("ProDiet.Models.DietPlan.DayDish", "DayMealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProDiet.Models.Dish", "Dish")
+                        .WithMany()
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DayMeal");
+
+                    b.Navigation("Dish");
+                });
+
             modelBuilder.Entity("ProDiet.Models.DietPlan.DayMeal", b =>
                 {
                     b.HasOne("ProDiet.Models.DietPlan.DietPlanDay", "DietPlanDay")
@@ -1177,25 +1196,6 @@ namespace ProDiet.Migrations
                         .IsRequired();
 
                     b.Navigation("DietPlan");
-                });
-
-            modelBuilder.Entity("ProDiet.Models.DietPlan.MealDish", b =>
-                {
-                    b.HasOne("ProDiet.Models.DietPlan.DayMeal", "DayMeal")
-                        .WithMany("MealDish")
-                        .HasForeignKey("DayMealMealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProDiet.Models.Dish", "Dish")
-                        .WithMany()
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DayMeal");
-
-                    b.Navigation("Dish");
                 });
 
             modelBuilder.Entity("ProDiet.Models.HomeMeasurement", b =>
@@ -1267,7 +1267,8 @@ namespace ProDiet.Migrations
 
             modelBuilder.Entity("ProDiet.Models.DietPlan.DayMeal", b =>
                 {
-                    b.Navigation("MealDish");
+                    b.Navigation("MealDish")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProDiet.Models.DietPlan.DietPlan", b =>

@@ -138,23 +138,23 @@ namespace ProDiet.Services
             {
                 db.Entry(dietPlanDay).State = EntityState.Modified;
 
-                foreach (var dietPlanDayMeal in dietPlanDay.DietPlanDayMeals)
+                foreach (var DayMeal in dietPlanDay.DietPlanDayMeals)
                 {
-                    if (dietPlanDayMeal.DietPlanDayId != 0)
+                    if (DayMeal.DietPlanDayId != 0)
                     {
-                        db.Entry(dietPlanDayMeal).State = EntityState.Modified;
+                        db.Entry(DayMeal).State = EntityState.Modified;
                     }
                     else
                     {
-                        db.Entry(dietPlanDayMeal).State = EntityState.Added;
+                        db.Entry(DayMeal).State = EntityState.Added;
 
                     }
 
                 }
                 var idsOfDayMeals = dietPlanDay.DietPlanDayMeals.Select(x => x.DietPlanDayId).ToList();
-                var dayMealsToDelete = await db.DietPlanDayDishes.
+                var dayMealsToDelete = await db.MealDishes.
                     Where(x => !idsOfDayMeals.
-                        Contains(x.DayMealId) && x.DayMealId == dietPlanDay.DietPlanDayId).ToListAsync();
+                        Contains(x.MealId) && x.MealId == dietPlanDay.DietPlanDayId).ToListAsync();
 
                 db.RemoveRange(dayMealsToDelete);
                 await db.SaveChangesAsync();
@@ -166,17 +166,17 @@ namespace ProDiet.Services
             }
         }
 
-        public async Task<DayMeal> GetDietPlanDayMeal(int mealId)
+        public async Task<DayMeal> GetDayMeal(int mealId)
         {
             try
             {
-                DayMeal dietPlanDayMeal =
+                DayMeal DayMeal =
                     await db.DayMeals.Include(x => x.MealDish).FirstOrDefaultAsync(x => x.MealId == mealId);
 
-                if (dietPlanDayMeal != null)
+                if (DayMeal != null)
                 {
                     //db.Entry(dish).State = EntityState.Detached;
-                    return dietPlanDayMeal;
+                    return DayMeal;
                 }
                 else
                 {
@@ -190,25 +190,39 @@ namespace ProDiet.Services
             }
         }
 
-        public async Task UpdateDietPlanDayMeal(DayMeal dayMeal)
+        public async Task UpdateDayMeal(DayMeal dayMeal)
         {
             try
             {
-                     if (dayMeal.MealId != 0)
+                db.Entry(dayMeal).State = EntityState.Modified;
+
+                foreach (var MealDish in dayMeal.MealDish)
+                {
+                    if (MealDish.MealDishId != 0)
                     {
-                        db.Entry(dayMeal).State = EntityState.Modified;
+                        db.Entry(MealDish).State = EntityState.Modified;
                     }
                     else
                     {
-                        db.Entry(dayMeal).State = EntityState.Added;
+                        db.Entry(MealDish).State = EntityState.Added;
+
                     }
-                     await db.SaveChangesAsync();
+
+                }
+                var idsOfMealDishes = dayMeal.MealDish.Select(x => x.MealDishId).ToList();
+                var mealDishesToDelete = await db.MealDishes.
+                    Where(x => !idsOfMealDishes.
+                        Contains(x.MealDishId) && x.MealId == dayMeal.MealId).ToListAsync();
+
+                db.RemoveRange(mealDishesToDelete);
+                await db.SaveChangesAsync();
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
+
         }
     }
 }

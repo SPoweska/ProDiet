@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProDiet.Models.DietPlan
 {
-    public class DietPlanDayDish : AuditableEntity
+    public class MealDish : AuditableEntity
     {
         [Key]
-        public int DayDishId { get; set; }
+        public int MealDishId { get; set; }
         public Dish Dish { get; set; }
         [Required]
         public int DishId { get; set; }
         public DayMeal DayMeal { get; set; }
         [Required]
-        [ForeignKey("DayMealId")]
-        public int DayMealId { get; set; }
+        [ForeignKey("MealId")]
+        public int MealId { get; set; }
 
         [Required]
         public float Carbohydrates { get; set; }
