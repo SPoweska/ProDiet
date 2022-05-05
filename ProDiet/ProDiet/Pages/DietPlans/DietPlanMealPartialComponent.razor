@@ -102,7 +102,9 @@
 
     [CascadingParameter]
     public DayMeal _dayMeal { get; set; }
+
     private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
+
     [Parameter]
     public string userId { get; set; }
 
@@ -130,6 +132,10 @@
                 dish = selectedDish;
                 await this.InvokeAsync(StateHasChanged);
                 await ReloadData();
+                mealDish.DishId = dish.DishId;
+                _dayMeal.MealDish=mealDish;
+                await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
+
             }
         }
 
@@ -143,6 +149,7 @@
         var resultDishId = await dialogBody.Result;
         if (!resultDishId.Cancelled)
         {
+            mealDish = new MealDish();
             selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
             if (selectedDish.DishId != 0)
             {
@@ -151,6 +158,8 @@
                 await ReloadData();
                 mealDish.DishId = dish.DishId;
                 _dayMeal.MealDish=mealDish;
+                _dayMeal.CreatedAt=DateTime.Now;
+                _dayMeal.CreatedBy = userId;
                 await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
             }
             

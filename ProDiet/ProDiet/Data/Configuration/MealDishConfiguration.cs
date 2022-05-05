@@ -1,27 +1,23 @@
-﻿//using Microsoft.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore.Metadata.Builders;
-//using ProDiet.Models.DietPlan;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProDiet.Models.DietPlan;
 
-//namespace ProDiet.Data.Configuration
-//{
+namespace ProDiet.Data.Configuration
+{
 
-//    public class MealDishConfiguration : IEntityTypeConfiguration<MealDish>
-//    {
-//        public void Configure(EntityTypeBuilder<MealDish> builder)
-//        {
+    public class MealDishConfiguration : IEntityTypeConfiguration<DayMeal>
+    {
+        public void Configure(EntityTypeBuilder<DayMeal> builder)
+        {
+            builder.HasOne(x => x.MealDish).WithOne(x => x.DayMeal).HasForeignKey<MealDish>(x => x.MealId);
 
-//            builder.HasKey(x => x.MealDishId);
-//            builder.ToTable("MealDishes");
-//            builder.HasOne(x => x.DayMeal).WithOne(x => x.MealDish).HasForeignKey<DayMeal>(x=>x.MealDishId)
-//                .OnDelete(DeleteBehavior.Cascade);
-
-//        }
+        }
 
 
 
-//    }
+    }
 
-//}
+}
 
 
 

@@ -139,8 +139,11 @@ else
         _dietPlanDay.ModifiedAt = DateTime.Now;
         foreach (var meal in _dietPlanDay.DietPlanDayMeals)
         {
+            meal.CreatedAt=DateTime.Now;
+            meal.CreatedBy = userId;
             await iDietPlanStoresService.UpdateDayMeal(meal);
         }
+        await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
         
 
     }

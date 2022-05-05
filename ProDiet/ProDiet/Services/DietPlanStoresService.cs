@@ -199,33 +199,41 @@ namespace ProDiet.Services
             }
         }
 
-        public async Task UpdateDayMeal(DayMeal dayMeal)
+        public async Task<DayMeal> UpdateDayMeal(DayMeal dayMeal)
         {
             try
             {
-                db.Entry(dayMeal).State = EntityState.Modified;
-
-                foreach (var MealDish in dayMeal.MealDish)
+                if (dayMeal.MealId == 0)
                 {
-                    if (MealDish.MealDishId != 0)
-                    {
-                        db.Entry(MealDish).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        db.Entry(MealDish).State = EntityState.Added;
-
-                    }
-
+                    db.Entry(dayMeal).State = EntityState.Added;
                 }
-                var idsOfMealDishes = dayMeal.MealDish.MealDishId;
-                var mealDishesToDelete = await db.MealDishes.
-                    Where(x => !idsOfMealDishes
-                        == x.MealDishId && x.MealId == dayMeal.MealId).ToListAsync();
+                else
+                {
+                    db.Entry(dayMeal).State = EntityState.Modified;
+                }
 
-                db.RemoveRange(mealDishesToDelete);
+                //foreach (var MealDish in dayMeal.MealDish)
+                //{
+                //    if (MealDish.MealDishId != 0)
+                //    {
+                //        db.Entry(MealDish).State = EntityState.Modified;
+                //    }
+                //    else
+                //    {
+                //        db.Entry(MealDish).State = EntityState.Added;
+
+                //    }
+
+                //}
+                //var idsOfMealDishes = dayMeal.MealDish.MealDishId;
+                //var mealDishesToDelete = await db.MealDishes.
+                //    Where(x => !idsOfMealDishes
+                //        == x.MealDishId && x.MealId == dayMeal.MealId).ToListAsync();
+
+                //db.RemoveRange(mealDishesToDelete);
                 await db.SaveChangesAsync();
-                
+                return dayMeal;
+
             }
             catch (Exception ex)
             {
