@@ -21,10 +21,10 @@
 
 <MudDialog  DisableSidePadding="true">
 <DialogContent>
-    <MudContainer Style="max-height: 1700px; max-width: 1700px; overflow-y: scroll; overflow-x: scroll">
+    <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
 
-        <h5>Wybierz danie z listy a następnie je edytuj</h5>
-        <MudCheckBox CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
+        <MudExpansionPanel Text="Wybierz jedno z istniejących dań" MaxHeight="150">
+        <MudCheckBox Size="Size.Small" Color="Color.Primary" CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
         <MudSelect
             T="int"
             ValueChanged="(int i) => OnDishSelected(i)"
@@ -35,6 +35,7 @@
                 <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
             }
         </MudSelect>
+        </MudExpansionPanel>
         @if(selectedDish.DishId != null)
         {
         <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">

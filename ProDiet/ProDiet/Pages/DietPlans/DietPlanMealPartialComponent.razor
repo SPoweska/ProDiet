@@ -16,7 +16,7 @@
     <DataAnnotationsValidator/>
     <MudCardContent>
         <MudCard Outlined="true">
-            <MudSelect Label="Nazwa posiłku" @bind-Value="_dayMeal.Name">
+            <MudSelect Label="Nazwa posiłku" ValueChanged="(string s) =>MealNameChanged(s) " Value="_dayMeal.Name">
                 @foreach (var mealType in mealList)
                 {
                     <MudSelectItem T="string" Value="@mealType">@mealType</MudSelectItem>
@@ -25,68 +25,88 @@
             <MudCard Outlined="true">
                 @if (_dayMeal.MealDish?.Dish != null)
                 {
-                            <MudTextField @bind-Value="_dayMeal.MealDish.Dish.DishName"
-                                    For="@(() => _dayMeal.MealDish.Dish.DishName)"
-                                    Disabled="true"
-                                    Immediate="true"
-                                    Label="Węglowodany"/>
-                            <MudTextField @bind-Value="_dayMeal.MealDish.Carbohydrates"
-                                  For="@(() => _dayMeal.MealDish.Carbohydrates)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Węglowodany"/>
+                    <div >
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <MudTextField @bind-Value="_dayMeal.MealDish.Dish.DishName"
+                                      For="@(() => _dayMeal.MealDish.Dish.DishName)"
+                                      Disabled="true"
+                                      Immediate="true"
+                                      Label="Nazwa dania"/>
+                    </div>
+
+                    <div class="row col-10">
+                        <div class="col-2">
                             <MudTextField @bind-Value="_dayMeal.MealDish.Calories"
-                                  For="@(() => _dayMeal.MealDish.Calories)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Kalorie"/>
-
+                                          For="@(() => _dayMeal.MealDish.Calories)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Kalorie"/>
+                        </div>
+                        <div class="col-2">
+                            <MudTextField @bind-Value="_dayMeal.MealDish.Carbohydrates"
+                                          For="@(() => _dayMeal.MealDish.Carbohydrates)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Węglowodany(g)"/>
+                        </div>
+                        <div class="col-2">
                             <MudTextField @bind-Value="_dayMeal.MealDish.Fats"
-                                  For="@(() => _dayMeal.MealDish.Fats)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Tłuszcz"/>
+                                          For="@(() => _dayMeal.MealDish.Fats)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Tłuszcz(g)"/>
+                        </div>
 
+                        <div class="col-2">
                             <MudTextField @bind-Value="_dayMeal.MealDish.Proteins"
-                                  For="@(() => _dayMeal.MealDish.Proteins)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Białko"/>
+                                          For="@(() => _dayMeal.MealDish.Proteins)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Białko(g)"/>
+                        </div>
 
+                        <div class="col-2">
                             <MudTextField @bind-Value="_dayMeal.MealDish.Fiber"
-                                  For="@(() => _dayMeal.MealDish.Fiber)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Błonnik"/>
+                                          For="@(() => _dayMeal.MealDish.Fiber)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Błonnik(g)"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+
                             <MudTextField @bind-Value="_dayMeal.MealDish.Dish.Servings"
-                                  For="@(() => _dayMeal.MealDish.Dish.Servings)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Liczba porcji"/>
+                                          For="@(() => _dayMeal.MealDish.Dish.Servings)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Liczba porcji"/>
+                        </div>
+                        <div class="col-2">
+
                             <MudTextField @bind-Value="_dayMeal.MealDish.Dish.PreparationMinutes"
-                                  For="@(() => _dayMeal.MealDish.Dish.PreparationMinutes)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Czas przygotowania w minutach"/>
+                                          For="@(() => _dayMeal.MealDish.Dish.PreparationMinutes)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Label="Czas przygotowania w minutach"/>
+                        </div>
+                    </div>
+                    <div class="row col-10">
+                        <div class="col-10">
                             <MudTextField @bind-Value="_dayMeal.MealDish.Dish.Recipe"
-                                  For="@(() => _dayMeal.MealDish.Dish.Recipe)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Wskazówki odnośnie przygotowania"/>
-                            <MudCard Outlined="true">
-                                <MudSelect Disabled="true" Label="Typ posiłku" @bind-Value="_dayMeal.MealDish.Dish.MealType">
-                                    @foreach (var mealType in Enum.GetValues(typeof(MealType)))
-                                    {
-                                <MudSelectItem T="string" Value="@mealType.ToString()">@mealType</MudSelectItem>
-                                    }
-                        </MudSelect>
-                    </MudCard>
+                                          For="@(() => _dayMeal.MealDish.Dish.Recipe)"
+                                          Disabled="true"
+                                          Immediate="true"
+                                          Lines="5"
+                                          Label="Wskazówki odnośnie przygotowania"/>
+                        </div>
+                    </div>
+                    </div>
                 }
                 else
                 {
-                    <h1>Wybierz danie z listy lub utwórz nowe</h1>
-                    <MudButton Color="Color.Success" @onclick="()=>OpenDialogSearchDish(userId, selectedDish)">Chcę wybrać i edytowac jedno z dostępnych dań </MudButton>
-                    <MudButton Color="Color.Primary" @onclick="()=>OpenDialogNewDish(userId, selectedDish)">Chcę utworzyć nowe danie </MudButton>
+                    <MudButton Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add"  @onclick="()=>OpenDialogSearchDish(userId, selectedDish)">Dodaj danie </MudButton>
                 }
                 
                 
@@ -112,14 +132,18 @@
     public Dish dish { get; set; }
     public MealDish mealDish { get; set; }
 
-    protected override void OnInitialized()
-    {
+    
 
-        base.OnInitialized();
+    private async Task MealNameChanged(string s)
+    {
+        _dayMeal.Name = s;
+        await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
+
     }
 
     private async Task OpenDialogSearchDish(string userId, Dish selectedDish )
     {
+        //await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
         mealDish = new MealDish();
         var parameters = new DialogParameters { ["userId"] =userId, ["_dish"]=selectedDish, ["mealDish"]= mealDish, ["MealId"] =_dayMeal.MealId };
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
@@ -138,37 +162,14 @@
                 mealDish.DishId = dish.DishId;
                 _dayMeal.MealDish=mealDish;
                 await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
-
-            }
-        }
-
-    }
-
-    private async Task OpenDialogNewDish(string userId, Dish selectedDish  )
-    {
-        var parameters = new DialogParameters {["userId"] =userId  ,["_dish"]=selectedDish};
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var dialogBody=DialogService.Show<CreateNewDishDialog>("Dodaj nowy pomiar ciała",parameters, closeOnEscapeKey);
-        var resultDishId = await dialogBody.Result;
-        if (!resultDishId.Cancelled)
-        {
-            mealDish = new MealDish();
-            selectedDish = await iDishStoresService.GetDish((int)resultDishId.Data);
-            if (selectedDish.DishId != 0)
-            {
-                dish = selectedDish;
-                await this.InvokeAsync(StateHasChanged);
                 await ReloadData();
-                mealDish.DishId = dish.DishId;
-                _dayMeal.MealDish=mealDish;
-                _dayMeal.CreatedAt=DateTime.Now;
-                _dayMeal.CreatedBy = userId;
-                await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
+
             }
-            
         }
 
     }
+
+
 
     public async Task ReloadData()
     {
@@ -178,8 +179,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await ReloadData();
         await base.OnInitializedAsync();
+        await ReloadData();
+
     }
 
 

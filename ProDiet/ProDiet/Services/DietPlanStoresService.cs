@@ -140,7 +140,11 @@ namespace ProDiet.Services
 
                 foreach (var meal in dietPlanDay.DietPlanDayMeals)
                 {
-                    meal.Name = "Posiłek";
+                    if (meal.Name == null)
+                    {
+                        meal.Name = "Posiłek";
+                    }
+                    
                     meal.CreatedAt = DateTime.Now;
                     meal.CreatedBy = dietPlanDay.CreatedBy;
 

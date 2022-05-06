@@ -3,66 +3,61 @@
 @inject IProductStoresService iProductStoresService;
 
 <MudCard Outlined="true">
-    <MudSelect
-        ValueChanged="( int i) => OnProductSelected(i)"
-        T="int"
-        Label="Nazwa produktu"
-        Value="usedProduct.ProductId"
-        Text="@selectedProduct.ProductName">
-        @foreach (var product in productList)
-        {
-            <MudSelectItem T="int" Value="@product.ProductId">@product.ProductName</MudSelectItem>
+    <div class="row">
+        <div class="col-8">
+            <MudSelect
+                ValueChanged="(int i) => OnProductSelected(i)"
+                T="int"
+                Label="Nazwa produktu"
+                Value="usedProduct.ProductId"
+                Text="@selectedProduct.ProductName">
+                @foreach (var product in productList)
+                {
+                    <MudSelectItem T="int" Value="@product.ProductId">@product.ProductName</MudSelectItem>
 
-        }
-    </MudSelect>
-    <MudTextField T="float"
-                  ReadOnly="true"
-                  @bind-Value="selectedProduct.Calories"                                                 
-                  Immediate="true"
-                  Label="Kalorie na 100g"/>
-    <MudTextField T="float"
-                  ReadOnly="true"
-                  @bind-Value="selectedProduct.Carbohydrates"                                                 
-                  Immediate="true"
-                  Label="Węglowodany na 100g"/>
-    <MudTextField T="float"
-                  ReadOnly="true"
-                  @bind-Value="selectedProduct.Fats"                                                 
-                  Immediate="true"
-                  Label="Tłuszcz na 100g"/>
-    <MudTextField T="float"
-                  ReadOnly="true"
-                  @bind-Value="selectedProduct.Proteins"                                                 
-                  Immediate="true"
-                  Label="Białko na 100g"/>
+                }
+            </MudSelect>
+        </div>
+        <div class="col-4">
 
-</MudCard>                                                
-<MudCard>
-    <MudTextField
-        ValueChanged="(int i) => CalculateNutrients(i)"
-                    T="int"
-                  Value="usedProduct.Quantity"                                                 
-                  Immediate="true"
-                  Label="Masa w gramach"/>
-    <MudTextField T="float"
-                  @bind-Value="usedProduct.Calories" 
-                  Disabled="true"
-                  Immediate="true"
-                  Label="Kalorie na 100g"/>
-    <MudTextField T="float"
-                  @bind-Value="usedProduct.Carbohydrates" 
-                  Disabled="true"
-                  Immediate="true"
-                  Label="Węglowodany na 100g"/>
-    <MudTextField T="float"
-                  @bind-Value="usedProduct.Fats"
-                  Disabled="true"
-                  Immediate="true"
-                  Label="Tłuszcz na 100g"/>
-    <MudTextField T="float"
-                  @bind-Value="usedProduct.Proteins"                                                 
-                  Immediate="true"
-                  Label="Białko na 100g"/>
+            <MudTextField
+                ValueChanged="(int i) => CalculateNutrients(i)"
+                T="int"
+                Value="usedProduct.Quantity"
+                Immediate="true"
+                Label="Masa w gramach"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <MudTextField T="float"
+                          @bind-Value="usedProduct.Calories"
+                          Disabled="true"
+                          Immediate="true"
+                          Label="Kaloryka"/>
+        </div>
+    <div class="col-2">
+        <MudTextField T="float"
+                      @bind-Value="usedProduct.Carbohydrates"
+                      Disabled="true"
+                      Immediate="true"
+                      Label="Węglowodany"/>
+    </div>
+    <div class="col-2">
+        <MudTextField T="float"
+                      @bind-Value="usedProduct.Fats"
+                      Disabled="true"
+                      Immediate="true"
+                      Label="Tłuszcz"/>
+    </div>
+    <div class="col-2">
+        <MudTextField T="float"
+                      @bind-Value="usedProduct.Proteins"
+                      Immediate="true"
+                      Disabled="true"
+                      Label="Białko"/>
+        </div>
+    </div>
 </MudCard>
 
 

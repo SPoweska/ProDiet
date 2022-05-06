@@ -53,35 +53,102 @@ else
                     </MudCard>
                 </MudCard>
             </MudCard>
+            
+            <div class="row">
+                <div class="col-2" align="center">Kaloryka</div>
+                <div class="col-2" align="center">Węglowodany</div>
+                <div class="col-2" align="center">Tłuszcze</div>
+                <div class="col-2" align="center">Białko</div>
+                <div class="col-2" align="center">Błonnik</div>
 
+            </div>
 
-            <MudTextField @bind-Value="_dietPlanDay.Carbohydrates"
-                          For="@(() => _dietPlanDay.Carbohydrates)"
-                          Immediate="true"
-                          Label="Węglowodany"/>
-            <MudTextField @bind-Value="_dietPlanDay.Calories"
-                          For="@(() => _dietPlanDay.Calories)"
-                          Immediate="true"
-                          Label="Kalorie"/>
-
-            <MudTextField @bind-Value="_dietPlanDay.Fats"
-                          For="@(() => _dietPlanDay.Fats)"
-                          Immediate="true"
-                          Label="Tłuszcz"/>
-
-            <MudTextField @bind-Value="_dietPlanDay.Proteins"
-                          For="@(() => _dietPlanDay.Proteins)"
-                          Immediate="true"
-                          Label="Białko"/>
-
-            <MudTextField @bind-Value="_dietPlanDay.Fiber"
-                          For="@(() => _dietPlanDay.Fiber)"
-                          Immediate="true"
-                          Label="Błonnik"/>
-        </MudCardContent>
+            <div class="row">
+                
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlanDay.Calories"
+                                  For="@(() => _dietPlanDay.Calories)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlan.DailyCalories"
+                                  For="@(() => _dietPlan.DailyCalories)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlanDay.Carbohydrates"
+                                  For="@(() => _dietPlanDay.Carbohydrates)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlan.DailyCarbohydrates"
+                                  For="@(() => _dietPlan.DailyCarbohydrates)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlanDay.Fats"
+                                  For="@(() => _dietPlanDay.Fats)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"/>
+                                  
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlan.DailyFats"
+                                  For="@(() => _dietPlan.DailyFats)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"/>
+                </div>
+                <div class="col-1">   
+                    <MudTextField @bind-Value="_dietPlanDay.Proteins"
+                                  For="@(() => _dietPlanDay.Proteins)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">   
+                    <MudTextField @bind-Value="_dietPlan.DailyProteins"
+                                  For="@(() => _dietPlan.DailyProteins)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlanDay.Fiber"
+                                  For="@(() => _dietPlanDay.Fiber)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+                <div class="col-1">
+                    <MudTextField @bind-Value="_dietPlan.DailyFiber"
+                                  For="@(() => _dietPlan.DailyFiber)"
+                                  Immediate="true"
+                                  Disabled="true"
+                                  Lines="1"
+                                  />
+                </div>
+            </div>
+    </MudCardContent>
     </MudCard>
     <MudCard>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
     </MudCard> 
 </EditForm>
@@ -102,6 +169,7 @@ else
     private bool _checkOwner = false;
     private DietPlanDay _dietPlanDay { get; set; }
     private string userId { get; set; }
+    private DietPlan _dietPlan { get; set; }
 
     private List<string> mealList = Enum.GetNames(typeof(MealType)).Cast<string>().ToList();
 
@@ -115,33 +183,50 @@ else
         if (_checkOwner==true)
         {
             _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
-        }        
+            _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
+        }
+        //if (_dietPlanDay.DietPlanDayMeals.Count!=0)
+        //{
+        //    Calculate();
+        //}
 
         await base.OnInitializedAsync();
     }
 
     private async Task AddMeal()
     {
+        await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
+        //foreach (var meal in _dietPlanDay.DietPlanDayMeals)
+        //{
+        //    await iDietPlanStoresService.UpdateDayMeal(meal);
+        //}
         _dietPlanDay.DietPlanDayMeals.Add(new DayMeal(){CreatedBy = userId, CreatedAt = DateTime.Now});
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
-
-
-
     }
 
-
-    private async Task OnValidSubmit()
+    private async Task Calculate()
     {
-        var user = httpContextAccessor.HttpContext.User;
-        userId = userManager.GetUserId(user);
-        _dietPlanDay= await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
-        _dietPlanDay.ModifiedBy = userId;
-        _dietPlanDay.ModifiedAt = DateTime.Now;
         _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
         _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
         _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
         _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
         _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
+    }
+
+
+    private async Task OnValidSubmit()
+    {
+        foreach (var meal in _dietPlanDay.DietPlanDayMeals)
+        {
+            await iDietPlanStoresService.UpdateDayMeal(meal);
+        }
+        var user = httpContextAccessor.HttpContext.User;
+        userId = userManager.GetUserId(user);
+        _dietPlanDay= await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
+        _dietPlanDay.ModifiedBy = userId;
+        _dietPlanDay.ModifiedAt = DateTime.Now;
+        Calculate();
+
         foreach (var meal in _dietPlanDay.DietPlanDayMeals)
         {
             meal.CreatedAt=DateTime.Now;

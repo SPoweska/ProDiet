@@ -65,7 +65,6 @@ else
                         <th>Wzrost</th>
                         <th>Obwód talii</th>
                         <th>Obwód bioder</th>
-                        <th>Błonnik</th>
                         <th>TBF</th>
                         <th>TBW</th>
                         <th>TBM</th>
@@ -85,6 +84,8 @@ else
                             <td>@_bodyMeasurement.TotalBodyWater</td>
                             <td>@_bodyMeasurement.TotalBoneMineral</td>
                             <td>@_bodyMeasurement.MeasurementDate</td>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error"  @onclick="()=>DeleteBodyMeasurement(_bodyMeasurement)">Skasuj pomiar</MudButton>
+
                         </tr>
                     }
                     </tbody>
@@ -93,7 +94,7 @@ else
         </MudTabPanel>
         <MudTabPanel Text="Jadłospisy">
             <MudCardContent>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Primary" OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
                 <table class="table">
                     <thead>
                     <tr>
@@ -114,8 +115,8 @@ else
                             <td>@dietPlan.PlanDaysCount</td>
                             <td>@dietPlan.DietPlanStartTime</td>
                             <td>@dietPlan.DietPlanEndTime</td>
-                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>OpenDialogDeleteDietPlan(dietPlan)"> Skasuj plan</MudButton>
-                            <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="()=>EditDietPlan(dietPlan)"> Edytuj plan</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Success" OnClick="()=>EditDietPlan(dietPlan)"> Edytuj plan</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="()=>OpenDialogDeleteDietPlan(dietPlan)"> Skasuj plan</MudButton>
                         </tr>
                     }
                     </tbody>
@@ -157,6 +158,11 @@ else
         navigationManager.NavigateTo($"/patientdetails/{PatientId}/EditDietPlan/{dietPlan.DietPlanId}");
     }
 
+    private async Task DeleteBodyMeasurement(BodyMeasurement bodyMeasurement)
+    {
+        _patient.BodyMeasurements.Remove(bodyMeasurement);
+        await iPatientStoresService.UpdatePatient(_patient);
+    }
 
     protected override async Task OnInitializedAsync()
     {

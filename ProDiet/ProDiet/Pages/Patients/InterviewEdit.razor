@@ -29,36 +29,43 @@ else
                 <MudTextField @bind-Value="_interview.VisitReason"
                               For="@(() => _interview.VisitReason)"
                               Immediate="true"
-                              Label="Powód wizyty"/>
+                              Label="Powód wizyty"
+                              Lines="4"
+                              />
 
                 
                 <MudTextField @bind-Value="_interview.Goals"
                               For="@(() => _interview.Goals)"
                               Immediate="true"
-                              Label="Cele"/>
+                              Label="Cele"
+                              Lines="4"/>
                 
 
                 <MudTextField @bind-Value="_interview.PhysicalActivity"
                               For="@(() => _interview.PhysicalActivity)"
                               Immediate="true"
-                              Label="Aktywność fizyczna"/>
+                              Label="Aktywność fizyczna"
+                              Lines="4"/>
 
                 <MudTextField @bind-Value="_interview.VisitGoal"
                               For="@(() => _interview.VisitGoal)"
                               Immediate="true"
-                              Label="Jaki jest cel wizyty?"/>
+                              Label="Jaki jest cel wizyty?"
+                              Lines="4"/>
                 
 
                 <MudTextField @bind-Value="_interview.Diseases"
                               For="@(() => _interview.Diseases)"
                               Immediate="true"
-                              Label="Czy Klient cierpi na jakąś chorobę przewlekłą?"/>
+                              Label="Czy Klient cierpi na jakąś chorobę przewlekłą?"
+                              Lines="4"/>
                                 
 
                 <MudTextField @bind-Value="_interview.Suplementation"
                               For="@(() => _interview.Suplementation)"
                               Immediate="true"
-                              Label="Jakie leki lub suplementy diety Klient przyjmuje? W jakich dawkach?"/>
+                              Label="Jakie leki lub suplementy diety Klient przyjmuje? W jakich dawkach?"
+                              Lines="4"/>
                 
                 <MudInputLabel>Stopień aktywności fizycznej według Wskaźnika Aktywności Fizycznej PAL</MudInputLabel>
 
@@ -75,29 +82,34 @@ else
                 <MudTextField @bind-Value="_interview.FamilyDiseases"
                               For="@(() => _interview.FamilyDiseases)"
                               Immediate="true"
-                              Label="Obciążenie chorobami w rodzinie w linii prostej"/>
+                              Label="Obciążenie chorobami w rodzinie w linii prostej"
+                              Lines="4"/>
                 
                 <MudTextField @bind-Value="_interview.DigestiveDiseases"
                               For="@(() => _interview.DigestiveDiseases)"
                               Immediate="true"
-                              Label="Schorzenia ze strony układu pokarmowego"/>
+                              Label="Schorzenia ze strony układu pokarmowego"
+                              Lines="4"/>
                 
                 
                 <MudTextField @bind-Value="_interview.HealthProblems"
                               For="@(() => _interview.HealthProblems)"
                               Immediate="true"
-                              Label="Problemy zdrowotne występujące u Klienta?"/>
+                              Label="Problemy zdrowotne występujące u Klienta?"
+                              Lines="4"/>
                 
                 <MudTextField @bind-Value="_interview.DietHistory"
                               For="@(() => _interview.DietHistory)"
                               Immediate="true"
-                              Label="Jakie diety Klient stosował/stosuje?"/>
+                              Label="Jakie diety Klient stosował/stosuje?"
+                              Lines="4"/>
                 
 
                 <MudTextField @bind-Value="_interview.Profession"
                               For="@(() => _interview.Profession)"
                               Immediate="true"
-                              Label="Wykonywany zawód?"/>
+                              Label="Wykonywany zawód?"
+                              Lines="4"/>
 
                 <MudInputLabel>Czy w pracy jest możliwość podgrzania posiłków?</MudInputLabel>
                 <MudRadioGroup @bind-SelectedOption="_interview.FoodHeatingAbility"
@@ -109,139 +121,162 @@ else
                 <MudTextField @bind-Value="_interview.TypicalEatingShedules"
                               For="@(() => _interview.TypicalEatingShedules)"
                               Immediate="true"
-                              Label="O jakiej porze Klient najczęściej spożywa następujące posiłki?"/>
+                              Label="O jakiej porze Klient najczęściej spożywa następujące posiłki?"
+                              Lines="4"/>
                 
                 
                 <MudTextField @bind-Value="_interview.LastMealTime"
                               For="@(() => _interview.LastMealTime)"
                               Immediate="true"
-                              Label="Ile godzin przed snem Klient zjada ostatni posiłek?"/>
+                              Label="Ile godzin przed snem Klient zjada ostatni posiłek?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.DailySnacksAmount"
                               For="@(() => _interview.DailySnacksAmount)"
                               Immediate="true"
-                              Label="Czy klient w ciągu dnia Klient podjada pomiędzy posiłkami?"/>
+                              Label="Czy klient w ciągu dnia Klient podjada pomiędzy posiłkami?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedSnacks"
                               For="@(() => _interview.PreferedSnacks)"
                               Immediate="true"
-                              Label="Co zwykle Klient podjada?"/>
+                              Label="Co zwykle Klient podjada?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.TimeWhenEatsMost"
                               For="@(() => _interview.TimeWhenEatsMost)"
                               Immediate="true"
-                              Label="Kiedy Klient ma największą ochotę na jedzenie?"/>
+                              Label="Kiedy Klient ma największą ochotę na jedzenie?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.UnlikedFoods"
                               For="@(() => _interview.UnlikedFoods)"
                               Immediate="true"
-                              Label="Jakich produktów z wymienionych kategorii Klient nie lubi?"/>
+                              Label="Jakich produktów z wymienionych kategorii Klient nie lubi?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedFats"
                               For="@(() => _interview.PreferedFats)"
                               Immediate="true"
-                              Label="Jakie tłuszcze Klient stosuje do potraw?"/>
+                              Label="Jakie tłuszcze Klient stosuje do potraw?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedBreads"
                               For="@(() => _interview.PreferedBreads)"
                               Immediate="true"
-                              Label="Jakiego rodzaju pieczywo Klient spożywa?"/>
+                              Label="Jakiego rodzaju pieczywo Klient spożywa?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyBread"
                               For="@(() => _interview.WeeklyBread)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa pieczywo"/>
+                              Label="Ile razy w tygodniu Klient spożywa pieczywo"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedCarbProducts"
                               For="@(() => _interview.PreferedCarbProducts)"
                               Immediate="true"
-                              Label="Jakie produkty węglowodanowe Klient spożywa najczęściej?"/>
+                              Label="Jakie produkty węglowodanowe Klient spożywa najczęściej?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyDairy"
                               For="@(() => _interview.WeeklyDairy)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa nabiał?"/>
+                              Label="Ile razy w tygodniu Klient spożywa nabiał?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedDairy"
                               For="@(() => _interview.PreferedDairy)"
                               Immediate="true"
-                              Label="Jakie produkty nabiałowe Klient spożywa najczęściej?"/>
+                              Label="Jakie produkty nabiałowe Klient spożywa najczęściej?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyVegetables"
                               For="@(() => _interview.WeeklyVegetables)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa warzywa?"/>
+                              Label="Ile razy w tygodniu Klient spożywa warzywa?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyFlourProducts"
                               For="@(() => _interview.WeeklyFlourProducts)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa wyroby mączne (kluski, kopytka, pyzy, makarony)?"/>
+                              Label="Ile razy w tygodniu Klient spożywa wyroby mączne (kluski, kopytka, pyzy, makarony)?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyMeat"
                               For="@(() => _interview.WeeklyMeat)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa mięso?"/>
+                              Label="Ile razy w tygodniu Klient spożywa mięso?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedMeat"
                               For="@(() => _interview.PreferedMeat)"
                               Immediate="true"
-                              Label="Jaki rodzaj mięsa Klient spożywa najczęściej?"/>
+                              Label="Jaki rodzaj mięsa Klient spożywa najczęściej?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyFish"
                               For="@(() => _interview.WeeklyFish)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa ryby?"/>
+                              Label="Ile razy w tygodniu Klient spożywa ryby?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedFish"
                               For="@(() => _interview.PreferedFish)"
                               Immediate="true"
-                              Label="Jakiego rodzaju ryby Klient spożywa najczęściej?"/>
+                              Label="Jakiego rodzaju ryby Klient spożywa najczęściej?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedDrinks"
                               For="@(() => _interview.PreferedDrinks)"
                               Immediate="true"
-                              Label="Jakie napoje Klient pije najczęściej?"/>
+                              Label="Jakie napoje Klient pije najczęściej?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.PreferedSweeteners"
                               For="@(() => _interview.PreferedSweeteners)"
                               Immediate="true"
-                              Label="Jeśli słodzi kawę i herbatę, to czym i ile?"/>
+                              Label="Jeśli słodzi kawę i herbatę, to czym i ile?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyCandies"
                               For="@(() => _interview.WeeklyCandies)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa słodycze lub wyroby cukiernicze?"/>
+                              Label="Ile razy w tygodniu Klient spożywa słodycze lub wyroby cukiernicze?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyFastFoods"
                               For="@(() => _interview.WeeklyFastFoods)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa potrawy typu Fast Food?"/>
+                              Label="Ile razy w tygodniu Klient spożywa potrawy typu Fast Food?"
+                              Lines="4"/>
 
                 
                 <MudTextField @bind-Value="_interview.WeeklyAlkohol"
                               For="@(() => _interview.WeeklyAlkohol)"
                               Immediate="true"
-                              Label="Ile razy w tygodniu Klient spożywa alkohol?"/>
+                              Label="Ile razy w tygodniu Klient spożywa alkohol?"
+                              Lines="4"/>
 
             </MudCard>
 
