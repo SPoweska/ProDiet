@@ -20,7 +20,7 @@
 }
 else
 {
-    <MudItem @onclick="() => Calculate()">
+    <MudItem >
     <h3>Edycja dnia jadłospisu: @_dietPlanDay.DietPlanDayDate</h3>
     <EditForm Model="@_dietPlanDay" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
@@ -220,19 +220,12 @@ else
 
     private async Task Calculate()
     {
-        if (_dietPlanDay.DietPlanDayMeals.Count>1)
-        {
-            _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
-            _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber); 
-        }
-        else
-        {
-            
-        }
-        
+
+        _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
+        _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
     }
 
 
