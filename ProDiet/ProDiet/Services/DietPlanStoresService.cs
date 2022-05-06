@@ -113,7 +113,7 @@ namespace ProDiet.Services
             try
             {
                 DietPlanDay dietPlanDay =
-                    await db.DietPlanDays.Include(x=>x.DietPlanDayMeals).FirstOrDefaultAsync(x => x.DietPlanDayId == dietPlanDayId);
+                    await db.DietPlanDays.Include(x=>x.DietPlanDayMeals).ThenInclude(x => x.MealDish).ThenInclude(x => x.Dish).FirstOrDefaultAsync(x => x.DietPlanDayId == dietPlanDayId);
 
                 if (dietPlanDay != null)
                 {

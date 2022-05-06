@@ -40,4 +40,30 @@ public class ProDietContext : IdentityDbContext<IdentityUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+    //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken(), string userName)
+    //{
+    //    {
+    //        var entries = ChangeTracker
+    //            .Entries()
+    //            .Where(e => e.Entity is AuditableEntity &&
+    //                        (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+    //        foreach (var entityEntry in entries)
+    //        {
+    //            if (entityEntry.State == EntityState.Modified)
+    //            {
+    //                ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
+    //                ((AuditableEntity)entityEntry.Entity).ModifiedBy = userName;
+    //            }
+    //            if (entityEntry.State == EntityState.Added)
+    //            {
+    //                ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+    //                ((AuditableEntity)entityEntry.Entity).CreatedBy = userName;
+    //            }
+    //        }
+
+    //        return base.SaveChangesAsync(cancellationToken);
+    //    }
+    //}
 }

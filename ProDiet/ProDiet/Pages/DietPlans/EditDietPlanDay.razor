@@ -116,16 +116,16 @@ else
         {
             _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
         }        
-        
+
         await base.OnInitializedAsync();
     }
 
     private async Task AddMeal()
     {
         _dietPlanDay.DietPlanDayMeals.Add(new DayMeal(){CreatedBy = userId, CreatedAt = DateTime.Now});
-        //await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
+        await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
 
-        
+
 
     }
 
@@ -137,6 +137,11 @@ else
         _dietPlanDay= await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
         _dietPlanDay.ModifiedBy = userId;
         _dietPlanDay.ModifiedAt = DateTime.Now;
+        _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
+        _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
+        _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
         foreach (var meal in _dietPlanDay.DietPlanDayMeals)
         {
             meal.CreatedAt=DateTime.Now;
