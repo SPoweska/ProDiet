@@ -49,11 +49,11 @@
 
                     <h7>Składniki</h7>
                     <MudCard>
-                        <MudFab
-                            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                        <MudButton
+                            Size="Size.Small" Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"
                             @onclick="@(() => _dish.UsedProducts.Add(new UsedProduct()))">
                             Dodaj składnik
-                        </MudFab>
+                        </MudButton>
                         <MudCard>
                             @for (var i = 0; i < _dish.UsedProducts.Count; i++)
                             {
@@ -127,8 +127,8 @@
                 </MudCardContent>
             </MudCard>
             <MudCard>
-                <MudButton OnClick="Cancel">Anuluj</MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+                <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Dodaj</MudButton>
             </MudCard>
             </EditForm>
             }
@@ -136,7 +136,7 @@
             {
                 <MudCard Outlined="true">
                     <h3>Wybierz produkt z listy</h3>
-                    <MudButton OnClick="Cancel">Anuluj</MudButton>
+                    <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
                 </MudCard>
             }
         </MudContainer>

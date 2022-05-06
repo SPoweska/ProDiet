@@ -54,7 +54,7 @@ else
         </MudTabPanel>
         <MudTabPanel Text="Pomiary">
             <MudCardContent>
-                <MudButton @onclick="()=>OpenDialogBodyMeasurement(_patient)"  Variant="Variant.Filled" Color="Color.Primary">
+                <MudButton @onclick="()=>OpenDialogBodyMeasurement(_patient)"  Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Tertiary">
                     Dodaj nowy pomiar ciała
                 </MudButton>  
 
@@ -94,7 +94,7 @@ else
         </MudTabPanel>
         <MudTabPanel Text="Jadłospisy">
             <MudCardContent>
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Primary" OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Tertiary" OnClick="()=>OpenDietPlanCreator()"> Dodaj jadłospis</MudButton>
                 <table class="table">
                     <thead>
                     <tr>
