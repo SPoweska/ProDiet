@@ -130,10 +130,16 @@
         foreach (var usedProduct in _dish.UsedProducts)
         {
             _dish.Proteins += (usedProduct.Proteins)/4;
+            _dish.Proteins = MathF.Round(_dish.Proteins, 1);
             _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
+            _dish.Carbohydrates = MathF.Round(_dish.Carbohydrates, 1);
             _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
+            _dish.Fats = MathF.Round(_dish.Fats, 1);
+
         }
         _dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+        _dish.Calories = MathF.Round(_dish.Calories, 1);
+
     }
 
     protected override async Task OnInitializedAsync()

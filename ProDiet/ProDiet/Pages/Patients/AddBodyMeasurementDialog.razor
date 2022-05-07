@@ -123,10 +123,40 @@
     void Submit() => mudDialog.Close(DialogResult.Ok(true));
     void Cancel() => mudDialog.Cancel();
 
-    
 
+    public async Task Calculate()
+    {
+        bodyMeasurement.Height = MathF.Round(bodyMeasurement.Height, 1);
+        bodyMeasurement.BodyWeight = MathF.Round(bodyMeasurement.BodyWeight, 1);
+        bodyMeasurement.Waist = MathF.Round(bodyMeasurement.Waist, 1);
+        bodyMeasurement.Hips = MathF.Round(bodyMeasurement.Hips, 1);
+        bodyMeasurement.TotalBodyFat = MathF.Round(bodyMeasurement.TotalBodyFat, 1);
+        bodyMeasurement.TotalBodyWater = MathF.Round(bodyMeasurement.TotalBodyWater, 1);
+        bodyMeasurement.TotalBoneMineral = MathF.Round(bodyMeasurement.TotalBoneMineral, 1);
+    }
 
+    //public async Task CalculatePPM()
+    //{
+    //    if (patient.Height!=0 & patient.Weight!=0)
+    //    {
+    //        int Age = CalculateAge(patient.BirthDate);
+    //        if (patient.Gender == "Kobieta")
+    //        {
+    //            float ppm=655 + (9,563 * patient.Weight) + (1,85 * patient.Height) - (4,676 * (float)Age);
+    //            patient.PPM=;
+    //        }
+    //    }
+    //}
 
+    private static int CalculateAge(DateTime dateOfBirth)  
+    {  
+        int age = 0;  
+        age = DateTime.Now.Year - dateOfBirth.Year;  
+        if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)  
+            age = age - 1;  
+  
+        return age;  
+    } 
 
 
     private async Task OnValidSubmit()
@@ -136,6 +166,7 @@
         var id = userManager.GetUserId(user);
         bodyMeasurement.CreatedBy = id;
         bodyMeasurement.CreatedAt = DateTime.Now;
+        await Calculate();
         patient.Height = bodyMeasurement.Height;
         patient.Weight = bodyMeasurement.BodyWeight;
         patient.ModifiedAt=DateTime.Now;
