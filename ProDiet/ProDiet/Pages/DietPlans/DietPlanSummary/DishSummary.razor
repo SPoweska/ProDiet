@@ -1,0 +1,99 @@
+﻿@using ProDiet.Models.DietPlan
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+
+@if(_mealDish!=null){
+   
+    <div align="center">
+        @if(_mealDish.Dish!=null){
+        <h5>Danie: @_mealDish.Dish.DishName </h5>
+        <br/>
+            <div class="row">
+                @if (_mealDish.Dish.DishId != 0)
+                {
+                    <p>Czas przygotowania: @_mealDish.Dish.PreparationMinutes minut</p>
+                    <p>Liczba porcji: @_mealDish.Dish.Servings</p>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Kaloryka(kcal)</th>
+                            <th scope="col">Węglowodany(g)</th>
+                            <th scope="col">Tłuszcz(g)</th>
+                            <th scope="col">Białko(g)</th>
+                            <th scope="col">Błonnik(g)</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>@_mealDish.Dish.Calories</td>
+                            <td>@_mealDish.Dish.Carbohydrates</td>
+                            <td>@_mealDish.Dish.Fats</td>
+                            <td>@_mealDish.Dish.Proteins</td>
+                            <td>@_mealDish.Dish.Fiber</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    @if (_mealDish.Dish.UsedProducts.Count > 0)
+                    {
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Nazwa produktu</th>
+                                <th scope="col">Ilość(g)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var usedProduct in usedProducts)
+                            {
+                                <tr>
+                                    <td>@usedProduct.Product.ProductName</td>
+                                    <td>@usedProduct.Quantity</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+
+
+
+
+                    }
+                }
+                else
+                {
+                    <h5>Wystąpił problem z wczytaniem dania</h5>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public MealDish _mealDish { get; set; }
+
+    public List<UsedProduct> usedProducts { get; set; } = new List<UsedProduct>();
+    public int mealDishId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Thread.Sleep(500);
+
+        if (_mealDish.Dish.UsedProducts.Count > 0)
+        {
+            foreach (var usedProduct in _mealDish.Dish.UsedProducts)
+            {
+                usedProducts.Add(usedProduct);
+            }
+        }
+        await base.OnInitializedAsync();
+    }
+
+
+}

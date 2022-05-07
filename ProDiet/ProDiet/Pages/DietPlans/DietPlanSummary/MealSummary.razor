@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+
+@if(_meal!=null){
+   
+    <div align="center">
+    <h5>Typ posiłku: @_meal.Name </h5>
+    <br/>
+    <div class="row">
+        @if (_meal.MealDish!=null)
+        {
+            <span style="border:lightgreen">
+        <DishSummary _mealDish="_meal.MealDish" ></DishSummary>
+            </span>
+            
+        }
+        else
+        {
+            <h5>Wystąpił problem z wczytaniem dania</h5>
+        }
+
+    </div>
+    </div>
+}
+else
+{
+    <h3>Wystąpił problem z wczytaniem posiłku</h3>
+}
+
+@code {
+    [Parameter]
+    public DayMeal _meal { get; set; }
+    public int mealId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        mealId = _meal.MealId;
+        if (mealId!=0)
+        {
+            Thread.Sleep(500);
+
+            _meal = await iDietPlanStoresService.GetDayMeal(mealId);
+        }
+        await base.OnInitializedAsync();
+    }
+
+}

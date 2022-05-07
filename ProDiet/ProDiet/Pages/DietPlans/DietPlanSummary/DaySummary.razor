@@ -8,6 +8,59 @@
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 
+@if(_day!=null)
+        {
+            <div align="center">
+                <h5>Data:@cultureInfo.DateTimeFormat.GetDayName(_day.DietPlanDayDate.Value.DayOfWeek)  @_day.DietPlanDayDate.Value.Date.ToString("d") </h5>
+                <br/>
+                <div class="row-cols-6">
+                    <div class="col-6">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Kaloryka(kcal)</th>
+                                <th scope="col">Węglowodany(g)</th>
+                                <th scope="col">Tłuszcz(g)</th>
+                                <th scope="col">Białko(g)</th>
+                                <th scope="col">Błonnik(g)</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>@_day.Calories</td>
+                                <td>@_day.Carbohydrates</td>
+                                <td>@_day.Fats</td>
+                                <td>@_day.Proteins</td>
+                                <td>@_day.Fiber</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @if (_day.DietPlanDayMeals.Count > 0)
+            {
+                @foreach (var meal in _day.DietPlanDayMeals)
+                {
+                    <hr size="10" />
+                    <MealSummary _meal="meal"></MealSummary>
+                    <hr size="10"/>
+                }
+            }
+            else
+            {
+                <h2>Wystąpił problem z wczytaniem posiłków</h2>
+            }
+        }
+    
+    else
+    {
+        <h2>Wystąpił problem z wczytaniem dania</h2>
+    }
+
+
 
 
 
@@ -17,11 +70,16 @@
     public DietPlanDay _day { get; set; }
     public int dayId { get; set; }
 
+    public System.Globalization.CultureInfo cultureInfo { get; set; }
+    
+
     protected override async Task OnInitializedAsync()
     {
+        cultureInfo = new System.Globalization.CultureInfo("pl-PL");
         dayId = _day.DietPlanDayId;
         if (dayId!=0)
         {
+            Thread.Sleep(500);
             _day = await iDietPlanStoresService.GetDietPlanDay(dayId);
         }
         await base.OnInitializedAsync();

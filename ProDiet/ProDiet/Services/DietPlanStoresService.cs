@@ -184,7 +184,7 @@ namespace ProDiet.Services
             try
             {
                 DayMeal DayMeal =
-                    await db.DayMeals.Include(x => x.MealDish).FirstOrDefaultAsync(x => x.MealId == mealId);
+                    await db.DayMeals.Include(x => x.MealDish).ThenInclude(x=>x.Dish).ThenInclude(x=>x.UsedProducts).ThenInclude(x=>x.Product).FirstOrDefaultAsync(x => x.MealId == mealId);
 
                 if (DayMeal != null)
                 {
@@ -246,6 +246,30 @@ namespace ProDiet.Services
             }
 
         }
+
+        //public async Task<DayMeal> GetDayMealDish(int mealDishId)
+        //{
+        //    try
+        //    {
+        //        DayMeal DayMeal =
+        //            await db.DayMeals.Include(x => x.MealDish).FirstOrDefaultAsync(x => x.MealId == mealId);
+
+        //        if (DayMeal != null)
+        //        {
+        //            //db.Entry(dish).State = EntityState.Detached;
+        //            return DayMeal;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentNullException();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+        //}
 
         public async Task<int> UpdateMealDish(MealDish mealDish)
         {

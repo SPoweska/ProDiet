@@ -21,15 +21,12 @@
         {
             @foreach (var day in _dietPlan.DietPlanDays)
             {
+                <MudCard Outlined="true">
+                <DaySummary _day="day"></DaySummary>
+                </MudCard>
                 
             }
         }
-        
-
-
-
-
-
     </div>
 
 }
