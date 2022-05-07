@@ -23,7 +23,7 @@
 <DialogContent>
     <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
 
-        <MudExpansionPanel Text="Wybierz jedno z istniejących dań" MaxHeight="150">
+        <MudExpansionPanel Style="background-color: beige" Text="Wybierz jedno z istniejących dań" MaxHeight="150">
         <MudCheckBox Size="Size.Small" Color="Color.Primary" CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
         <MudSelect
             T="int"
@@ -39,15 +39,39 @@
         @if(selectedDish.DishId != null)
         {
         <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator/>
-            <MudCard>
+    <DataAnnotationsValidator/>
+            <MudCard @onclick="@OnProductsListChanged">
                 <MudCardContent>
                     <MudTextField @bind-Value="_dish.DishName"
                                   For="@(() => _dish.DishName)"
                                   Immediate="true"
                                   Label="Nazwa dania"/>
+                    
+                    <p></p>
+                        <h9>Podsumowanie dania</h9>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Kaloryka</th>
+                                <th>Węglowodany(g)</th>
+                                <th>Tłuszcz(g)</th>
+                                <th>Białko(g)</th>
+                                <th>Błonnik(g)</th>
+                                
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>@_dish.Calories</td>
+                                <td>@_dish.Carbohydrates</td>
+                                <td>@_dish.Fats</td>
+                                <td>@_dish.Proteins</td>
+                                <td>@_dish.Fiber</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                    <h7>Składniki</h7>
+                    <h9>Lista składników:</h9>
                     <MudCard>
                         <MudButton
                             Size="Size.Small" Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"
@@ -75,46 +99,25 @@
                         </MudCard>
                     </MudCard>
 
+                    <div class="row">
+                    <div class="col-3">
+                        <MudTextField @bind-Value="_dish.Servings"
+                                      For="@(() => _dish.Servings)"
+                                      Immediate="true"
+                                      Label="Liczba porcji"/>
+                    </div>
+                    <div class="col-3">
 
-                    <MudTextField @bind-Value="_dish.Carbohydrates"
-                                  For="@(() => _dish.Carbohydrates)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Węglowodany"/>
-                    <MudTextField @bind-Value="_dish.Calories"
-                                  For="@(() => _dish.Calories)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Kalorie"/>
-
-                    <MudTextField @bind-Value="_dish.Fats"
-                                  For="@(() => _dish.Fats)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Tłuszcz"/>
-
-                    <MudTextField @bind-Value="_dish.Proteins"
-                                  For="@(() => _dish.Proteins)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Białko"/>
-
-                    <MudTextField @bind-Value="_dish.Fiber"
-                                  For="@(() => _dish.Fiber)"
-                                  Disabled="true"
-                                  Immediate="true"
-                                  Label="Błonnik"/>
-                    <MudTextField @bind-Value="_dish.Servings"
-                                  For="@(() => _dish.Servings)"
-                                  Immediate="true"
-                                  Label="Liczba porcji"/>
-                    <MudTextField @bind-Value="_dish.PreparationMinutes"
-                                  For="@(() => _dish.PreparationMinutes)"
-                                  Immediate="true"
-                                  Label="Czas przygotowania w minutach"/>
+                        <MudTextField @bind-Value="_dish.PreparationMinutes"
+                                      For="@(() => _dish.PreparationMinutes)"
+                                      Immediate="true"
+                                      Label="Czas przygotowania(minut)"/>
+                    </div>
+                    </div>
                     <MudTextField @bind-Value="_dish.Recipe"
                                   For="@(() => _dish.Recipe)"
                                   Immediate="true"
+                                  Lines="5"
                                   Label="Wskazówki odnośnie przygotowania"/>
                     <MudCard Outlined="true">
                         <MudSelect Label="Typ posiłku" @bind-Value="_dish.MealType">
@@ -128,9 +131,9 @@
             </MudCard>
             <MudCard>
                 <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Dodaj</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
             </MudCard>
-            </EditForm>
+</EditForm>
             }
             else
             {

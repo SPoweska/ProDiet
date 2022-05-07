@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using ProDiet.Data.Enums;
 
 namespace ProDiet.Models
@@ -25,9 +26,9 @@ namespace ProDiet.Models
         public List<BodyMeasurement> BodyMeasurements { get; set; } = new List<BodyMeasurement>();
         public List<PatientIntolerance> PatientIntolerances { get; set; } = new List<PatientIntolerance>();
         public List<PatientAlergene> PatientAlergenes { get; set; } = new List<PatientAlergene>();
-        public int Height { get; set; }
-        
-        public int Weight { get; set; }
+        public float Height { get; set; }
+
+        public float Weight { get; set; }
 
         [Required]
         public string PhoneNumber { get; set; }

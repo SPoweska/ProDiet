@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProDiet.Models
 {
@@ -17,11 +18,14 @@ namespace ProDiet.Models
         public int PatientId { get; set; }
         [Required]
         [Range(25, 350)]
+
         public float BodyWeight { get; set; }
         [Required]
         [Range(30, 250)]
+
         public float Height { get; set; }
         [Range(30, 250)]
+
         public float Waist { get; set; }
         [Range(30, 250)]
         public float Hips { get; set; }

@@ -136,6 +136,8 @@
         var id = userManager.GetUserId(user);
         bodyMeasurement.CreatedBy = id;
         bodyMeasurement.CreatedAt = DateTime.Now;
+        patient.Height = bodyMeasurement.Height;
+        patient.Weight = bodyMeasurement.BodyWeight;
         patient.ModifiedAt=DateTime.Now;
         patient.ModifiedBy = id;
         patient.BodyMeasurements.Add(bodyMeasurement);

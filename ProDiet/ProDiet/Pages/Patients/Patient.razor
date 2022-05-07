@@ -116,23 +116,6 @@ else
         StateHasChanged();
     }
 
-    //private async Task LoadPatients(string userId)
-    //{
-    //    _patients = await iPatientStoresService.GetAllUsersPatients(userId);
-    //}
-
-
-
-
-
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    var user = httpContextAccessor.HttpContext.User;
-    //    userId = userManager.GetUserId(user);
-    //    await LoadPatients(userId);
-    //    await base.OnInitializedAsync();
-    //}
     protected override async Task OnInitializedAsync()
     {
         var user = httpContextAccessor.HttpContext.User;

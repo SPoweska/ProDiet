@@ -25,10 +25,38 @@ else
     <EditForm Model="@_dietPlanDay" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
         <MudCard>
+            <p></p>
+            <h9>Podsumowanie dnia:</h9>
+            <div class="row-cols-6">
+                <div class="col-6">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Kaloryka(kcal)</th>
+                            <th scope="col">Węglowodany(g)</th>
+                            <th scope="col">Tłuszcz(g)</th>
+                            <th scope="col">Białko(g)</th>
+                            <th scope="col">Błonnik(g)</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>@_dietPlanDay.Calories z @_dietPlan.DailyCalories</td>
+                            <td>@_dietPlanDay.Carbohydrates z @_dietPlan.DailyCarbohydrates</td>
+                            <td>@_dietPlanDay.Fats z @_dietPlan.DailyFats</td>
+                            <td>@_dietPlanDay.Proteins z @_dietPlan.DailyProteins</td>
+                            <td>@_dietPlanDay.Fiber z @_dietPlan.DailyFiber</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
             <MudCardContent>
                 <MudCard>
                     <MudCard>
-                    
+
                         <MudCard>
                             @for (var i = 0; i < _dietPlanDay.DietPlanDayMeals.Count; i++)
                             {
@@ -54,7 +82,7 @@ else
                                         </CascadingValue>
                                     </span>
                                 </MudCard>
-                            
+
                             }
                         </MudCard>
                         <MudButton
@@ -64,99 +92,9 @@ else
                         </MudButton>
                     </MudCard>
                 </MudCard>
-  
-            
-                <div class="row">
-                    <div class="col-2" align="center">Kaloryka</div>
-                    <div class="col-2" align="center">Węglowodany</div>
-                    <div class="col-2" align="center">Tłuszcze</div>
-                    <div class="col-2" align="center">Białko</div>
-                    <div class="col-2" align="center">Błonnik</div>
 
-                </div>
 
-                <div class="row">
-                
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlanDay.Calories"
-                                      For="@(() => _dietPlanDay.Calories)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlan.DailyCalories"
-                                      For="@(() => _dietPlan.DailyCalories)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlanDay.Carbohydrates"
-                                      For="@(() => _dietPlanDay.Carbohydrates)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlan.DailyCarbohydrates"
-                                      For="@(() => _dietPlan.DailyCarbohydrates)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlanDay.Fats"
-                                      For="@(() => _dietPlanDay.Fats)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"/>
-                                  
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlan.DailyFats"
-                                      For="@(() => _dietPlan.DailyFats)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"/>
-                    </div>
-                    <div class="col-1">   
-                        <MudTextField @bind-Value="_dietPlanDay.Proteins"
-                                      For="@(() => _dietPlanDay.Proteins)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">   
-                        <MudTextField @bind-Value="_dietPlan.DailyProteins"
-                                      For="@(() => _dietPlan.DailyProteins)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlanDay.Fiber"
-                                      For="@(() => _dietPlanDay.Fiber)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                    <div class="col-1">
-                        <MudTextField @bind-Value="_dietPlan.DailyFiber"
-                                      For="@(() => _dietPlan.DailyFiber)"
-                                      Immediate="true"
-                                      Disabled="true"
-                                      Lines="1"
-                        />
-                    </div>
-                </div>
+               
             </MudCardContent>
         </MudCard>
     
@@ -199,10 +137,6 @@ else
             _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
             _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
         }
-        //if (_dietPlanDay.DietPlanDayMeals.Count!=0)
-        //{
-        //    Calculate();
-        //}
 
         await base.OnInitializedAsync();
     }
@@ -210,10 +144,6 @@ else
     private async Task AddMeal()
     {
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
-        //foreach (var meal in _dietPlanDay.DietPlanDayMeals)
-        //{
-        //    await iDietPlanStoresService.UpdateDayMeal(meal);
-        //}
         _dietPlanDay.DietPlanDayMeals.Add(new DayMeal(){CreatedBy = userId, CreatedAt = DateTime.Now});
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
     }
