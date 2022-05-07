@@ -1,0 +1,71 @@
+﻿@page "/patientdetails/{PatientId:int}/DietPlanSummary/{DietPlanId:int}"
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+
+@if (_dietPlan != null)
+{
+    <div align="center">
+        <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
+        <h4>Nazwa jadłospisu: @_dietPlan.DietPlanName</h4>
+        <h7>Liczba dni jadłospisu: @_dietPlan.PlanDaysCount</h7>
+        <br/>
+        <h7>Kaloryka: @_dietPlan.DailyCalories kcal</h7>
+        @if (_dietPlan.PlanDaysCount > 0)
+        {
+            @foreach (var day in _dietPlan.DietPlanDays)
+            {
+                
+            }
+        }
+        
+
+
+
+
+
+    </div>
+
+}
+
+else
+{
+    <h2>Wystąpił błąd, nie możesz teraz wyświetlić tego planu</h2>
+}
+
+@code {
+
+    [Parameter]
+    public int PatientId { get; set; }
+    
+    public Patient _patient { get; set; }
+
+    [Parameter]
+    public int DietPlanId { get; set; }
+
+    public DietPlan _dietPlan { get; set; }
+
+    private bool _checkOwner = false;
+    private string? userId{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = httpContextAccessor.HttpContext.User;
+        var userId = userManager.GetUserId(user);
+        _checkOwner= await iPatientStoresService.CheckOwner(userId, PatientId);
+        if (_checkOwner==true)
+        {
+            _patient = await iPatientStoresService.GetPatientData(PatientId);
+            _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
+        }        
+        
+        await base.OnInitializedAsync();
+    }
+
+}

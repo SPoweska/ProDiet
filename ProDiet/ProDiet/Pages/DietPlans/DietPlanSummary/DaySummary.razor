@@ -1,0 +1,34 @@
+﻿@using ProDiet.Models.DietPlan
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Models
+@using ProDiet.Models.DietPlan
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IDietPlanStoresService iDietPlanStoresService
+@inject IPatientStoresService iPatientStoresService
+@inject IHttpContextAccessor httpContextAccessor
+
+
+
+
+@code {
+
+    [Parameter]
+    public DietPlanDay _day { get; set; }
+    public int dayId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dayId = _day.DietPlanDayId;
+        if (dayId!=0)
+        {
+            _day = await iDietPlanStoresService.GetDietPlanDay(dayId);
+        }
+        await base.OnInitializedAsync();
+    }
+
+
+
+
+
+}
