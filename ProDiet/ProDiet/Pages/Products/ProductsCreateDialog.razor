@@ -16,243 +16,240 @@
 @inject IHttpContextAccessor httpContextAccessor;
 
 
-    <MudDialog  DisableSidePadding="true">
-    <DialogContent>
-    <MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll ; overflow-x:scroll" >
 
-    <EditForm Model="_product" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
-    <MudCard >
-    <MudCardContent>
-    <MudTextField @bind-Value="_product.ProductName"
-                  For="@(() => _product.ProductName)"
-                  Immediate="true"
-                  Label="Nazwa produktu"/>
-    <MudTextField @bind-Value="_product.Carbohydrates"
-                  For="@(() => _product.Carbohydrates)"
-                  Immediate="true"
-                  Label="Węglowodany"/>
-    <MudTextField @bind-Value="_product.Fats"
-                  For="@(() => _product.Fats)"
-                  Immediate="true"
-                  Label="Tłuszcz"/>
-    <MudTextField @bind-Value="_product.Proteins"
-                  For="@(() => _product.Proteins)"
-                  Immediate="true"
-                  Label="Białko"/>
-    <MudTextField @bind-Value="_product.Fiber"
-                  For="@(() => _product.Fiber)"
-                  Immediate="true"
-                  Label="Błonnik"/>
-    <MudTextField @bind-Value="_product.Calories"
-                  For="@(() => _product.Calories)"
-                  Immediate="true"
-                  Label="Kalorie"/>
-    <MudRadioGroup @bind-SelectedOption="_product.ProductCategory"
-                   For="() => _product.ProductCategory">
-        <MudRadio Placement="Placement.Top" Option="@("Nabiał")">Nabiał
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/milk.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Zbożowe")">Zbożowe
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/wheat.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Strączkowe")">Strączkowe
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/beans.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Warzywa")">Warzywa
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/vegetable.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Owoce")">Owoce
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fruit.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Mięso")">Mięso
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/meat.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Ryby")">Ryby
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fish.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Owoce morza")">Owoce morza
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/seafood.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Zioła i przyprawy")">Zioła i przyprawy
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/herb.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Orzechy")">Orzechy
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/peanut.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Nasiona")">Nasiona
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/seeds.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Grzyby")">Grzyby
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fungi.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Napoje")">Napoje
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/drink.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Słodycze")">Słodycze
-            <MudCard >
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/candy.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Suplementy i probiotyki")">Suplementy i probiotyki
-            <MudCard>
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/drug.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-        <MudRadio Placement="Placement.Top" Option="@("Inne")">Inne
-            <MudCard>
-                <MudImage Width="50" Height="50" Src="Icons/ProductCategories/others.png"></MudImage>
-            </MudCard>
-        </MudRadio>
-    </MudRadioGroup>
-    <h7>Alergeny</h7>
-    <MudCard>                                                                    
-        <MudFab
-            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-            @onclick="@(() => _product.Alergenes.Add(new Alergene()))" >
-            Dodaj składnik
-        </MudFab>                                
-        <MudCard>                                    
-            @for (var i = 0; i < _product.Alergenes.Count; i++)
-            {
-                var index = i;
-                var alergenes = _product.Alergenes[i];
-            
-                <MudCard Outlined="true">
-                    <MudSelect Label="Nazwa składnika" @bind-Value="alergenes.AlergeneName">
-                        @foreach (var alergene in Enum.GetValues(typeof(Alergenes)))
-                        {
-                            <MudSelectItem T="string" Value="@alergene.ToString()">@alergene</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCard>
-                <MudFab
-                    Size="Size.Small"
-                    StartIcon="@Icons.Filled.Delete"
-                    Color="Color.Error"
-                    @onclick="@(() => _product.Alergenes.RemoveAt(index))">
-                    Skasuj
-                </MudFab>
-            }
-        </MudCard>
-    </MudCard>
-    <h7>Składniki odżywcze</h7>
-    <MudCard>                                                                    
-        <MudFab
-            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-            @onclick="@(() => _product.Nutrients.Add(new Nutrient()))" >
-            Dodaj składnik
-        </MudFab>                                
-        <MudCard>                                    
-            @for (var i = 0; i < _product.Nutrients.Count; i++)
-            {
-                var index = i;
-                var nutrients = _product.Nutrients[i];
-            
-                <MudCard Outlined="true">
-                    <MudSelect Label="Nazwa składnika" @bind-Value="nutrients.Name">
-                        @foreach (string nutrient in alergenesArray)
-                        {
-                            <MudSelectItem T="string" Value="@nutrient">@nutrient</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCard>                                                
-                <MudCard>
-                    <MudTextField T="float"
-                                  @bind-Value="nutrients.Quantity"                                                 
-                                  Immediate="true"
-                                  Label="Ilość na 100g"/>
-                </MudCard>
+<MudDialog DisableSidePadding="true">
+<DialogContent>
+<MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll; overflow-x: scroll">
 
-                <MudFab
-                    Size="Size.Small"
-                    StartIcon="@Icons.Filled.Delete"
-                    Color="Color.Error"
-                    @onclick="@(() => _product.Nutrients.RemoveAt(index))">
-                    Skasuj
-                </MudFab>
-            }
+<EditForm Model="_product" OnValidSubmit="OnValidSubmit">
+<DataAnnotationsValidator/>
+<ValidationSummary/>
+<MudCard >
+<MudCardContent>
+<MudTextField @bind-Value="_product.ProductName"
+              For="@(() => _product.ProductName)"
+              Immediate="true"
+              Label="Nazwa produktu"/>
+<MudTextField @bind-Value="_product.Carbohydrates"
+              For="@(() => _product.Carbohydrates)"
+              Immediate="true"
+              Label="Węglowodany"/>
+<MudTextField @bind-Value="_product.Fats"
+              For="@(() => _product.Fats)"
+              Immediate="true"
+              Label="Tłuszcz"/>
+<MudTextField @bind-Value="_product.Proteins"
+              For="@(() => _product.Proteins)"
+              Immediate="true"
+              Label="Białko"/>
+<MudTextField @bind-Value="_product.Fiber"
+              For="@(() => _product.Fiber)"
+              Immediate="true"
+              Label="Błonnik"/>
+<MudTextField @bind-Value="_product.Calories"
+              For="@(() => _product.Calories)"
+              Immediate="true"
+              Label="Kalorie"/>
+<MudRadioGroup @bind-SelectedOption="_product.ProductCategory"
+               For="() => _product.ProductCategory">
+    <MudRadio Placement="Placement.Top" Option="@("Nabiał")">Nabiał
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/milk.png"></MudImage>
         </MudCard>
-    </MudCard>
-    <h7>Miary domowe</h7>
-    <MudCard>                                                                    
-        <MudFab
-            Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-            @onclick="@(() => _product.HomeMeasurement.Add(new HomeMeasurement()))" >
-            Dodaj składnik
-        </MudFab>                                
-        <MudCard>                                    
-            @for (var i = 0; i < _product.HomeMeasurement.Count; i++)
-            {
-                var index = i;
-                var homeMeasturements = _product.HomeMeasurement[i];
-            
-                <MudCard Outlined="true">
-                    <MudSelect Label="Nazwa składnika" @bind-Value="homeMeasturements.MeasurementName">
-                        @foreach (var measturement in Enum.GetValues(typeof(HomeMeasures)))
-                        {
-                            <MudSelectItem T="string" Value="@measturement.ToString()">@measturement</MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCard>                                                
-                <MudCard>
-                    <MudTextField T="float"
-                                  @bind-Value="homeMeasturements.Mass"                                                 
-                                  Immediate="true"
-                                  Label="Masa w gramach"/>
-                </MudCard>
-
-                <MudFab
-                    Size="Size.Small"
-                    StartIcon="@Icons.Filled.Delete"
-                    Color="Color.Error"
-                    @onclick="@(() => _product.HomeMeasurement.RemoveAt(index))">
-                    Skasuj
-                </MudFab>
-            }
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Zbożowe")">Zbożowe
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/wheat.png"></MudImage>
         </MudCard>
-    </MudCard>
-    </MudCardContent>
-    </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Strączkowe")">Strączkowe
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/beans.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Warzywa")">Warzywa
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/vegetable.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Owoce")">Owoce
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fruit.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Mięso")">Mięso
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/meat.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Ryby")">Ryby
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fish.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Owoce morza")">Owoce morza
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/seafood.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Zioła i przyprawy")">Zioła i przyprawy
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/herb.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Orzechy")">Orzechy
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/peanut.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Nasiona")">Nasiona
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/seeds.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Grzyby")">Grzyby
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/fungi.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Napoje")">Napoje
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/drink.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Słodycze")">Słodycze
+        <MudCard >
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/candy.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Suplementy i probiotyki")">Suplementy i probiotyki
+        <MudCard>
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/drug.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+    <MudRadio Placement="Placement.Top" Option="@("Inne")">Inne
+        <MudCard>
+            <MudImage Width="50" Height="50" Src="Icons/ProductCategories/others.png"></MudImage>
+        </MudCard>
+    </MudRadio>
+</MudRadioGroup>
+<h7>Alergeny</h7>
+<MudCard>
+    <MudFab
+        Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+        @onclick="@(() => _product.Alergenes.Add(new Alergene()))">
+        Dodaj składnik
+    </MudFab>
     <MudCard>
-        <MudButton OnClick="Cancel">Wyjdź</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-    </MudCard>   
-                               
-    </EditForm>
-    </MudContainer>
-    
+        @for (var i = 0; i < _product.Alergenes.Count; i++)
+        {
+            var index = i;
+            var alergenes = _product.Alergenes[i];
 
-    </DialogContent>
+            <MudCard Outlined="true">
+                <MudSelect Label="Nazwa składnika" @bind-Value="alergenes.AlergeneName">
+                    @foreach (var alergene in Enum.GetValues(typeof(Alergenes)))
+                    {
+                        <MudSelectItem T="string" Value="@alergene.ToString()">@alergene</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudCard>
+            <MudFab
+                Size="Size.Small"
+                StartIcon="@Icons.Filled.Delete"
+                Color="Color.Error"
+                @onclick="@(() => _product.Alergenes.RemoveAt(index))">
+                Skasuj
+            </MudFab>
+        }
+    </MudCard>
+</MudCard>
+<h7>Składniki odżywcze</h7>
+<MudCard>
+    <MudFab
+        Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+        @onclick="@(() => _product.Nutrients.Add(new Nutrient()))">
+        Dodaj składnik
+    </MudFab>
+    <MudCard>
+        @for (var i = 0; i < _product.Nutrients.Count; i++)
+        {
+            var index = i;
+            var nutrients = _product.Nutrients[i];
 
-    </MudDialog>
+            <MudCard Outlined="true">
+                <MudSelect Label="Nazwa składnika" @bind-Value="nutrients.Name">
+                    @foreach (string nutrient in alergenesArray)
+                    {
+                        <MudSelectItem T="string" Value="@nutrient">@nutrient</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudCard>
+            <MudCard>
+                <MudTextField T="float"
+                              @bind-Value="nutrients.Quantity"
+                              Immediate="true"
+                              Label="Ilość na 100g"/>
+            </MudCard>
+
+            <MudFab
+                Size="Size.Small"
+                StartIcon="@Icons.Filled.Delete"
+                Color="Color.Error"
+                @onclick="@(() => _product.Nutrients.RemoveAt(index))">
+                Skasuj
+            </MudFab>
+        }
+    </MudCard>
+</MudCard>
+<h7>Miary domowe</h7>
+<MudCard>
+    <MudFab
+        Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+        @onclick="@(() => _product.HomeMeasurement.Add(new HomeMeasurement()))">
+        Dodaj składnik
+    </MudFab>
+    <MudCard>
+        @for (var i = 0; i < _product.HomeMeasurement.Count; i++)
+        {
+            var index = i;
+            var homeMeasturements = _product.HomeMeasurement[i];
+
+            <MudCard Outlined="true">
+                <MudSelect Label="Nazwa składnika" @bind-Value="homeMeasturements.MeasurementName">
+                    @foreach (var measturement in Enum.GetValues(typeof(HomeMeasures)))
+                    {
+                        <MudSelectItem T="string" Value="@measturement.ToString()">@measturement</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudCard>
+            <MudCard>
+                <MudTextField T="float"
+                              @bind-Value="homeMeasturements.Mass"
+                              Immediate="true"
+                              Label="Masa w gramach"/>
+            </MudCard>
+
+            <MudFab
+                Size="Size.Small"
+                StartIcon="@Icons.Filled.Delete"
+                Color="Color.Error"
+                @onclick="@(() => _product.HomeMeasurement.RemoveAt(index))">
+                Skasuj
+            </MudFab>
+        }
+    </MudCard>
+</MudCard>
+</MudCardContent>
+</MudCard>
+<MudCard>
+    <MudButton OnClick="Cancel">Wyjdź</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
+</MudCard>
+</EditForm>
+</MudContainer>
+</DialogContent>
+</MudDialog>
 
 
 

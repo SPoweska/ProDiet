@@ -12,10 +12,14 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 
+<div id="border">
+<MudButton Color="Color.Tertiary" 
+           Variant="Variant.Filled" 
+           StartIcon="@Icons.Material.Filled.Add"
+           @onclick="()=>OpenAddPatientDialog()"
+> Dodaj nowego pacjenta
+    </MudButton>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" @onclick="()=>OpenAddPatientDialog()">
-    Dodaj nowego pacjenta
-</button>
 
 @if (_patients == null)
 {
@@ -23,6 +27,7 @@
 }
 else
 {
+    
     <table class="table">
         <thead>
         <tr>
@@ -43,14 +48,16 @@ else
                 <td>@_patient.Email</td>
                 <td>@_patient.PhoneNumber</td>
                 <td>@_patient.CreatedAt.ToShortDateString()</td>
-                <td><button class="btn btn-info" @onclick="@(()=>navigationManager.NavigateTo($"/patientdetails/{_patient.Id}"))">Edytuj </button></td>
-                <td><button class="btn btn-danger" @onclick="() => OpenDeleteDialog(_patient)">Skasuj</button></td>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Success" @onclick="@(()=>navigationManager.NavigateTo($"/patientdetails/{_patient.Id}"))"> Wyświetl pacjenta</MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" @onclick="() => OpenDeleteDialog(_patient)">Skasuj pacjenta</MudButton>
+                
             </tr>
         }
         </tbody>
     </table>
+    
 }
-
+</div>
 
 
 

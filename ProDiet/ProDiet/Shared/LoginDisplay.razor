@@ -3,21 +3,21 @@
 @inject NavigationManager Navigation
 @inject TokenProvider TokenProvider
 
-
 <AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage/Index">
+        <a style="color: aliceblue" href="Identity/Account/Manage/Index">
             Mój profil
         </a>
+        <a>  </a>
         <form action="/Identity/Account/Logout?returnUrl=%2F" method="post">
-            <button class="nav-link btn-link" type="submit">Wyloguj</button>
+            <button class="btn btn-danger" type="submit">Wyloguj</button>
             <input name="__RequestVerificationToken" type="hidden"
                    value="@TokenProvider.XsrfToken"/>
         </form>
     </Authorized>
     <NotAuthorized>
-        <a href="Identity/Account/Register">Rejestracja</a>
-        <a href="Identity/Account/Login">Logowanie</a>
+        <a style="color: aliceblue" href="Identity/Account/Register">Rejestracja</a>
+        <a style="color: aliceblue" href="Identity/Account/Login">Logowanie</a>
     </NotAuthorized>
 </AuthorizeView>
 

@@ -19,121 +19,123 @@
 @inject NavigationManager navigationManager;
 
 
+
 <MudDialog  DisableSidePadding="true">
-<DialogContent>
-    <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
+    <div id="border">
+    <DialogContent>
+        <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
 
-        <MudExpansionPanel Style="background-color: beige" Text="Wybierz jedno z istniejących dań" MaxHeight="150">
-        <MudCheckBox Size="Size.Small" Color="Color.Primary" CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
-        <MudSelect
-            T="int"
-            ValueChanged="(int i) => OnDishSelected(i)"
-            Label="Wybierz danie z listy"
-            Value="selectedDish.DishId">
-            @foreach (var dish in dishesList)
+            <MudExpansionPanel Style="background-color: beige" Text="Wybierz jedno z istniejących dań" MaxHeight="150">
+                <MudCheckBox Size="Size.Small" Color="Color.Primary" CheckedChanged="(bool i) => OnlyMyDishesCheck(i)" Checked="onlyMyDishes" Label="Wyświetlaj dodane przeze mnie dania"></MudCheckBox>
+                <MudSelect
+                    T="int"
+                    ValueChanged="(int i) => OnDishSelected(i)"
+                    Label="Wybierz danie z listy"
+                    Value="selectedDish.DishId">
+                    @foreach (var dish in dishesList)
+                    {
+                        <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudExpansionPanel>
+            @if(selectedDish.DishId != null)
             {
-                <MudSelectItem T="int" Value="@dish.DishId">@dish.DishName</MudSelectItem>
-            }
-        </MudSelect>
-        </MudExpansionPanel>
-        @if(selectedDish.DishId != null)
-        {
-        <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator/>
-            <MudCard @onclick="@OnProductsListChanged">
-                <MudCardContent>
-                    <MudTextField @bind-Value="_dish.DishName"
-                                  For="@(() => _dish.DishName)"
-                                  Immediate="true"
-                                  Label="Nazwa dania"/>
+                <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator/>
+                    <MudCard @onclick="OnProductsListChanged">
+                        <MudCardContent>
+                            <MudTextField @bind-Value="_dish.DishName"
+                                          For="@(() => _dish.DishName)"
+                                          Immediate="true"
+                                          Label="Nazwa dania"/>
                     
-                    <p></p>
-                        <h9>Podsumowanie dania</h9>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Kaloryka</th>
-                                <th>Węglowodany(g)</th>
-                                <th>Tłuszcz(g)</th>
-                                <th>Białko(g)</th>
-                                <th>Błonnik(g)</th>
+                            <p></p>
+                            <h9>Podsumowanie dania</h9>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Kaloryka</th>
+                                    <th>Węglowodany(g)</th>
+                                    <th>Tłuszcz(g)</th>
+                                    <th>Białko(g)</th>
+                                    <th>Błonnik(g)</th>
                                 
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>@_dish.Calories</td>
-                                <td>@_dish.Carbohydrates</td>
-                                <td>@_dish.Fats</td>
-                                <td>@_dish.Proteins</td>
-                                <td>@_dish.Fiber</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>@_dish.Calories</td>
+                                    <td>@_dish.Carbohydrates</td>
+                                    <td>@_dish.Fats</td>
+                                    <td>@_dish.Proteins</td>
+                                    <td>@_dish.Fiber</td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                    <h9>Lista składników:</h9>
+                            <h9>Lista składników:</h9>
+                            <MudCard>
+                                <MudButton
+                                    Size="Size.Small" Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"
+                                    @onclick="@(() => _dish.UsedProducts.Add(new UsedProduct()))">
+                                    Dodaj składnik
+                                </MudButton>
+                                <MudCard>
+                                    @for (var i = 0; i < _dish.UsedProducts.Count; i++)
+                                    {
+                                        var index = i;
+                                        var usedProduct = _dish.UsedProducts[i];
+
+                                        <CascadingValue Value="usedProduct">
+                                            <UsedProductComponent productList="_productsList" OnDataChange="@OnProductsListChanged"></UsedProductComponent>
+                                        </CascadingValue>
+
+                                        <MudFab
+                                            Size="Size.Small"
+                                            StartIcon="@Icons.Filled.Delete"
+                                            Color="Color.Error"
+                                            @onclick="@(() => _dish.UsedProducts.RemoveAt(index))">
+                                            Skasuj
+                                        </MudFab>
+                                    }
+                                </MudCard>
+                            </MudCard>
+
+                            <div class="row">
+                                <div class="col-3">
+                                    <MudTextField @bind-Value="_dish.Servings"
+                                                  For="@(() => _dish.Servings)"
+                                                  Immediate="true"
+                                                  Label="Liczba porcji"/>
+                                </div>
+                                <div class="col-3">
+
+                                    <MudTextField @bind-Value="_dish.PreparationMinutes"
+                                                  For="@(() => _dish.PreparationMinutes)"
+                                                  Immediate="true"
+                                                  Label="Czas przygotowania(minut)"/>
+                                </div>
+                            </div>
+                            <MudTextField @bind-Value="_dish.Recipe"
+                                          For="@(() => _dish.Recipe)"
+                                          Immediate="true"
+                                          Lines="5"
+                                          Label="Wskazówki odnośnie przygotowania"/>
+                            <MudCard Outlined="true">
+                                <MudSelect Label="Typ posiłku" @bind-Value="_dish.MealType">
+                                    @foreach (var mealType in Enum.GetValues(typeof(MealType)))
+                                    {
+                                        <MudSelectItem T="string" Value="@mealType.ToString()">@mealType</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudCard>
+                        </MudCardContent>
+                    </MudCard>
                     <MudCard>
-                        <MudButton
-                            Size="Size.Small" Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"
-                            @onclick="@(() => _dish.UsedProducts.Add(new UsedProduct()))">
-                            Dodaj składnik
-                        </MudButton>
-                        <MudCard>
-                            @for (var i = 0; i < _dish.UsedProducts.Count; i++)
-                            {
-                                var index = i;
-                                var usedProduct = _dish.UsedProducts[i];
-
-                                <CascadingValue Value="usedProduct">
-                                    <UsedProductComponent productList="_productsList" OnDataChange="@OnProductsListChanged"></UsedProductComponent>
-                                </CascadingValue>
-
-                                <MudFab
-                                    Size="Size.Small"
-                                    StartIcon="@Icons.Filled.Delete"
-                                    Color="Color.Error"
-                                    @onclick="@(() => _dish.UsedProducts.RemoveAt(index))">
-                                    Skasuj
-                                </MudFab>
-                            }
-                        </MudCard>
+                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
                     </MudCard>
-
-                    <div class="row">
-                    <div class="col-3">
-                        <MudTextField @bind-Value="_dish.Servings"
-                                      For="@(() => _dish.Servings)"
-                                      Immediate="true"
-                                      Label="Liczba porcji"/>
-                    </div>
-                    <div class="col-3">
-
-                        <MudTextField @bind-Value="_dish.PreparationMinutes"
-                                      For="@(() => _dish.PreparationMinutes)"
-                                      Immediate="true"
-                                      Label="Czas przygotowania(minut)"/>
-                    </div>
-                    </div>
-                    <MudTextField @bind-Value="_dish.Recipe"
-                                  For="@(() => _dish.Recipe)"
-                                  Immediate="true"
-                                  Lines="5"
-                                  Label="Wskazówki odnośnie przygotowania"/>
-                    <MudCard Outlined="true">
-                        <MudSelect Label="Typ posiłku" @bind-Value="_dish.MealType">
-                            @foreach (var mealType in Enum.GetValues(typeof(MealType)))
-                            {
-                                <MudSelectItem T="string" Value="@mealType.ToString()">@mealType</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudCard>
-                </MudCardContent>
-            </MudCard>
-            <MudCard>
-                <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
-            </MudCard>
-</EditForm>
+                </EditForm>
             }
             else
             {
@@ -143,9 +145,10 @@
                 </MudCard>
             }
         </MudContainer>
-</DialogContent>
-    
+    </DialogContent>
+</div>
 </MudDialog>
+
 
 
 @code {
@@ -191,13 +194,22 @@
 
     private void OnProductsListChanged()
     {
-        foreach (var usedProduct in _dish.UsedProducts)
-        {
-            _dish.Proteins += (usedProduct.Proteins)/4;
-            _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-            _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-        }
-        _dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+        _dish.Proteins = 0;
+        _dish.Carbohydrates = 0;
+        _dish.Fats = 0;
+        _dish.Calories = 0;
+        _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
+        _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
+        _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
+        _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
+        //foreach (var usedProduct in _dish.UsedProducts)
+        //{
+        //    _dish.Proteins += (usedProduct.Proteins)/4;
+        //    _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
+        //    _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
+        //}
+
+        //_dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
     }
 
     protected override async Task OnInitializedAsync()

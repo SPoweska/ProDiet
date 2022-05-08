@@ -18,7 +18,7 @@
 <h3>Utwórz nowe danie</h3>
 <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator/>
-            <MudCard @onclick="@OnProductsListChanged">
+            <MudCard @onclick="OnProductsListChanged" >
                 <MudCardContent>
                     <MudTextField @bind-Value="_dish.DishName"
                                   For="@(() => _dish.DishName)"
@@ -27,7 +27,7 @@
                     
                     <p></p>
                         <h9>Podsumowanie dania</h9>
-                        <table class="table">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Kaloryka</th>
@@ -127,18 +127,28 @@
 
     private void OnProductsListChanged()
     {
-        foreach (var usedProduct in _dish.UsedProducts)
-        {
-            _dish.Proteins += (usedProduct.Proteins)/4;
-            _dish.Proteins = MathF.Round(_dish.Proteins, 1);
-            _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-            _dish.Carbohydrates = MathF.Round(_dish.Carbohydrates, 1);
-            _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-            _dish.Fats = MathF.Round(_dish.Fats, 1);
+        _dish.Proteins = 0;
+        _dish.Carbohydrates = 0;
+        _dish.Fats = 0;
+        _dish.Calories = 0;
+        _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
+        _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
+        _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
+        _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
+        
 
-        }
-        _dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
-        _dish.Calories = MathF.Round(_dish.Calories, 1);
+    //foreach (var usedProduct in _dish.UsedProducts)
+        //{
+        //    _dish.Proteins += (usedProduct.Proteins)/4;
+        //    _dish.Proteins = MathF.Round(_dish.Proteins, 1);
+        //    _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
+        //    _dish.Carbohydrates = MathF.Round(_dish.Carbohydrates, 1);
+        //    _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
+        //    _dish.Fats = MathF.Round(_dish.Fats, 1);
+
+        //}
+        //_dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+        //_dish.Calories = MathF.Round(_dish.Calories, 1);
 
     }
 

@@ -1,5 +1,5 @@
 ﻿
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="top-row ps-3 navbar navbar-dark" id="topbargradient" >
     <div class="container-fluid">
         <a class="navbar-brand" href="">ProDiet</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -10,21 +10,31 @@
 <AuthorizeView>
     <Authorized>
 
-    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <div class="@NavMenuCssClass"  @onclick="ToggleNavMenu" >
         <nav class="flex-column">
-            <div class="nav-item px-3">
+            <div class="nav-item px-3" style="color: white">
                 <NavLink class="nav-link" href="patients">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Pacjenci
                 </NavLink>
             </div>
-            <div class="nav-item px-3">
+            <div class="nav-item px-3" style="color: white">
                 <NavLink class="nav-link" href="products">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Moje produkty
                 </NavLink>
             </div>
-            <div class="nav-item px-3">
+            <div class="nav-item px-3" style="color: white">
+                <NavLink class="nav-link" href="allproducts">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Wszystkie produkty
+                </NavLink>
+            </div>
+            <div class="nav-item px-3" style="color: white">
                 <NavLink class="nav-link" href="mydishes">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Dania
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Moje dania
+                </NavLink>
+            </div>
+            <div class="nav-item px-3" style="color: white">
+                <NavLink class="nav-link" href="alldishes">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Wszystkie dania
                 </NavLink>
             </div>
         </nav>

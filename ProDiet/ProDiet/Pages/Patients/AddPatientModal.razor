@@ -12,74 +12,76 @@
 
 
 
-<h3>AddPatientModal</h3>
 
 
 <CascadingValue Value="this">
-<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Dodawanie nowego pacjenta</h4>
-                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-            </div>
-            <div class="modal-body">
-                <EditForm Model="_patient" OnValidSubmit="OnValidSubmit">
-                    <DataAnnotationsValidator/>
-                    <ValidationSummary/>
-                    <div class="form-group">
-                        <div>
-                            <h4>Dane pacjenta</h4>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label for="FirstName">Imię</label>
-                                    <InputText id="FirstName" @bind-Value="_patient.FirstName" placeholder="Imię" class="form-control">
-                                    </InputText>
+    <div id="border">
+    <div class="modal fade show" id="myModal" style="display: block; background-color: rgba(10, 10, 10, .8);" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Dodawanie nowego pacjenta</h4>
+                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="_patient" OnValidSubmit="OnValidSubmit">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <div class="form-group">
+                            <div>
+                                <h4>Dane pacjenta</h4>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="FirstName">Imię</label>
+                                        <InputText id="FirstName" @bind-Value="_patient.FirstName" placeholder="Imię" class="form-control">
+                                        </InputText>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="LastName">Nazwisko</label>
+                                        <InputText id="LastName" @bind-Value="_patient.LastName" placeholder="Nazwisko" class="form-control"></InputText>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="LastName">Nazwisko</label>
-                                    <InputText id="LastName" @bind-Value="_patient.LastName" placeholder="Nazwisko" class="form-control"></InputText>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="Gender">Płeć</label>
+                                        <InputSelect id="Gender" @bind-Value="_patient.Gender" placeholder="Płeć" class="form-control">
+                                            <option value="-----------"></option>
+                                            @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                                            {
+                                                <option value="@gender">@gender</option>
+                                            }
+                                        </InputSelect>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="DateOfBirth">Data urodzenia</label>
+                                        <InputDate @bind-Value="_patient.BirthDate">
+                                        </InputDate>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label for="Gender">Płeć</label>
-                                    <InputSelect id="Gender" @bind-Value="_patient.Gender" placeholder="Płeć" class="form-control">
-                                        <option value="-----------"></option>
-                                        @foreach (var gender in Enum.GetValues(typeof(Gender)))
-                                        {
-                                            <option value="@gender">@gender</option>
-                                        }
-                                    </InputSelect>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="DateOfBirth">Data urodzenia</label>
-                                    <InputDate @bind-Value="_patient.BirthDate">
-                                    </InputDate>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label for="Email">Adres e-mail</label>
-                                    <InputText id="Email" @bind-Value="_patient.Email" placeholder="Email" class="form-control"></InputText>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="PhoneNumber">Numer telefonu</label>
-                                    <InputText id="PhoneNumber" @bind-Value="_patient.PhoneNumber" placeholder="Numer telefonu" class="form-control"></InputText>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="Email">Adres e-mail</label>
+                                        <InputText id="Email" @bind-Value="_patient.Email" placeholder="Email" class="form-control"></InputText>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="PhoneNumber">Numer telefonu</label>
+                                        <InputText id="PhoneNumber" @bind-Value="_patient.PhoneNumber" placeholder="Numer telefonu" class="form-control"></InputText>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <MudButton OnClick="ModalCancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
-                    </div>
-                </EditForm>
+                        <div class="modal-footer">
+                            <MudButton OnClick="ModalCancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
+                        </div>
+                    </EditForm>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 </CascadingValue>
+
 
 
 

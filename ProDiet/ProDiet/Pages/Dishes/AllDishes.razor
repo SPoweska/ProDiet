@@ -1,4 +1,4 @@
-﻿@page "/mydishes"
+﻿@page "/alldishes"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Identity
 @using ProDiet.Data.Enums
@@ -13,13 +13,13 @@
 @inject IDialogService DialogService
 
 <div id="border">
-<h3>Moje dania</h3>
+<h3>Baza dań</h3>
 
 @if (_dishes == null)
 {
     <MudButton Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" @onclick="@(()=>navigationManager.NavigateTo("/dish"))">Dodaj nowe danie</MudButton>
 
-    <p> Nie dodałeś jeszcze żadnych dań</p>
+    <p> Brak dań w bazie</p>
 }
 else
     
@@ -58,8 +58,6 @@ else
                 <td>@_dish.Proteins</td>
                 <td>@_dish.Servings</td>
                 <td>@_dish.MealType</td>
-                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => OpenDialogDishInfo(_dish.DishId)" > Wyświetl danie</MudButton>
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Info" @onclick="@(()=>navigationManager.NavigateTo($"/mydishes/editdish/{_dish.DishId}"))"> Edytuj danie</MudButton>
                 </tr>
         }
         </tbody>
@@ -82,7 +80,7 @@ else
     {
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
-        _dishes = await iDishStoresService.GetAllUserDishes(id);
+        _dishes = await iDishStoresService.GetAllDishes();
         _filteredDishes = _dishes;
         await base.OnInitializedAsync();
     }
@@ -92,14 +90,6 @@ else
         SearchTerm = term;
         _filteredDishes = _dishes.Where(x => x.DishName.ToLower().Contains(SearchTerm.ToLower())).ToList();
         await this.InvokeAsync(StateHasChanged);
-    }
-
-    private void OpenDialogDishInfo(int dishId)
-    {    
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var parameters = new DialogParameters() {["dishId"] = dishId};
-        var dialog=DialogService.Show<SingleDish>("Informacje o daniu",parameters, closeOnEscapeKey);       
-
     }
 
 }

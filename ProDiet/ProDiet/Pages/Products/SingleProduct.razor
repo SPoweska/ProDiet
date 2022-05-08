@@ -1,0 +1,63 @@
+﻿@using ProDiet.Models
+
+<MudDialog  DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Kaloryka</th>
+                    <th>Węglowodany</th>
+                    <th>Tłuszcz</th>
+                    <th>Białko</th>
+                    <th>Błonnik</th>
+                    <th>Kategoria</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                        <td>@_product.ProductName</td>
+                        <td>@_product.Calories</td>
+                        <td>@_product.Carbohydrates</td>
+                        <td>@_product.Fats</td>
+                        <td>@_product.Proteins</td>
+                        <td>@_product.Fiber</td>
+                        <td>@_product.ProductCategory</td>
+                    </tr>
+                </tbody>
+            </table>
+        </MudContainer>
+    </DialogContent>
+
+</MudDialog>
+
+@code {
+
+    [Parameter]
+    public Product _product { get; set; }
+
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [CascadingParameter]
+    MudDialogInstance mudDialog { get; set; }
+
+
+    void Submit()
+    {
+
+        mudDialog.Close(DialogResult.Ok(true));
+    } 
+
+    void Cancel() => mudDialog.Cancel();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {       
+
+        await base.OnInitializedAsync();
+    }
+
+}

@@ -10,9 +10,9 @@
 
 
 
-<MudDialog  DisableSidePadding="true">
+<MudDialog DisableSidePadding="true">
     <DialogContent>
-        <MudContainer Style="max-height: 1700px; max-width: 1700px; overflow-y: scroll ; overflow-x:scroll" >
+        <MudContainer Style="max-height: 1700px; max-width: 1700px; overflow-y: scroll; overflow-x: scroll">
 
             <EditForm Model="bodyMeasurement" OnValidSubmit="OnValidSubmit">
                 <DataAnnotationsValidator/>
@@ -52,17 +52,16 @@
                         <InputDate @bind-Value="bodyMeasurement.MeasurementDate">
                         </InputDate>
                         @*</div>*@
-        
+
                     </MudCardContent>
                 </MudCard>
                 <MudCardActions>
                     <MudButton OnClick="Cancel">Cancel</MudButton>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Dodaj</MudButton>
-                </MudCardActions> 
+                </MudCardActions>
             </EditForm>
         </MudContainer>
     </DialogContent>
-    
 </MudDialog>
 
 @code {

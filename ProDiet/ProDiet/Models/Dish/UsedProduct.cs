@@ -5,8 +5,7 @@ namespace ProDiet.Models
 {
     public class UsedProduct
     {
-
-        //dopisać kaloryke itp
+        
         [Key]
         public int UsedProductId { get; set; }
         [Required]

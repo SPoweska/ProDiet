@@ -11,7 +11,7 @@
 @using ProDiet.Services
 @using Microsoft.AspNetCore.Components
 
-
+<div id="border"></div>
 @*Edycja dnia jadłospisu-> (dodawanie posiłków) DietPlanMealPartial*@
 
 @if (_dietPlanDay == null)
@@ -26,7 +26,7 @@ else
         <DataAnnotationsValidator />
         <MudCard>
             <p></p>
-            <h9>Podsumowanie dnia:</h9>
+            <h5>Podsumowanie dnia:</h5>
             <div class="row-cols-6">
                 <div class="col-6">
                     <table class="table table-bordered">
@@ -62,27 +62,32 @@ else
                             {
                                 var index = i;
                                 var dayMeal = _dietPlanDay.DietPlanDayMeals[i];
-                                <div class="row">
-                                    <div class="col-10"></div>
-                                    <div class="col-2">
-                                        <MudButton
-                                            Size="Size.Small"
-                                            EndIcon="@Icons.Filled.Delete"
-                                            Variant="Variant.Filled"
-                                            Color="Color.Error"
-                                            @onclick="@(() => _dietPlanDay.DietPlanDayMeals.RemoveAt(index))">
-                                            Skasuj posiłek
-                                        </MudButton>
-                                    </div>
-                                </div>
-                                <MudCard Outlined="true">
-                                    <span>
-                                        <CascadingValue Value="dayMeal">
-                                            <DietPlanMealPartialComponent userId="userId"></DietPlanMealPartialComponent>
-                                        </CascadingValue>
-                                    </span>
-                                </MudCard>
+                                <div id="borderThin">
+                                    <div class="row">
+                                        <div class="col-10"></div>
+                                        <div class="col-2">
+                                            <MudButton
+                                                Size="Size.Small"
+                                                EndIcon="@Icons.Filled.Delete"
+                                                Variant="Variant.Filled"
+                                                Color="Color.Error"
+                                                @onclick="@(() => _dietPlanDay.DietPlanDayMeals.RemoveAt(index))">
+                                                Skasuj posiłek
+                                            </MudButton>
 
+                                        </div>
+                                    </div>
+                                
+                                    <MudCard Outlined="true">
+                                        <span>
+                                            <CascadingValue Value="dayMeal">
+                                                <DietPlanMealPartialComponent userId="userId"></DietPlanMealPartialComponent>
+                                            </CascadingValue>
+                                        </span>
+                                    </MudCard>
+                                
+                                </div>
+                                <br/>
                             }
                         </MudCard>
                         <MudButton
@@ -100,7 +105,7 @@ else
     
         <MudCard>
             <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Dodaj</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Zapisz</MudButton>
         </MudCard> 
     </EditForm>
     </MudItem>
@@ -148,7 +153,7 @@ else
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
     }
 
-    private async Task Calculate()
+    private void Calculate()
     {
 
         _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
@@ -185,7 +190,7 @@ else
 
     void Cancel()
     {
-        
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/EditDietPlan/{DietPlanId}");
     }
 
 }

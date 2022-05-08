@@ -7,6 +7,7 @@
 
 @*Edycja/tworzenie dania w środku posiłku*@
 
+<div id="borderThin">
 <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudCard>
@@ -30,7 +31,7 @@
                         var usedProduct = _dish.UsedProducts[i];
             
                         <CascadingValue Value="usedProduct">
-                        <UsedProductComponent productList="_productsList"></UsedProductComponent>
+                            <UsedProductComponent productList="_productsList"></UsedProductComponent>
                         </CascadingValue>
 
                         <MudFab
@@ -94,6 +95,7 @@
         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="demo-form-button">Zapisz danie</MudButton>
     </MudCard> 
 </EditForm>
+</div>
 
 @code {
     [CascadingParameter]

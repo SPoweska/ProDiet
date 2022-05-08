@@ -9,6 +9,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 
+<div id="border">
 @if (_dietPlan == null)
 {
     <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
@@ -27,6 +28,7 @@ else
     </MudGrid>
 
 }
+</div>
 
 
 

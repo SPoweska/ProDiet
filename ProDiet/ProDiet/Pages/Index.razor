@@ -1,8 +1,25 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
 
-<h1 align="center">Witaj w aplikacji ProDiet!</h1>
+<PageTitle>Strona głowna</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <h1 align="center">Witaj w aplikacji ProDiet!</h1>
 
-Welcome to your new app.
+    </Authorized>
+    <NotAuthorized>
+        <body style="height: 100%; margin: 0; background-image: url('backgroundimg.jpg')">
+        <div align="center" style="min-height: 100%; height: 100%; margin: 0">
+            <h1 align="center" style="color: aliceblue">Witaj w aplikacji ProDiet!</h1>
+                <a href="Identity/Account/Register">
+                    <MudButton Variant="Variant.Filled" Color="Color.Info"> Zarejestruj się</MudButton>
+                </a>
+                <a href="Identity/Account/Login">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success"> Zaloguj się</MudButton>
+                </a>
+        </div>
+        </body>
+    </NotAuthorized>
+</AuthorizeView>
+
 

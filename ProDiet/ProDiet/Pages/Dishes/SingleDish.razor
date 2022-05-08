@@ -1,0 +1,99 @@
+﻿@using ProDiet.Models
+@using ProDiet.Services
+@inject IDishStoresService iDishStoresService
+
+<MudDialog  DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 800px; max-width: 800px; overflow-y: scroll; overflow-x: scroll">
+            <div class="row">
+            <p>Czas przygotowania:@_dish.PreparationMinutes  minut</p>
+                    <p>Liczba porcji: @_dish.Servings</p>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Kcal</th>
+                    <th>Węglowodany</th>
+                    <th>Tłuszcz</th>
+                    <th>Białko</th>
+                    <th>Liczba porcji</th>
+                    <th>Rodzaj dania</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>@_dish.DishName</td>
+                    <td>@_dish.Calories</td>
+                    <td>@_dish.Carbohydrates</td>
+                    <td>@_dish.Fats</td>
+                    <td>@_dish.Proteins</td>
+                    <td>@_dish.Servings</td>
+                    <td>@_dish.MealType</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+                    @if (_dish.UsedProducts.Count > 0)
+                    {
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Nazwa produktu</th>
+                                <th scope="col">Ilość(g)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var usedProduct in _dish.UsedProducts)
+                            {
+                                <tr>
+                                    <td>@usedProduct.Product.ProductName</td>
+                                    <td>@usedProduct.Quantity</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    }
+                            <div id="borderThin">
+                            <h8>Wskazówki odnośnie przygotowania:</h8>
+                            <p>@_dish.Recipe</p>
+                            </div>
+                                
+                       
+                }
+        </MudContainer>
+    </DialogContent>
+
+</MudDialog>
+
+@code {
+
+    public Models.Dish _dish { get; set; } = new Models.Dish();
+    [Parameter]
+    public int dishId { get; set; }
+
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [CascadingParameter]
+    MudDialogInstance mudDialog { get; set; }
+
+
+    void Submit()
+    {
+
+        mudDialog.Close(DialogResult.Ok(true));
+    } 
+
+    void Cancel() => mudDialog.Cancel();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dish = await iDishStoresService.GetDish(dishId);
+        await base.OnInitializedAsync();
+    }
+
+}

@@ -104,7 +104,7 @@ namespace ProDiet.Services
         {
             try
             {
-                Dish? dish = await db.Dishes.Include(x=>x.UsedProducts).FirstOrDefaultAsync(x => x.DishId == dishId);
+                Dish? dish = await db.Dishes.Include(x=>x.UsedProducts).ThenInclude(x=>x.Product).FirstOrDefaultAsync(x => x.DishId == dishId);
 
                 if (dish != null)
                 {

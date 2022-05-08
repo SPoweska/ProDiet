@@ -16,7 +16,7 @@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 
-
+<div id="border">
 @if (_patient==null)
 {
     <p><em>Nie możesz wyświetlić danych tego pacjenta</em></p>
@@ -24,29 +24,37 @@
 
 else
 {
-
+    
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-10">
-        <MudTabPanel  Text="Dane pacjenta" Class="mud-theme-TertiaryDarken">
+        <MudTabPanel  Text="Dane pacjenta">
             <MudCardContent>
                 <div>
                     <div>
-                        <div class="d-inline pa-1 mud-theme-primary">Imię</div>
-                        <div class="d-inline pa-1 mud-theme-dark">@_patient.FirstName</div>
+                        <div class="d-inline pa-1 ">Imię:</div>
+                        <div class="d-inline pa-1 ">@_patient.FirstName</div>
                     </div>
                     <div>
-                        <div class="d-inline pa-1 mud-theme-primary">Nazwisko</div>
-                        <div class="d-inline pa-1 mud-theme-dark">@_patient.LastName</div>
+                        <div class="d-inline pa-1 ">Nazwisko:</div>
+                        <div class="d-inline pa-1 ">@_patient.LastName</div>
                     </div>
                     <div>
-                        <div class="d-inline pa-1 mud-theme-primary">Email</div>
-                        <div class="d-inline pa-1 mud-theme-dark">@_patient.Email</div>
+                        <div class="d-inline pa-1 ">Email:</div>
+                        <div class="d-inline pa-1 ">@_patient.Email</div>
                     </div>
                     <div>
-                        <div class="d-inline pa-1 mud-theme-primary">Numer telefonu</div>
-                        <div class="d-inline pa-1 mud-theme-dark">@_patient.PhoneNumber</div>
+                        <div class="d-inline pa-1 ">Numer telefonu:</div>
+                        <div class="d-inline pa-1 ">@_patient.PhoneNumber</div>
                     </div>
                     <div>
-                        <MudButton @onclick="()=>OpenInterview()"  Variant="Variant.Filled" Color="Color.Primary">
+                        <div class="d-inline pa-1 ">Wzrost:</div>
+                        <div class="d-inline pa-1 ">@_patient.Height cm</div>
+                    </div>
+                    <div>
+                        <div class="d-inline pa-1 ">Waga:</div>
+                        <div class="d-inline pa-1 ">@_patient.Weight kg</div>
+                    </div>
+                    <div>
+                        <MudButton @onclick="()=>OpenInterview()"  Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Info">
                             Edytuj wywiad żywieniowy</MudButton>
                     </div>
                 </div>
@@ -124,11 +132,8 @@ else
             </MudCardContent>
         </MudTabPanel>
     </MudTabs>
-
-
-
-    
 }
+</div>
 
 
 @code {

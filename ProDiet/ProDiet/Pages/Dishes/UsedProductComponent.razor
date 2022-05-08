@@ -2,6 +2,7 @@
 @using ProDiet.Services
 @inject IProductStoresService iProductStoresService;
 
+<div id="borderThin">
 <MudCard Outlined="true">
     <div class="row">
         <div class="col-8">
@@ -36,29 +37,30 @@
                           Immediate="true"
                           Label="Kaloryka"/>
         </div>
-    <div class="col-2">
-        <MudTextField T="float"
-                      @bind-Value="usedProduct.Carbohydrates"
-                      Disabled="true"
-                      Immediate="true"
-                      Label="Węglowodany"/>
-    </div>
-    <div class="col-2">
-        <MudTextField T="float"
-                      @bind-Value="usedProduct.Fats"
-                      Disabled="true"
-                      Immediate="true"
-                      Label="Tłuszcz"/>
-    </div>
-    <div class="col-2">
-        <MudTextField T="float"
-                      @bind-Value="usedProduct.Proteins"
-                      Immediate="true"
-                      Disabled="true"
-                      Label="Białko"/>
+        <div class="col-2">
+            <MudTextField T="float"
+                          @bind-Value="usedProduct.Carbohydrates"
+                          Disabled="true"
+                          Immediate="true"
+                          Label="Węglowodany"/>
+        </div>
+        <div class="col-2">
+            <MudTextField T="float"
+                          @bind-Value="usedProduct.Fats"
+                          Disabled="true"
+                          Immediate="true"
+                          Label="Tłuszcz"/>
+        </div>
+        <div class="col-2">
+            <MudTextField T="float"
+                          @bind-Value="usedProduct.Proteins"
+                          Immediate="true"
+                          Disabled="true"
+                          Label="Białko"/>
         </div>
     </div>
 </MudCard>
+</div>
 
 
 
