@@ -58,6 +58,8 @@ else
                 <td>@_dish.Proteins</td>
                 <td>@_dish.Servings</td>
                 <td>@_dish.MealType</td>
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => OpenDialogDishInfo(_dish.DishId)" > Wyświetl danie</MudButton>
+
                 </tr>
         }
         </tbody>
@@ -90,6 +92,14 @@ else
         SearchTerm = term;
         _filteredDishes = _dishes.Where(x => x.DishName.ToLower().Contains(SearchTerm.ToLower())).ToList();
         await this.InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenDialogDishInfo(int dishId)
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters() {["dishId"] = dishId};
+        var dialog=DialogService.Show<SingleDish>("Informacje o daniu",parameters, closeOnEscapeKey);       
+
     }
 
 }
