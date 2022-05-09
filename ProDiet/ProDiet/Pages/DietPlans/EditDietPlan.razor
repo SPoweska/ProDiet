@@ -10,25 +10,28 @@
 @inject NavigationManager navigationManager
 
 <div id="border">
-@if (_dietPlan == null)
-{
-    <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
-}
-else
-{
-    <h3>Edycja jadłospisu: @_dietPlan.DietPlanName</h3>
-    <h6>Kliknij na dzień, który chcesz edytować</h6>
-    <MudGrid Spacing="3" Justify="Justify.Center">
-        @foreach (var Day in _dietPlan.DietPlanDays)
-        {
-            <MudItem @onclick="() => NavigateToDietDay(Day)">
-                <DietPlanDayCardPartial _dietPlanDay="Day"></DietPlanDayCardPartial>
-            </MudItem>
-        }
-    </MudGrid>
+    <MudCard>
+    @if (_dietPlan == null)
+    {
+        <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
+    }
+    else
+    {
+        <h3>Edycja jadłospisu: @_dietPlan.DietPlanName</h3>
+        <h6>Kliknij na dzień, który chcesz edytować</h6>
+        <MudGrid Spacing="3" Justify="Justify.Center">
+            @foreach (var Day in _dietPlan.DietPlanDays)
+            {
+                <MudItem @onclick="() => NavigateToDietDay(Day)">
+                    <DietPlanDayCardPartial _dietPlanDay="Day"></DietPlanDayCardPartial>
+                </MudItem>
+            }
+        </MudGrid>
 
-}
+    }
+    </MudCard>
 </div>
+
 
 
 

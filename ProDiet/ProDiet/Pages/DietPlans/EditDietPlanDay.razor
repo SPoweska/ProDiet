@@ -11,108 +11,115 @@
 @using ProDiet.Services
 @using Microsoft.AspNetCore.Components
 
-<div id="border"></div>
-@*Edycja dnia jadłospisu-> (dodawanie posiłków) DietPlanMealPartial*@
 
-@if (_dietPlanDay == null)
-{
-    <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
-}
-else
-{
-    <MudItem >
-    <h3>Edycja dnia jadłospisu: @_dietPlanDay.DietPlanDayDate</h3>
-    <EditForm Model="@_dietPlanDay" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator />
-        <MudCard>
-            <p></p>
-            <h5>Podsumowanie dnia:</h5>
-            <div class="row-cols-6">
-                <div class="col-6">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col">Kaloryka(kcal)</th>
-                            <th scope="col">Węglowodany(g)</th>
-                            <th scope="col">Tłuszcz(g)</th>
-                            <th scope="col">Białko(g)</th>
-                            <th scope="col">Błonnik(g)</th>
+<div class="row">
+    
+    <div class="col-8">
+        <div id="border">
+        @*Edycja dnia jadłospisu-> (dodawanie posiłków) DietPlanMealPartial*@
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>@_dietPlanDay.Calories z @_dietPlan.DailyCalories</td>
-                            <td>@_dietPlanDay.Carbohydrates z @_dietPlan.DailyCarbohydrates</td>
-                            <td>@_dietPlanDay.Fats z @_dietPlan.DailyFats</td>
-                            <td>@_dietPlanDay.Proteins z @_dietPlan.DailyProteins</td>
-                            <td>@_dietPlanDay.Fiber z @_dietPlan.DailyFiber</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-            <MudCardContent>
-                <MudCard>
+        @if (_dietPlanDay == null)
+        {
+            <p><em>Nie możesz wyświetlić tego planu dietetycznego</em></p>
+        }
+        else
+        {
+            <MudItem >
+                <h3>Edycja dnia jadłospisu: @_dietPlanDay.DietPlanDayDate</h3>
+                <EditForm Model="@_dietPlanDay" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator/>
                     <MudCard>
+                        <p></p>
+                        <h5>Podsumowanie dnia:</h5>
+                        <div class="row-cols-6">
+                            <div class="col-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Kaloryka(kcal)</th>
+                                        <th scope="col">Węglowodany(g)</th>
+                                        <th scope="col">Tłuszcz(g)</th>
+                                        <th scope="col">Białko(g)</th>
+                                        <th scope="col">Błonnik(g)</th>
 
-                        <MudCard>
-                            @for (var i = 0; i < _dietPlanDay.DietPlanDayMeals.Count; i++)
-                            {
-                                var index = i;
-                                var dayMeal = _dietPlanDay.DietPlanDayMeals[i];
-                                <div id="borderThin">
-                                    <div class="row">
-                                        <div class="col-10"></div>
-                                        <div class="col-2">
-                                            <MudButton
-                                                Size="Size.Small"
-                                                EndIcon="@Icons.Filled.Delete"
-                                                Variant="Variant.Filled"
-                                                Color="Color.Error"
-                                                @onclick="@(() => _dietPlanDay.DietPlanDayMeals.RemoveAt(index))">
-                                                Skasuj posiłek
-                                            </MudButton>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>@_dietPlanDay.Calories z @_dietPlan.DailyCalories</td>
+                                        <td>@_dietPlanDay.Carbohydrates z @_dietPlan.DailyCarbohydrates</td>
+                                        <td>@_dietPlanDay.Fats z @_dietPlan.DailyFats</td>
+                                        <td>@_dietPlanDay.Proteins z @_dietPlan.DailyProteins</td>
+                                        <td>@_dietPlanDay.Fiber z @_dietPlan.DailyFiber</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                        </div>
-                                    </div>
-                                
-                                    <MudCard Outlined="true">
-                                        <span>
-                                            <CascadingValue Value="dayMeal">
-                                                <DietPlanMealPartialComponent userId="userId"></DietPlanMealPartialComponent>
-                                            </CascadingValue>
-                                        </span>
+                        </div>
+                        <MudCardContent>
+                            <MudCard>
+                                <MudCard>
+
+                                    <MudCard>
+                                        @for (var i = 0; i < _dietPlanDay.DietPlanDayMeals.Count; i++)
+                                        {
+                                            var index = i;
+                                            var dayMeal = _dietPlanDay.DietPlanDayMeals[i];
+                                            <div id="borderThin">
+                                                <div class="row">
+                                                    <div class="col-10"></div>
+                                                    <div class="col-2">
+                                                        <MudButton
+                                                            Size="Size.Small"
+                                                            EndIcon="@Icons.Filled.Delete"
+                                                            Variant="Variant.Filled"
+                                                            Color="Color.Error"
+                                                            @onclick="@(() => _dietPlanDay.DietPlanDayMeals.RemoveAt(index))">
+                                                            Skasuj posiłek
+                                                        </MudButton>
+
+                                                    </div>
+                                                </div>
+
+                                                <MudCard Outlined="true">
+                                                    <span>
+                                                        <CascadingValue Value="dayMeal">
+                                                            <DietPlanMealPartialComponent userId="userId"></DietPlanMealPartialComponent>
+                                                        </CascadingValue>
+                                                    </span>
+                                                </MudCard>
+
+                                            </div>
+                                            <br/>
+                                        }
                                     </MudCard>
-                                
-                                </div>
-                                <br/>
-                            }
-                        </MudCard>
-                        <MudButton
-                            Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add"
-                            @onclick="() => AddMeal()">
-                            Dodaj posiłek
-                        </MudButton>
+                                    <MudButton
+                                        Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add"
+                                        @onclick="() => AddMeal()">
+                                        Dodaj posiłek
+                                    </MudButton>
+                                </MudCard>
+                            </MudCard>
+
+
+
+                        </MudCardContent>
                     </MudCard>
-                </MudCard>
+
+                    <MudCard>
+                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Zapisz</MudButton>
+                    </MudCard>
+                </EditForm>
+            </MudItem>
 
 
-               
-            </MudCardContent>
-        </MudCard>
-    
-        <MudCard>
-            <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Tertiary">Zapisz</MudButton>
-        </MudCard> 
-    </EditForm>
-    </MudItem>
 
-    
-
-}
+        }
+    </div>
+</div>
+</div>
 
 
 @code {

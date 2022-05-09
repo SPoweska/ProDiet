@@ -8,7 +8,7 @@ namespace ProDiet.Models
     {
         [Key]
         public int ProductId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Nazwa jest wymagana w celu dodania produktu")]
         public string ProductName { get; set; }
         [Required]
         public float Carbohydrates { get; set; }

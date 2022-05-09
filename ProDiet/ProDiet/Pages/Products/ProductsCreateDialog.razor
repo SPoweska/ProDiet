@@ -19,37 +19,51 @@
 
 <MudDialog DisableSidePadding="true">
 <DialogContent>
-<MudContainer Style="max-height: 700px; max-width: 700px; overflow-y: scroll; overflow-x: scroll">
+<MudContainer Style="max-height: 850px; max-width: 850px; overflow-y: scroll; overflow-x: scroll">
 
 <EditForm Model="_product" OnValidSubmit="OnValidSubmit">
 <DataAnnotationsValidator/>
 <ValidationSummary/>
 <MudCard >
 <MudCardContent>
-<MudTextField @bind-Value="_product.ProductName"
-              For="@(() => _product.ProductName)"
-              Immediate="true"
-              Label="Nazwa produktu"/>
-<MudTextField @bind-Value="_product.Carbohydrates"
-              For="@(() => _product.Carbohydrates)"
-              Immediate="true"
-              Label="Węglowodany"/>
-<MudTextField @bind-Value="_product.Fats"
-              For="@(() => _product.Fats)"
-              Immediate="true"
-              Label="Tłuszcz"/>
-<MudTextField @bind-Value="_product.Proteins"
-              For="@(() => _product.Proteins)"
-              Immediate="true"
-              Label="Białko"/>
+<div class="row">
+    
+    <MudTextField @bind-Value="_product.ProductName"
+                  For="@(() => _product.ProductName)"
+                  Immediate="true"
+                  Label="Nazwa produktu"/>
+    <div class="col-2">
+        <MudTextField @bind-Value="_product.Calories"
+                      For="@(() => _product.Calories)"
+                      Immediate="true"
+                      Label="Kalorie"/>
+    </div>
+    <div class="col-2">
+
+        <MudTextField @bind-Value="_product.Carbohydrates"
+                      For="@(() => _product.Carbohydrates)"
+                      Immediate="true"
+                      Label="Węglowodany"/>
+    </div>
+    <div class="col-2">
+        <MudTextField @bind-Value="_product.Fats"
+                      For="@(() => _product.Fats)"
+                      Immediate="true"
+                      Label="Tłuszcz"/>
+    </div>
+    <div class="col-2">
+        <MudTextField @bind-Value="_product.Proteins"
+                      For="@(() => _product.Proteins)"
+                      Immediate="true"
+                      Label="Białko"/>
+    </div>
+    <div class="col-2">
 <MudTextField @bind-Value="_product.Fiber"
               For="@(() => _product.Fiber)"
               Immediate="true"
               Label="Błonnik"/>
-<MudTextField @bind-Value="_product.Calories"
-              For="@(() => _product.Calories)"
-              Immediate="true"
-              Label="Kalorie"/>
+    </div>
+</div>
 <MudRadioGroup @bind-SelectedOption="_product.ProductCategory"
                For="() => _product.ProductCategory">
     <MudRadio Placement="Placement.Top" Option="@("Nabiał")">Nabiał

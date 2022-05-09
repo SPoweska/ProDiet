@@ -10,160 +10,162 @@
 @inject NavigationManager navigationManager
 
 <div id="border">
-@if (_patient == null)
-{
-    <p><em>Nie możesz wyświetlić planów dietetycznych tego pacjenta</em></p>
-}
-else
-{
-    <div>
-        <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
-        <EditForm Model="_dietPlan" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-            <h4>Ustawienia jadłospisu</h4>
-            <div class="row">
-                <div class="col-3">
-                    <MudTextField @bind-Value="_dietPlan.DietPlanName"
-                                  For="@(() => _dietPlan.DietPlanName)"
-                                  Immediate="true"
-                                  Label="Nazwa"/>
+    <MudCard>
+    @if (_patient == null)
+    {
+        <p><em>Nie możesz wyświetlić planów dietetycznych tego pacjenta</em></p>
+    }
+    else
+    {
+        <div>
+            <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
+            <EditForm Model="_dietPlan" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+                <h4>Ustawienia jadłospisu</h4>
+                <div class="row">
+                    <div class="col-3">
+                        <MudTextField @bind-Value="_dietPlan.DietPlanName"
+                                      For="@(() => _dietPlan.DietPlanName)"
+                                      Immediate="true"
+                                      Label="Nazwa"/>
+                    </div>
+                    <div class="col-2">
+                        <MudNumericField
+                            ValueChanged="(int i) => OnDayCountChanged(i)"
+                            T="int"
+                            Value="planDaysCount"
+                            Label="Liczba dni jadłospisu"
+                            Min="1"
+                            Max="14"
+                            Variant="Variant.Outlined"/>
+                    </div>
                 </div>
-                <div class="col-2">
-                    <MudNumericField
-                        ValueChanged="(int i) => OnDayCountChanged(i)"
-                        T="int"
-                        Value="planDaysCount"
-                        Label="Liczba dni jadłospisu"
-                        Min="1"
-                        Max="14"
-                        Variant="Variant.Outlined"/>
+                <p></p>
+                <p></p>
+                <MudInputLabel>Wybierz datę ważności jadłospisu</MudInputLabel>
+                <div class="row">
+                    <div class="col-4">
+                        <MudDateRangePicker @bind-DateRange="_dateRange"></MudDateRangePicker>
+                    </div>
                 </div>
-            </div>
-            <p></p>
-            <p></p>
-            <MudInputLabel>Wybierz datę ważności jadłospisu</MudInputLabel>
-            <div class="row">
-                <div class="col-4">
-                    <MudDateRangePicker @bind-DateRange="_dateRange"></MudDateRangePicker>
-                </div>
-            </div>
-            <p></p>
-            <p></p>
-            <div class="row">
-                <div class="col-2">
+                <p></p>
+                <p></p>
+                <div class="row">
+                    <div class="col-2">
 
-                    <MudTextField
-                        ValueChanged="(float i) => OnDailyCaloriesChanged(i)"
-                        T="float"
-                        Value="_dietPlan.DailyCalories"
-                        For="@(() => _dietPlan.DailyCalories)"
-                        Immediate="true"
-                        Label="Planowana liczba kalorii(kcal)"/>
-                </div>
-                <div class="col-2">
-                    <MudTextField @bind-Value="_patient.PPM"
-                                  For="@(() => _patient.PPM)"
-                                  Immediate="true"
-                                  Disabled="true"
-                                  Label="PPM(kcal)"/>
-                </div>
-                <div class="col-2">
+                        <MudTextField
+                            ValueChanged="(float i) => OnDailyCaloriesChanged(i)"
+                            T="float"
+                            Value="_dietPlan.DailyCalories"
+                            For="@(() => _dietPlan.DailyCalories)"
+                            Immediate="true"
+                            Label="Planowana liczba kalorii(kcal)"/>
+                    </div>
+                    <div class="col-2">
+                        <MudTextField @bind-Value="_patient.PPM"
+                                      For="@(() => _patient.PPM)"
+                                      Immediate="true"
+                                      Disabled="true"
+                                      Label="PPM(kcal)"/>
+                    </div>
+                    <div class="col-2">
 
-                    <MudTextField @bind-Value="_patient.CPM"
-                                  For="@(() => _patient.CPM)"
-                                  Immediate="true"
-                                  Disabled="true"
-                                  Label="CPM(kcal)"/>
+                        <MudTextField @bind-Value="_patient.CPM"
+                                      For="@(() => _patient.CPM)"
+                                      Immediate="true"
+                                      Disabled="true"
+                                      Label="CPM(kcal)"/>
+                    </div>
                 </div>
-            </div>
-            <p></p>
-            <p></p>
-        
+                <p></p>
+                <p></p>
 
-            <MudInputLabel>Udział energii poszczególnych makroskładników(%):</MudInputLabel>
-            <div class="row">
-                <div class="col-2" align="center">
-                    <h8>Węglowodany</h8>
-                </div>
-                <div class="col-2" align="center">
-                    <h8>Białko</h8>
-                </div>
-                <div class="col-2" align="center">
-                    <h8>Tłuszcz</h8>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1">
-                    <MudNumericField
-                        ValueChanged="(int i) => OnPercentChanged(i, 'c')"
-                        T="int"
-                        Value="carbPercent"
-                        Label="%"
-                        Min="1"
-                        Max=@maxCarbPercent
-                        Variant="Variant.Outlined"/>
-                </div>
-                <div class="col-1">
-                    <MudTextField @bind-Value="_dietPlan.DailyCarbohydrates"
-                                  For="@(() => _dietPlan.DailyCarbohydrates)"
-                                  Immediate="true"
-                                  Disabled="true"
-                                  Label="g"/>
-            
-                </div>
-                <div class="col-1">
 
-                    <MudNumericField
-                        ValueChanged="( int i) => OnPercentChanged(i, 'p')"
-                        T="int"
-                        Value="proteinPercent" 
-                        Label="%" 
-                        Min="1" 
-                        Max=@maxProteinPercent 
-                        Variant="Variant.Outlined" />
+                <MudInputLabel>Udział energii poszczególnych makroskładników(%):</MudInputLabel>
+                <div class="row">
+                    <div class="col-2" align="center">
+                        <h8>Węglowodany</h8>
+                    </div>
+                    <div class="col-2" align="center">
+                        <h8>Białko</h8>
+                    </div>
+                    <div class="col-2" align="center">
+                        <h8>Tłuszcz</h8>
+                    </div>
                 </div>
-                <div class="col-1">
-                    <MudTextField @bind-Value="_dietPlan.DailyProteins"
-                                  For="@(() => _dietPlan.DailyProteins)"
-                                  Immediate="true"
-                                  Disabled="true"
-                                  Label="g"/>
-                </div>
-                <div class="col-1">
-                    <MudNumericField 
-                        ValueChanged="( int i) => OnPercentChanged(i, 'f')"
-                        T="int"
-                        Value="fatPercent" 
-                        Label="%" 
-                        Min="1" 
-                        Max=@maxFatPercent 
-                        Variant="Variant.Outlined" />
-                </div>
-                <div class="col-1">
-                    <MudTextField 
-                        @bind-Value="_dietPlan.DailyFats"
-                        For="@(() => _dietPlan.DailyFats)"
-                        Immediate="true"
-                        Disabled="true"
-                        Label="g"/>
-                </div>
-            </div>
-            <MudTextField @bind-Value="_dietPlan.Recommendations"
-                          For="@(() => _dietPlan.Recommendations)"
-                          Immediate="true"
-                          Lines="4"
-                          Label="Zalecenia ogólne"/>
-            <MudCard>
-                <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Wyjdź</MudButton>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Dodaj</MudButton>
-            </MudCard>
-    
+                <div class="row">
+                    <div class="col-1">
+                        <MudNumericField
+                            ValueChanged="(int i) => OnPercentChanged(i, 'c')"
+                            T="int"
+                            Value="carbPercent"
+                            Label="%"
+                            Min="1"
+                            Max=@maxCarbPercent
+                            Variant="Variant.Outlined"/>
+                    </div>
+                    <div class="col-1">
+                        <MudTextField @bind-Value="_dietPlan.DailyCarbohydrates"
+                                      For="@(() => _dietPlan.DailyCarbohydrates)"
+                                      Immediate="true"
+                                      Disabled="true"
+                                      Label="g"/>
 
-        </EditForm>
-    </div>
-    
-}
+                    </div>
+                    <div class="col-1">
+
+                        <MudNumericField
+                            ValueChanged="(int i) => OnPercentChanged(i, 'p')"
+                            T="int"
+                            Value="proteinPercent"
+                            Label="%"
+                            Min="1"
+                            Max=@maxProteinPercent
+                            Variant="Variant.Outlined"/>
+                    </div>
+                    <div class="col-1">
+                        <MudTextField @bind-Value="_dietPlan.DailyProteins"
+                                      For="@(() => _dietPlan.DailyProteins)"
+                                      Immediate="true"
+                                      Disabled="true"
+                                      Label="g"/>
+                    </div>
+                    <div class="col-1">
+                        <MudNumericField
+                            ValueChanged="(int i) => OnPercentChanged(i, 'f')"
+                            T="int"
+                            Value="fatPercent"
+                            Label="%"
+                            Min="1"
+                            Max=@maxFatPercent
+                            Variant="Variant.Outlined"/>
+                    </div>
+                    <div class="col-1">
+                        <MudTextField
+                            @bind-Value="_dietPlan.DailyFats"
+                            For="@(() => _dietPlan.DailyFats)"
+                            Immediate="true"
+                            Disabled="true"
+                            Label="g"/>
+                    </div>
+                </div>
+                <MudTextField @bind-Value="_dietPlan.Recommendations"
+                              For="@(() => _dietPlan.Recommendations)"
+                              Immediate="true"
+                              Lines="4"
+                              Label="Zalecenia ogólne"/>
+                <MudCard>
+                    <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Wyjdź</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Dodaj</MudButton>
+                </MudCard>
+
+
+            </EditForm>
+        </div>
+
+    }
+    </MudCard>
 </div>
 
 

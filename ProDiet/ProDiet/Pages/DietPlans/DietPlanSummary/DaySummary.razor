@@ -8,6 +8,7 @@
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 
+
 @if(_day!=null)
         {
             <div align="center">
@@ -45,7 +46,9 @@
                 @foreach (var meal in _day.DietPlanDayMeals)
                 {
                     <hr size="10" />
+                    <div style="padding: 30px">
                     <MealSummary _meal="meal"></MealSummary>
+                    </div>
                     <hr size="10"/>
                 }
             }
@@ -59,7 +62,6 @@
     {
         <h2>Wystąpił problem z wczytaniem dania</h2>
     }
-
 
 
 

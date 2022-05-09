@@ -2,28 +2,48 @@
 
 
 <PageTitle>Strona głowna</PageTitle>
-<body style="height: 100%; margin: 0">
+<div style="background-image: url('backgroundimg.jpg'); background-position:
+            center center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;">
+<div style="height: 800px; margin: auto;
+            width: 50%;
+            padding: 10px;">
 <AuthorizeView>
-    
+
     <Authorized>
-        <h1 align="center">Witaj w aplikacji ProDiet!</h1>
+        <div class="row" style="margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%)">
+            <div class="col-8">
+                <h1 style="color: antiquewhite">Witaj w aplikacji ProDiet!</h1>
+                <p >
+                    <h3 style="color: aliceblue" >Opracuj spersonalizowany plan dietetyczny w ciągu kilku minut</h3>
+                    <h5 style="color: aliceblue">Wybierz interesującą cię zakładkę z paska po lewej stronie ekranu i rozpocznij pracę</h5>
+                </p>
+            </div>
+        </div>
 
     </Authorized>
     <NotAuthorized>
-        
-        <div style="background-image: url('backgroundimg.jpg')">
-            <h1>Witaj w aplikacji ProDiet!</h1>
+        <div class="row" style="margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%)">
+            <div class="col-6">
+            <h1 style="color: antiquewhite">Witaj w aplikacji ProDiet!</h1>
+                <p >
+                    <h3 style="color: aliceblue" >Opracuj spersonalizowany plan dietetyczny w ciągu kilku minut</h3>
+                    <h5 style="color: aliceblue">Ta aplikacja ułatwia dietetykom i trenerom personalnym tworzenie spersonalizowanych planów dietetycznych i śledzenie wyników twoich klientów.</h5>
+                </p>
             <a href="Identity/Account/Register">
                 <MudButton Variant="Variant.Filled" Color="Color.Info"> Zarejestruj się</MudButton>
             </a>
-            <a href="Identity/Account/Login">
-                <MudButton Variant="Variant.Filled" Color="Color.Success"> Zaloguj się</MudButton>
-            </a>
+                <a href="Identity/Account/Login">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success"> Zaloguj się</MudButton>
+                </a>
+            </div>
         </div>
-        
+
     </NotAuthorized>
-    
+
 </AuthorizeView>
-</body>
+</div>
+</div>
 
 

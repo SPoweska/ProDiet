@@ -7,31 +7,37 @@
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 
-@if(_meal!=null){
-   
-    <div align="center">
-    <h5>Typ posiłku: @_meal.Name </h5>
-    <br/>
-    <div class="row">
-        @if (_meal.MealDish!=null)
+
+
+        @if (_meal != null)
         {
-            <span style="border:lightgreen">
-        <DishSummary _mealDish="_meal.MealDish" ></DishSummary>
-            </span>
-            
+
+            <div>
+                <h5>Typ posiłku: @_meal.Name </h5>
+                <br/>
+                <div class="row">
+                    @if (_meal.MealDish != null)
+                    {
+                        <span style="border: lightgreen">
+                            <div style="padding: 20px">
+                            <DishSummary _mealDish="_meal.MealDish"></DishSummary>
+                            </div>
+                        </span>
+
+                    }
+                    else
+                    {
+                        <h5>Wystąpił problem z wczytaniem dania</h5>
+                    }
+
+                </div>
+            </div>
         }
         else
         {
-            <h5>Wystąpił problem z wczytaniem dania</h5>
+            <h3>Wystąpił problem z wczytaniem posiłku</h3>
         }
 
-    </div>
-    </div>
-}
-else
-{
-    <h3>Wystąpił problem z wczytaniem posiłku</h3>
-}
 
 @code {
     [Parameter]

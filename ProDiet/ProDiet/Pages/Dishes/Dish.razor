@@ -16,38 +16,43 @@
 @inject NavigationManager navigationManager;
 
 <h3>Utwórz nowe danie</h3>
-<EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator/>
-            <MudCard @onclick="OnProductsListChanged" >
+<div class="row">
+    <div class="col-7">
+        <EditForm Model="@_dish" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator/>
+            <MudCard @onclick="OnProductsListChanged">
                 <MudCardContent>
                     <MudTextField @bind-Value="_dish.DishName"
                                   For="@(() => _dish.DishName)"
                                   Immediate="true"
                                   Label="Nazwa dania"/>
-                    
+
                     <p></p>
-                        <h9>Podsumowanie dania</h9>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Kaloryka</th>
-                                <th>Węglowodany(g)</th>
-                                <th>Tłuszcz(g)</th>
-                                <th>Białko(g)</th>
-                                <th>Błonnik(g)</th>
-                                
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>@_dish.Calories</td>
-                                <td>@_dish.Carbohydrates</td>
-                                <td>@_dish.Fats</td>
-                                <td>@_dish.Proteins</td>
-                                <td>@_dish.Fiber</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <h9>Podsumowanie dania</h9>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Kaloryka</th>
+                            <th>Węglowodany(g)</th>
+                            <th>Tłuszcz(g)</th>
+                            <th>Białko(g)</th>
+                            <th>Błonnik(g)</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>@_dish.Calories</td>
+                            <td>@_dish.Carbohydrates</td>
+                            <td>@_dish.Fats</td>
+                            <td>@_dish.Proteins</td>
+
+                           @* <td>@_dish.Fiber</td>*@
+
+                            <td>4,2</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                     <h9>Lista składników:</h9>
                     <MudCard>
@@ -78,19 +83,19 @@
                     </MudCard>
 
                     <div class="row">
-                    <div class="col-3">
-                        <MudTextField @bind-Value="_dish.Servings"
-                                      For="@(() => _dish.Servings)"
-                                      Immediate="true"
-                                      Label="Liczba porcji"/>
-                    </div>
-                    <div class="col-3">
+                        <div class="col-3">
+                            <MudTextField @bind-Value="_dish.Servings"
+                                          For="@(() => _dish.Servings)"
+                                          Immediate="true"
+                                          Label="Liczba porcji"/>
+                        </div>
+                        <div class="col-3">
 
-                        <MudTextField @bind-Value="_dish.PreparationMinutes"
-                                      For="@(() => _dish.PreparationMinutes)"
-                                      Immediate="true"
-                                      Label="Czas przygotowania(minut)"/>
-                    </div>
+                            <MudTextField @bind-Value="_dish.PreparationMinutes"
+                                          For="@(() => _dish.PreparationMinutes)"
+                                          Immediate="true"
+                                          Label="Czas przygotowania(minut)"/>
+                        </div>
                     </div>
                     <MudTextField @bind-Value="_dish.Recipe"
                                   For="@(() => _dish.Recipe)"
@@ -111,7 +116,9 @@
                 <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Filled.Cancel">Anuluj</MudButton>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success">Zapisz</MudButton>
             </MudCard>
-</EditForm>
+        </EditForm>
+    </div>
+</div>
 
 @code {
     private ProDiet.Models.Dish _dish;
@@ -137,19 +144,6 @@
         _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
         
 
-    //foreach (var usedProduct in _dish.UsedProducts)
-        //{
-        //    _dish.Proteins += (usedProduct.Proteins)/4;
-        //    _dish.Proteins = MathF.Round(_dish.Proteins, 1);
-        //    _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-        //    _dish.Carbohydrates = MathF.Round(_dish.Carbohydrates, 1);
-        //    _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-        //    _dish.Fats = MathF.Round(_dish.Fats, 1);
-
-        //}
-        //_dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
-        //_dish.Calories = MathF.Round(_dish.Calories, 1);
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -159,12 +153,6 @@
         
         await base.OnInitializedAsync();
     }
-
-    //private async Task<Product> SelectedProductDataLoad(int selectedProductId)
-    //{
-    //    Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
-    //    return selectedProduct;
-    //}
 
     private async Task OnValidSubmit()
     {

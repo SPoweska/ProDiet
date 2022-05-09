@@ -9,32 +9,37 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
 
-@if (_dietPlan != null)
-{
-    <div align="center">
-        <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
-        <h4>Nazwa jadłospisu: @_dietPlan.DietPlanName</h4>
-        <h7>Liczba dni jadłospisu: @_dietPlan.PlanDaysCount</h7>
-        <br/>
-        <h7>Kaloryka: @_dietPlan.DailyCalories kcal</h7>
-        @if (_dietPlan.PlanDaysCount > 0)
+
+
+
+        @if (_dietPlan != null)
         {
-            @foreach (var day in _dietPlan.DietPlanDays)
-            {
-                <MudCard Outlined="true">
-                <DaySummary _day="day"></DaySummary>
-                </MudCard>
-                
-            }
+            <div>
+                <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
+                <h4>Nazwa jadłospisu: @_dietPlan.DietPlanName</h4>
+                <h7>Liczba dni jadłospisu: @_dietPlan.PlanDaysCount</h7>
+                <br/>
+                <h7>Kaloryka: @_dietPlan.DailyCalories kcal</h7>
+                @if (_dietPlan.PlanDaysCount > 0)
+                {
+                    @foreach (var day in _dietPlan.DietPlanDays)
+                    {
+                        <MudCard Outlined="true">
+                            <div style="padding: 30px">
+                            <DaySummary _day="day"></DaySummary>
+                            </div>
+                        </MudCard>
+
+                    }
+                }
+            </div>
+
         }
-    </div>
 
-}
-
-else
-{
-    <h2>Wystąpił błąd, nie możesz teraz wyświetlić tego planu</h2>
-}
+        else
+        {
+            <h2>Wystąpił błąd, nie możesz teraz wyświetlić tego planu</h2>
+        }
 
 @code {
 

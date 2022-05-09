@@ -2,9 +2,9 @@
 @using MudBlazor.Extensions
 
 <div id="border">
-<MudCard>
+<MudCard Style="background-color: khaki">
     <MudCardContent>
-        <div class="card-title">@_dietPlanDay.DietPlanDayDate.ToString()</div>
+        <div class="card-title">@cultureInfo.DateTimeFormat.GetDayName(_dietPlanDay.DietPlanDayDate.Value.DayOfWeek)  @_dietPlanDay.DietPlanDayDate.Value.Date.ToString("d")</div>
         <hr/>
         <MudText>Kaloryka: @_dietPlanDay.Calories kcal</MudText>
         <hr/>
@@ -23,8 +23,12 @@
     [Parameter]
     public DietPlanDay _dietPlanDay { get; set; }
 
+    public System.Globalization.CultureInfo cultureInfo { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        cultureInfo = new System.Globalization.CultureInfo("pl-PL");
+
         await base.OnInitializedAsync();
     }
 
