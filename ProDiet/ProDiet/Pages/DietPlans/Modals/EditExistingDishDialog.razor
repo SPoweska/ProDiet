@@ -196,18 +196,22 @@
         _dish.Carbohydrates = 0;
         _dish.Fats = 0;
         _dish.Calories = 0;
+        _dish.Fiber = 0;
         _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
         _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
         _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
         _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
-        //foreach (var usedProduct in _dish.UsedProducts)
-        //{
-        //    _dish.Proteins += (usedProduct.Proteins)/4;
-        //    _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-        //    _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-        //}
 
-        //_dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+        if (_dish.UsedProducts.Sum(x => x.Fiber)!=null)
+        {
+            _dish.Fiber = 0;
+        }
+        else
+        {
+            _dish.Fiber = _dish.UsedProducts.Sum(x => x.Fiber);
+
+        }
+        
     }
 
     protected override async Task OnInitializedAsync()

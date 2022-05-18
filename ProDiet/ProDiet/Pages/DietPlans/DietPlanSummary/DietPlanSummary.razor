@@ -14,6 +14,7 @@
 
         @if (_dietPlan != null)
         {
+            <MudButton Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" >Generuj PDF</MudButton>
             <div>
                 <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
                 <h4>Nazwa jadłospisu: @_dietPlan.DietPlanName</h4>

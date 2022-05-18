@@ -149,6 +149,14 @@
                             Disabled="true"
                             Label="g"/>
                     </div>
+
+                    <div class="col-1">
+                        <MudTextField
+                            @bind-Value="_dietPlan.DailyFiber"
+                            For="@(() => _dietPlan.DailyFiber)"
+                            Immediate="true"
+                            Label="Błonnik g"/>
+                    </div>
                 </div>
                 <MudTextField @bind-Value="_dietPlan.Recommendations"
                               For="@(() => _dietPlan.Recommendations)"
@@ -286,6 +294,10 @@
         var userId = userManager.GetUserId(user);
         _dietPlan.CreatedBy = userId;
         _dietPlan.CreatedAt = DateTime.Now;
+        if (_dietPlan.DailyFiber==null)
+        {
+            _dietPlan.DailyFiber = 0;
+        }
         for (var i = 0; i < _dietPlan.PlanDaysCount; i++)
         {
             _dietPlan.DietPlanDays.Add(new DietPlanDay()
