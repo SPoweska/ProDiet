@@ -15,6 +15,7 @@ namespace ProDiet.Services
         public Task<DayMeal> UpdateDayMeal(DayMeal dayMeal);
         public Task<DayMeal> GetDayMeal(int mealId);
         public Task<int> UpdateMealDish(MealDish mealDish);
+        public Task<DietPlan> GetDietPlanSummary(int dietPlanId);
 
 
     }

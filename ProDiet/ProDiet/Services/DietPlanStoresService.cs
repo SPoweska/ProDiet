@@ -59,6 +59,29 @@ namespace ProDiet.Services
             }
         }
 
+        public async Task<DietPlan> GetDietPlanSummary(int dietPlanId)
+        {
+            try
+            {
+                DietPlan? dietPlan = await db.DietPlans.Include(x => x.DietPlanDays).ThenInclude(x=>x.DietPlanDayMeals).ThenInclude(x=>x.MealDish).ThenInclude(x=>x.Dish).ThenInclude(x=>x.UsedProducts).ThenInclude(x=>x.Product).FirstOrDefaultAsync(x => x.DietPlanId == dietPlanId);
+
+                if (dietPlan != null)
+                {
+                    //db.Entry(dish).State = EntityState.Detached;
+                    return dietPlan;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task AddDietPlan(DietPlan dietPlan)
         {
             try

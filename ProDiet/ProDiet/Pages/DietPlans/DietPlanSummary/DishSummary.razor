@@ -50,7 +50,7 @@
                             </thead>
                             <tbody>
 
-                            @foreach (var usedProduct in usedProducts)
+                            @foreach (var usedProduct in _mealDish.Dish.UsedProducts)
                             {
                                 <tr>
                                     <td>@usedProduct.Product.ProductName</td>
@@ -92,15 +92,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Thread.Sleep(500);
+        //Thread.Sleep(500);
 
-        if (_mealDish.Dish.UsedProducts.Count > 0)
-        {
-            foreach (var usedProduct in _mealDish.Dish.UsedProducts)
-            {
-                usedProducts.Add(usedProduct);
-            }
-        }
+        //if (_mealDish.Dish.UsedProducts.Count > 0)
+        //{
+        //    foreach (var usedProduct in _mealDish.Dish.UsedProducts)
+        //    {
+        //        usedProducts.Add(usedProduct);
+        //    }
+        //}
         await base.OnInitializedAsync();
     }
 

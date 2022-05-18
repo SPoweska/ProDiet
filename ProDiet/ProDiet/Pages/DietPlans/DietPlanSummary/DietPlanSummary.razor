@@ -65,7 +65,7 @@
         if (_checkOwner==true)
         {
             _patient = await iPatientStoresService.GetPatientData(PatientId);
-            _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
+            _dietPlan = await iDietPlanStoresService.GetDietPlanSummary(DietPlanId);
         }        
         
         await base.OnInitializedAsync();

@@ -197,20 +197,25 @@
         _dish.Fats = 0;
         _dish.Calories = 0;
         _dish.Fiber = 0;
-        _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
-        _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
-        _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
-        _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
-
-        if (_dish.UsedProducts.Sum(x => x.Fiber)!=null)
+        if (_dish.UsedProducts.Count>1)
         {
-            _dish.Fiber = 0;
-        }
-        else
-        {
-            _dish.Fiber = _dish.UsedProducts.Sum(x => x.Fiber);
+            _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
+            _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
+            _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
+            _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
+            if (_dish.UsedProducts.Sum(x => x.Fiber)!=null)
+            {
+                _dish.Fiber = 0;
+            }
+            else
+            {
+                _dish.Fiber = _dish.UsedProducts.Sum(x => x.Fiber);                
 
+            }
         }
+        
+
+        
         
     }
 

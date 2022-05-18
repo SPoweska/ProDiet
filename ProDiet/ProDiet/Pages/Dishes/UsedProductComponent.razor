@@ -112,6 +112,7 @@
         usedProduct.Carbohydrates =(selectedProduct.Carbohydrates * usedProduct.Quantity) / 100 ;
         usedProduct.Fats = (selectedProduct.Fats * usedProduct.Quantity) / 100;
         usedProduct.Proteins =(selectedProduct.Proteins * usedProduct.Quantity) / 100;
+        usedProduct.Fiber =(selectedProduct.Fiber * usedProduct.Quantity) / 100;
         usedProduct.Calories = (selectedProduct.Calories * usedProduct.Quantity) / 100;
         await this.InvokeAsync(StateHasChanged);
         await DataChange();
