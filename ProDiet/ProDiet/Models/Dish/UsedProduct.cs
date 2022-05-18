@@ -23,7 +23,7 @@ namespace ProDiet.Models
         public float Fats { get; set; }
         [Required]
         public float Proteins { get; set; }
-        public float? Fiber { get; set; }
+        public float Fiber { get; set; }
         [Required]
         public float Calories { get; set; }
 

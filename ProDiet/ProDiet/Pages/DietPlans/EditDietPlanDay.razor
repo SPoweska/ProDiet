@@ -173,14 +173,15 @@
             _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
             _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
             _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
-            if (_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber)==0)
-            {
-                _dietPlanDay.Fiber = 0;
-            }
-            else
-            {
-                _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
-            } 
+            _dietPlanDay.Fiber = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber), 2 , MidpointRounding.AwayFromZero);
+            //if (_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber)==0)
+            //{
+            //    _dietPlanDay.Fiber = 0;
+            //}
+            //else
+            //{
+            //    _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
+            //} 
         }
         if (_dietPlanDay.DietPlanDayMeals.Count==1)
         {
@@ -188,14 +189,15 @@
             _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
             _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
             _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
-            if (_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber)==0)
-            {
-                _dietPlanDay.Fiber = 0;
-            }
-            else
-            {
-                _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
-            }  
+            _dietPlanDay.Fiber = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber), 2 , MidpointRounding.AwayFromZero);
+            //if (_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber)==0)
+            //{
+            //    _dietPlanDay.Fiber = 0;
+            //}
+            //else
+            //{
+            //    _dietPlanDay.Fiber = _dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber);
+            //}  
         }
 
 

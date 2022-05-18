@@ -47,9 +47,9 @@
                             <td>@_dish.Fats</td>
                             <td>@_dish.Proteins</td>
 
-                           @* <td>@_dish.Fiber</td>*@
+                            <td>@_dish.Fiber</td>
 
-                            <td>4,2</td>
+                            
                         </tr>
                         </tbody>
                     </table>
@@ -138,10 +138,12 @@
         _dish.Carbohydrates = 0;
         _dish.Fats = 0;
         _dish.Calories = 0;
+        _dish.Fiber = 0;
         _dish.Calories = MathF.Round(_dish.UsedProducts.Sum(x => x.Calories),2, MidpointRounding.AwayFromZero);
         _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
         _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
         _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
+        _dish.Fiber = MathF.Round(_dish.UsedProducts.Sum(x => x.Fiber),2, MidpointRounding.AwayFromZero);
         
 
     }

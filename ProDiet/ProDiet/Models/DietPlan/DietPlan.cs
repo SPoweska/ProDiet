@@ -26,7 +26,7 @@ namespace ProDiet.Models.DietPlan
         public float DailyFats { get; set; }
         [Required]
         public float DailyProteins { get; set; }
-        public float? DailyFiber { get; set; }
+        public float DailyFiber { get; set; }
         [Required]
         public float DailyCalories { get; set; }
 
