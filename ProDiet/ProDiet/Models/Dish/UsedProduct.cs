@@ -27,5 +27,10 @@ namespace ProDiet.Models
         [Required]
         public float Calories { get; set; }
 
+        public UsedProduct ShallowCopy()
+        {
+            return (UsedProduct)this.MemberwiseClone();
+        }
+
     }
 }

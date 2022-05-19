@@ -221,6 +221,12 @@
         {
             _dish = await iDishStoresService.GetDish(_dish.DishId);
             selectedDish = _dish.ShallowCopy();
+            var zm = new List<UsedProduct>();
+            foreach (var product in _dish.UsedProducts)
+            {
+                zm.Add(product.ShallowCopy());
+            }
+            selectedDish.UsedProducts = zm;
         }
         _productsList = await iProductStoresService.GetAllProducts();
         allDishesList = await iDishStoresService.GetAllDishes();
@@ -237,20 +243,28 @@
         var id = userManager.GetUserId(user);
         if (_dish != selectedDish)
         {
-            _dish.DishId = 0;
-            _dish.CreatedBy = id;
-            _dish.CreatedAt = DateTime.Now;
-            if (_dish.UsedProducts.Count>1)
+            var zm2 = new Dish();
+            zm2 = _dish.ShallowCopy();
+
+            var zm3 = new List<UsedProduct>();
+            foreach (var product in _dish.UsedProducts)
             {
-                foreach (var usedProduct in _dish?.UsedProducts)
-                {
-                    usedProduct.DishId = 0;
-                    _dish.UsedProducts.Add(usedProduct);
-                }
+                var temp = product.ShallowCopy();
+                temp.UsedProductId = 0;
+                zm3.Add(temp);
             }
+            zm2.UsedProducts = zm3;
 
-
-            _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
+            zm2.DishId = 0;
+            zm2.CreatedAt = DateTime.Now;
+            zm2.CreatedBy = id;
+            _dish.CreatedBy = id;            
+            _dish.CreatedAt = DateTime.Now;
+            _dish.DishId = await iDishStoresService.AddDishReturnId(zm2);
+        }
+        else
+        {
+            _dish = await iDishStoresService.GetDish(_dish.DishId);
         }
         mealDish.DishId = _dish.DishId;
         mealDish.Calories = _dish.Calories;
@@ -264,7 +278,7 @@
         mealDishId = await iDietPlanStoresService.UpdateMealDish(mealDish);
 
         Submit();
-
+        
     }
 
 

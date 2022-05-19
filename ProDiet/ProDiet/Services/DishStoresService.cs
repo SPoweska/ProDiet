@@ -32,9 +32,9 @@ namespace ProDiet.Services
         {
             try
             {
-                await db.Dishes.AddAsync(dish);
+                db.Dishes.Add(dish);
                 await db.SaveChangesAsync();
-                return dish.DishId; 
+                return dish.DishId;
             }
             catch (Exception ex)
             {
