@@ -110,6 +110,8 @@ else
         if (resultDishId!=null)
         {
             await Reload();
+            var currentUri= navigationManager.Uri;
+            navigationManager.NavigateTo(currentUri,true);
         }
 
     }

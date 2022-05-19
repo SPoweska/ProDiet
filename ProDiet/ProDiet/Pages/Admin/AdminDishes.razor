@@ -1,0 +1,111 @@
+﻿@page "/admindishes"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Pages.Components
+@using ProDiet.Pages.Dishes
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IProductStoresService iProductStoresService
+@inject IDishStoresService iDishStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <div id="border">
+            <h3>Moje dania</h3>
+
+            @if (_dishes == null)
+            {
+                <MudButton Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" @onclick="@(() => navigationManager.NavigateTo("/dish"))">Dodaj nowe danie</MudButton>
+
+                <p> Nie dodano jeszcze żadnych dań</p>
+            }
+            else
+
+            {
+
+                <MudButton Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" @onclick="@(() => navigationManager.NavigateTo("/dish"))">Dodaj nowe danie</MudButton>
+                <div class="row">
+                    <div class="col-3">
+                        <MudTextField
+                            ValueChanged="(string s) => Search(s)"
+                            Value="SearchTerm"
+                            Label="Wyszukaj danie"/>
+                    </div>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Kcal</th>
+                        <th>Węglowodany</th>
+                        <th>Tłuszcz</th>
+                        <th>Białko</th>
+                        <th>Liczba porcji</th>
+                        <th>Rodzaj dania</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var _dish in _filteredDishes)
+                    {
+                        <tr>
+                            <td>@_dish.DishName</td>
+                            <td>@_dish.Calories</td>
+                            <td>@_dish.Carbohydrates</td>
+                            <td>@_dish.Fats</td>
+                            <td>@_dish.Proteins</td>
+                            <td>@_dish.Servings</td>
+                            <td>@_dish.MealType</td>
+                            <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => OpenDialogDishInfo(_dish.DishId)"> Wyświetl danie</MudButton>
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Info" @onclick="@(() => navigationManager.NavigateTo($"/mydishes/editdish/{_dish.DishId}"))"> Edytuj danie</MudButton>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Nie masz dostępu do tej strony</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private List<ProDiet.Models.Dish> _dishes= new List<Models.Dish>();
+
+    private string SearchTerm { get; set; } = "";
+
+    private List<ProDiet.Models.Dish> _filteredDishes { get; set; }=new List<Models.Dish>();
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dishes = await iDishStoresService.GetAllDishes();
+        _filteredDishes = _dishes;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Search( string term)
+    {
+        SearchTerm = term;
+        _filteredDishes = _dishes.Where(x => x.DishName.ToLower().Contains(SearchTerm.ToLower())).ToList();
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenDialogDishInfo(int dishId)
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters() {["dishId"] = dishId};
+        var dialog=DialogService.Show<SingleDish>("Informacje o daniu",parameters, closeOnEscapeKey);       
+
+    }
+
+}

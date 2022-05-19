@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.Pkcs;
 using Microsoft.EntityFrameworkCore;
 using ProDiet.Data;
+using ProDiet.Models;
 using ProDiet.Models.DietPlan;
 
 namespace ProDiet.Services
@@ -239,25 +241,6 @@ namespace ProDiet.Services
                     db.Entry(dayMeal).State = EntityState.Modified;
                 }
 
-                //foreach (var MealDish in dayMeal.MealDish)
-                //{
-                //    if (MealDish.MealDishId != 0)
-                //    {
-                //        db.Entry(MealDish).State = EntityState.Modified;
-                //    }
-                //    else
-                //    {
-                //        db.Entry(MealDish).State = EntityState.Added;
-
-                //    }
-
-                //}
-                //var idsOfMealDishes = dayMeal.MealDish.MealDishId;
-                //var mealDishesToDelete = await db.MealDishes.
-                //    Where(x => !idsOfMealDishes
-                //        == x.MealDishId && x.MealId == dayMeal.MealId).ToListAsync();
-
-                //db.RemoveRange(mealDishesToDelete);
                 await db.SaveChangesAsync();
                 return dayMeal;
 
@@ -269,30 +252,6 @@ namespace ProDiet.Services
             }
 
         }
-
-        //public async Task<DayMeal> GetDayMealDish(int mealDishId)
-        //{
-        //    try
-        //    {
-        //        DayMeal DayMeal =
-        //            await db.DayMeals.Include(x => x.MealDish).FirstOrDefaultAsync(x => x.MealId == mealId);
-
-        //        if (DayMeal != null)
-        //        {
-        //            //db.Entry(dish).State = EntityState.Detached;
-        //            return DayMeal;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentNullException();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //}
 
         public async Task<int> UpdateMealDish(MealDish mealDish)
         {
@@ -319,5 +278,7 @@ namespace ProDiet.Services
             }
 
         }
+
+        
     }
 }

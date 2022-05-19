@@ -1,0 +1,120 @@
+﻿@page "/adminproducts"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity
+@using ProDiet.Data.Enums
+@using ProDiet.Models
+@using ProDiet.Pages.Components
+@using ProDiet.Pages.Products
+@using ProDiet.Services
+@inject UserManager<IdentityUser> userManager
+@inject IProductStoresService iProductStoresService
+@inject IHttpContextAccessor httpContextAccessor
+@inject NavigationManager navigationManager
+@inject IDialogService DialogService
+
+<div id="border">
+<h3>Moje produkty</h3>
+
+<MudButton @onclick="OpenDialog"  Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add">
+    Dodaj nowy produkt
+</MudButton>
+
+@if (_products == null)
+{
+    <p> Nie dodałeś jeszcze żadnych produktów</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-3">
+            <MudTextField
+                ValueChanged="(string s) => Search(s)"
+                Value="SearchTerm"
+                Label="Wyszukaj produkty"/>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Kaloryka</th>
+            <th>Węglowodany</th>
+            <th>Tłuszcz</th>
+            <th>Białko</th>
+            <th>Błonnik</th>
+            <th>Kategoria</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var _product in _filteredProducts)
+        {
+            <tr>
+                <td>@_product.ProductName</td>
+                <td>@_product.Calories</td>
+                <td>@_product.Carbohydrates</td>
+                <td>@_product.Fats</td>
+                <td>@_product.Proteins</td>
+                <td>@_product.Fiber</td>
+                <td>@_product.ProductCategory</td>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Info" @onclick="@(()=>navigationManager.NavigateTo($"/products/edit/{_product.ProductId}"))"> Edytuj produkt</MudButton>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+}
+</div>
+
+@code {
+    private List<Models.Product> _products;
+    private Models.Product _product;
+    
+
+    public bool AddProductDialogOpen { get; set; }
+
+    private string SearchTerm { get; set; } = "";
+
+    private List<ProDiet.Models.Product> _filteredProducts { get; set; }=new List<Models.Product>();
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _products = await iProductStoresService.GetAllProducts();
+        _filteredProducts = _products;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Reload()
+    {
+        await this.InvokeAsync(StateHasChanged);
+        _products = await iProductStoresService.GetAllProducts();
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Search( string term)
+    {
+        SearchTerm = term;
+        _filteredProducts = _products.Where(x => x.ProductName.ToLower().Contains(SearchTerm.ToLower())).ToList();
+        await this.InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OpenDialog()
+    {    
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+
+        var dialog=DialogService.Show<ProductsCreateDialog>("Dodaj nowy produkt", closeOnEscapeKey);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await Reload();
+            var currentUri= navigationManager.Uri;
+            navigationManager.NavigateTo(currentUri,true);
+        }
+
+    }
+}
+
+

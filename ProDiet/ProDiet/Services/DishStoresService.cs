@@ -156,5 +156,28 @@ namespace ProDiet.Services
                 throw ex;
             }
         }
+
+        public async Task<bool> CheckOwner(string ownerId, int dishId)
+        {
+            try
+            {
+                Dish? dish = await db.Dishes.FirstAsync(x => x.DishId == dishId);
+
+                if (dish.CreatedBy != ownerId)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

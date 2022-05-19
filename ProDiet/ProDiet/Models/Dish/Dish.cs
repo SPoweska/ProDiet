@@ -31,6 +31,9 @@ namespace ProDiet.Models
         public string MealType { get; set; }
 
 
-
+        public Dish ShallowCopy()
+        {
+            return (Dish)this.MemberwiseClone();
+        }
     }
 }

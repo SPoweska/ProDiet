@@ -12,7 +12,7 @@
 @using Microsoft.AspNetCore.Components
 
 
-<div class="row">
+<div class="row" @onclick="() =>Calculate()">
     
     <div class="col-8">
         <div id="border">
@@ -31,7 +31,7 @@
                     <MudCard>
                         <p></p>
                         <h5>Podsumowanie dnia:</h5>
-                        <div class="row-cols-6">
+                        <div class="row-cols-6" @onclick="Calculate">
                             <div class="col-6">
                                 <table class="table table-bordered">
                                     <thead>
@@ -148,6 +148,7 @@
         {
             _dietPlanDay = await iDietPlanStoresService.GetDietPlanDay(DietPlanDayId);
             _dietPlan = await iDietPlanStoresService.GetDietPlan(DietPlanId);
+            await Calculate();
         }
 
         await base.OnInitializedAsync();
@@ -158,37 +159,42 @@
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
         _dietPlanDay.DietPlanDayMeals.Add(new DayMeal(){CreatedBy = userId, CreatedAt = DateTime.Now});
         await iDietPlanStoresService.UpdateDietPlanDay(_dietPlanDay);
+        await Calculate();
+        await this.InvokeAsync(StateHasChanged);
     }
 
-    private void Calculate()
-    {
-        _dietPlanDay.Calories = 0;
-        _dietPlanDay.Fats = 0;
-        _dietPlanDay.Carbohydrates = 0;
-        _dietPlanDay.Proteins = 0;
-        _dietPlanDay.Fiber = 0;
-        if (_dietPlanDay.DietPlanDayMeals.Any()&&_dietPlanDay.DietPlanDayMeals.Any(x=>x.MealDish?.Dish!=null))
+    private async Task Calculate()
+    {        
+        if (_dietPlanDay.DietPlanDayMeals.Any())
         {
-            
-            _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
-            _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
-            _dietPlanDay.Fiber = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber), 2 , MidpointRounding.AwayFromZero);
-            
+            _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Where(x => x.MealDish?.Dish != null).Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
+            _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Where(x => x.MealDish?.Dish != null).Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
+            _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Where(x => x.MealDish?.Dish != null).Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
+            _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Where(x => x.MealDish?.Dish != null).Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
+            _dietPlanDay.Fiber = MathF.Round(_dietPlanDay.DietPlanDayMeals.Where(x => x.MealDish?.Dish != null).Sum(x => x.MealDish.Fiber), 2 , MidpointRounding.AwayFromZero);
+            await this.InvokeAsync(StateHasChanged);
+
         }
-        //if (_dietPlanDay.DietPlanDayMeals.Count==1)
-        //{
-        //    _dietPlanDay.Calories = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Calories),2, MidpointRounding.AwayFromZero);
-        //    _dietPlanDay.Fats = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fats), 2, MidpointRounding.AwayFromZero);
-        //    _dietPlanDay.Carbohydrates = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Carbohydrates), 2, MidpointRounding.AwayFromZero);
-        //    _dietPlanDay.Proteins = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Proteins), 2 , MidpointRounding.AwayFromZero);
-        //    _dietPlanDay.Fiber = MathF.Round(_dietPlanDay.DietPlanDayMeals.Sum(x => x.MealDish.Fiber), 2 , MidpointRounding.AwayFromZero);
-        //}
-
+        if (_dietPlanDay.DietPlanDayMeals.Count==0)
+        {
+            _dietPlanDay.Calories = 0;
+            _dietPlanDay.Fats = 0;
+            _dietPlanDay.Carbohydrates = 0;
+            _dietPlanDay.Proteins = 0;
+            _dietPlanDay.Fiber = 0;
+        }
+       
 
         
         
+    }
+
+    private async Task Remove(int index)
+    {
+        _dietPlanDay.DietPlanDayMeals.RemoveAt(index);
+        await Calculate();
+        await this.InvokeAsync(StateHasChanged);
+
     }
 
 

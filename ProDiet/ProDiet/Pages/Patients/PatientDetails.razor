@@ -117,7 +117,7 @@ else
                     <tbody>
                     @foreach (var dietPlan in _patient.DietPlans)
                     {
-                        <tr>
+                        <tr @onclick="() => OpenDietPlan(dietPlan.DietPlanId)">
                             <td>@dietPlan.DietPlanName</td>
                             <td>@dietPlan.DailyCalories</td>
                             <td>@dietPlan.PlanDaysCount</td>
@@ -149,6 +149,11 @@ else
     public void OpenInterview()
     {
         navigationManager.NavigateTo($"/patientdetails/{PatientId}/Interview");
+    }
+
+    public async Task OpenDietPlan(int id)
+    {
+        navigationManager.NavigateTo($"/patientdetails/{PatientId}/DietPlanSummary/{id}");
     }
     
     public void OpenDietPlanCreator()

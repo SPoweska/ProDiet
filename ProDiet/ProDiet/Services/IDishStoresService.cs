@@ -11,5 +11,6 @@ namespace ProDiet.Services
         public Task DeleteDish(int dishId);
         public Task<Dish> GetDish(int dishId);
         public Task<int> AddDishReturnId(Dish dish);
+        public Task<bool> CheckOwner(string ownerId, int dishId);
     }
 }

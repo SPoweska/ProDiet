@@ -291,13 +291,14 @@ else
         var user = httpContextAccessor.HttpContext.User;
         userId = userManager.GetUserId(user);
         _checkOwner= await iProductStoresService.CheckOwner(userId, ProductId);
-        if (_checkOwner)
+        if (_checkOwner==true)
         {
             _product = await iProductStoresService.GetProductData(ProductId);
         }
-        else
+        if (user.IsInRole("Admin"))
         {
-            _product = null;
+            _product = await iProductStoresService.GetProductData(ProductId);             
+
         }
 
 

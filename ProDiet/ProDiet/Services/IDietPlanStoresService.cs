@@ -1,4 +1,5 @@
-﻿using ProDiet.Models.DietPlan;
+﻿using ProDiet.Models;
+using ProDiet.Models.DietPlan;
 
 namespace ProDiet.Services
 {

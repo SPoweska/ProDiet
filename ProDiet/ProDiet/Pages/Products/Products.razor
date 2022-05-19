@@ -90,6 +90,7 @@ else
 
     private async Task Reload()
     {
+        await this.InvokeAsync(StateHasChanged);
         _products = await iProductStoresService.GetAllProducts();
         await this.InvokeAsync(StateHasChanged);
     }
@@ -106,10 +107,12 @@ else
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
 
         var dialog=DialogService.Show<ProductsCreateDialog>("Dodaj nowy produkt", closeOnEscapeKey);
-        var resultDishId = await dialog.Result;
-        if (resultDishId!=null)
+        var result = await dialog.Result;
+        if (!result.Cancelled)
         {
             await Reload();
+            var currentUri= navigationManager.Uri;
+            navigationManager.NavigateTo(currentUri,true);
         }
 
     }

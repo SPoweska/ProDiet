@@ -19,7 +19,7 @@
 <h3>Edytuj danie</h3>
 @if (_dish == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Nie możesz edytowac tego dania</em></p>
 }
 else
 {
@@ -132,6 +132,7 @@ else
     
     private ProDiet.Models.Dish _dish;
     private List<Product> _productsList;
+    private bool CheckOwner= false;
 
 
     private void Cancel()
@@ -141,9 +142,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _dish = await iDishStoresService.GetDish(dishId);
+        var user = httpContextAccessor.HttpContext.User;
+        var id = userManager.GetUserId(user);
+        CheckOwner = await iDishStoresService.CheckOwner(id, dishId);
+        if (CheckOwner==true)
+        {
+            _dish = await iDishStoresService.GetDish(dishId);
 
-        _productsList = await iProductStoresService.GetAllProducts();
+            _productsList = await iProductStoresService.GetAllProducts();
+        }
+        if (user.IsInRole("Admin"))
+        {
+            _dish = await iDishStoresService.GetDish(dishId);
+
+            _productsList = await iProductStoresService.GetAllProducts();             
+
+        }
 
 
 
@@ -151,11 +165,6 @@ else
         await base.OnInitializedAsync();
     }
 
-    //private async Task<Product> SelectedProductDataLoad(int selectedProductId)
-    //{
-    //    Product selectedProduct = await iProductStoresService.GetProductData(selectedProductId);
-    //    return selectedProduct;
-    //}
 
     private void OnProductsListChanged()
     {
@@ -169,20 +178,12 @@ else
             _dish.Proteins = MathF.Round(_dish.UsedProducts.Sum(x => x.Proteins),2, MidpointRounding.AwayFromZero);
             _dish.Carbohydrates = MathF.Round(_dish.UsedProducts.Sum(x => x.Carbohydrates),2, MidpointRounding.AwayFromZero);
             _dish.Fats = MathF.Round(_dish.UsedProducts.Sum(x => x.Fats),2, MidpointRounding.AwayFromZero);
-            //foreach (var usedProduct in _dish.UsedProducts)
-            //{
-            //    _dish.Proteins += (usedProduct.Proteins)/4;
-            //    _dish.Carbohydrates += ((usedProduct.Carbohydrates * usedProduct.Quantity) / 100)/4;
-            //    _dish.Fats += ((usedProduct.Fats * usedProduct.Quantity) / 100)/9;
-            //}
-            //_dish.Calories = (_dish.Carbohydrates * 4) + (_dish.Proteins * 4) + (_dish.Fats * 9);
+
         }        
     }
 
     private async Task OnValidSubmit()
     {
-
-
         var user = httpContextAccessor.HttpContext.User;
         var id = userManager.GetUserId(user);
         OnProductsListChanged();

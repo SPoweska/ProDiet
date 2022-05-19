@@ -72,7 +72,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-
                             <h9>Lista składników:</h9>
                             <MudCard>
                                 <MudButton
@@ -169,7 +168,6 @@
     public List<Dish> allDishesList { get; set; } = new List<Dish>();
     public List<Dish> userDishesList { get; set; } = new List<Dish>();
     public Dish selectedDish { get; set; } = new Dish() {DishId = 0};
-    public Dish notEditedDish { get; set; } = new Dish() {DishId = 0};
     public int mealDishId { get; set; }
     
 
@@ -222,9 +220,7 @@
         else
         {
             _dish = await iDishStoresService.GetDish(_dish.DishId);
-    //notEditedDish = await iDishStoresService.GetDish(_dish.DishId);
-            
-            selectedDish = _dish;
+            selectedDish = _dish.ShallowCopy();
         }
         _productsList = await iProductStoresService.GetAllProducts();
         allDishesList = await iDishStoresService.GetAllDishes();
@@ -244,13 +240,7 @@
             _dish.DishId = 0;
             _dish.CreatedBy = id;
             _dish.CreatedAt = DateTime.Now;
-            _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
-        }
-        if (_dish != notEditedDish)
-        {
-            _dish.DishId = 0;
-            _dish.CreatedBy = id;
-            _dish.CreatedAt = DateTime.Now;
+            _dish.UsedProducts = _dish.UsedProducts;
             _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
         }
         mealDish.DishId = _dish.DishId;
@@ -287,7 +277,7 @@
     public async Task OnDishSelected(int i)
     {
         selectedDish = await iDishStoresService.GetDish(i);
-        _dish = selectedDish;
+        _dish = selectedDish.ShallowCopy();
         await this.InvokeAsync(StateHasChanged);
     }
 

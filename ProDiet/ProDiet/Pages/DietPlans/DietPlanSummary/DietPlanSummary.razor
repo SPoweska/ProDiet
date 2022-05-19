@@ -3,18 +3,20 @@
 @using ProDiet.Models
 @using ProDiet.Models.DietPlan
 @using ProDiet.Services
+@using System.Security.Cryptography.X509Certificates
 @inject UserManager<IdentityUser> userManager
 @inject IDietPlanStoresService iDietPlanStoresService
 @inject IPatientStoresService iPatientStoresService
 @inject IHttpContextAccessor httpContextAccessor
 @inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
 
 
 
 
         @if (_dietPlan != null)
         {
-            <MudButton Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" >Generuj PDF</MudButton>
+            <MudButton Color="Color.Success" Variant="Variant.Filled" @onclick="Print" Class="HideWhenPrint" StartIcon="@Icons.Filled.Add" >Generuj PDF</MudButton>
             <div>
                 <h2>Jadłospis dla pacjenta: @_patient.FirstName @_patient.LastName</h2>
                 <h4>Nazwa jadłospisu: @_dietPlan.DietPlanName</h4>
@@ -27,13 +29,34 @@
                     {
                         <MudCard Outlined="true">
                             <div style="padding: 30px">
-                            <DaySummary _day="day"></DaySummary>
+                                <DaySummary _day="day"></DaySummary>
                             </div>
                         </MudCard>
 
                     }
                 }
+                <MudCard Outlined="true">
+                <h4>Lista zakupów:</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa produktu</th>
+                        <th>Ilość(g)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var product in ShoppingList)
+                    {
+                        <tr>
+                            <td>@product.Product.ProductName</td>
+                            <td>@product.Quantity</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                </MudCard>
             </div>
+            
 
         }
 
@@ -56,6 +79,7 @@
 
     private bool _checkOwner = false;
     private string? userId{ get; set; }
+    private List<UsedProduct> ShoppingList { get; set; } = new List<UsedProduct>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,9 +90,40 @@
         {
             _patient = await iPatientStoresService.GetPatientData(PatientId);
             _dietPlan = await iDietPlanStoresService.GetDietPlanSummary(DietPlanId);
+            Thread.Sleep(300);
+            ShoppingList = GetShoppingList(_dietPlan);
         }        
         
         await base.OnInitializedAsync();
     }
+
+    private void Print()
+    {
+        jsRuntime.InvokeVoidAsync("Print");
+    }
+
+    private List<UsedProduct> GetShoppingList (DietPlan dietPlan)
+    {
+        var zm= dietPlan.DietPlanDays.SelectMany(x => x.DietPlanDayMeals.Where(z=> z.MealDish != null).SelectMany(y => y.MealDish.Dish.UsedProducts)).ToList();
+
+        var tempList = new List<UsedProduct>();
+
+        foreach (var prod in zm.Select(x => x.Product).Distinct())
+        {
+            var tempProduct = zm.Where(x => x.Product.ProductId == prod.ProductId);
+            tempList.Add(new UsedProduct
+            {
+                ProductId = prod.ProductId,
+                Quantity = tempProduct.Sum(x => x.Quantity),
+                Product = prod
+            });
+
+        }
+        return tempList;
+    }
+
+
+   
+
 
 }

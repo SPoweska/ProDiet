@@ -7,6 +7,7 @@
 @inject IDishStoresService iDishStoresService;
 @inject IDietPlanStoresService iDietPlanStoresService;
 @inject IDialogService DialogService
+@inject NavigationManager navigationManager
 
 @*Edycja posiłku*@
 
@@ -170,6 +171,8 @@
                 _dayMeal.MealDish=mealDish;
                 await iDietPlanStoresService.UpdateDayMeal(_dayMeal);
                 await ReloadData();
+                var currentUri= navigationManager.Uri;
+                navigationManager.NavigateTo(currentUri,true);
 
             }
         }

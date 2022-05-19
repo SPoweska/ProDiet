@@ -68,31 +68,12 @@
 
     [Parameter]
     public ProDiet.Models.Patient patient { get; set; }
-    //public ProDiet.Models.Patient patient { get; set; }
-
-    //[Parameter]
-    //public int patientId { get; set; }
+ 
 
     public BodyMeasurement bodyMeasurement;
 
     [Parameter]
     public EventCallback<bool> OnClose { get; set; }
-
-    //public void ShowModal(RenderFragment content)
-    //{
-    //    StateHasChanged();
-    //}
-
-    //private Task ModalOk()
-    //{
-    //    return OnClose.InvokeAsync(true);
-
-    //}
-
-    //private Task ModalCancel()
-    //{
-    //    return OnClose.InvokeAsync(false);
-    //}
 
     protected override async Task OnInitializedAsync()
     {
@@ -174,7 +155,6 @@
         await iPatientStoresService.UpdatePatient(patient);
         Thread.Sleep(500);
         Submit();
-    //await ModalOk();
 
 
     }
