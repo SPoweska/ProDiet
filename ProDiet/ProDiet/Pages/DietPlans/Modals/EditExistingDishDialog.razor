@@ -240,7 +240,16 @@
             _dish.DishId = 0;
             _dish.CreatedBy = id;
             _dish.CreatedAt = DateTime.Now;
-            _dish.UsedProducts = _dish.UsedProducts;
+            if (_dish.UsedProducts.Count>1)
+            {
+                foreach (var usedProduct in _dish?.UsedProducts)
+                {
+                    usedProduct.DishId = 0;
+                    _dish.UsedProducts.Add(usedProduct);
+                }
+            }
+
+
             _dish.DishId = await iDishStoresService.AddDishReturnId(_dish);
         }
         mealDish.DishId = _dish.DishId;

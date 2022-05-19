@@ -7,6 +7,25 @@
         </button>
     </div>
 </div>
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <div class="@NavMenuCssClass"  @onclick="ToggleNavMenu" >
+            <nav class="flex-column">
+                <div>Menu administratora</div>
+                <div class="nav-item px-3" style="color: white">
+                    <NavLink class="nav-link" href="adminproducts">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Zarządzaj produktami
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3" style="color: white">
+                    <NavLink class="nav-link" href="admindishes">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Zarządzaj daniami
+                    </NavLink>
+                </div>
+            </nav>
+        </div>
+    </Authorized>
+</AuthorizeView>
 <AuthorizeView>
     <Authorized>
         <div class="@NavMenuCssClass"  @onclick="ToggleNavMenu" >
