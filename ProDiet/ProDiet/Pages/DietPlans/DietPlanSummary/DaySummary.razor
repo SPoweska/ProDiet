@@ -78,12 +78,7 @@
     protected override async Task OnInitializedAsync()
     {
         cultureInfo = new System.Globalization.CultureInfo("pl-PL");
-        //dayId = _day.DietPlanDayId;
-        //if (dayId!=0)
-        //{
-        //    Thread.Sleep(500);
-        //    _day = await iDietPlanStoresService.GetDietPlanDay(dayId);
-        //}
+        
         await base.OnInitializedAsync();
     }
 

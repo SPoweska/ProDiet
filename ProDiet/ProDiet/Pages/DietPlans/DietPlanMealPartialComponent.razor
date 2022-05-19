@@ -26,11 +26,11 @@
                     </MudSelect>
                 </div>
             </div>
-            <MudCard Outlined="true">
+            <MudCard  Outlined="true">
             
                 @if (_dayMeal.MealDish?.Dish != null)
                 {
-                    <div >
+                    <div @onclick="() => OpenDialogSearchDish(userId,_dayMeal.MealDish.Dish)">
                         <div class="row">
                             <div class="col-3">
                                 <MudTextField @bind-Value="_dayMeal.MealDish.Dish.DishName"
