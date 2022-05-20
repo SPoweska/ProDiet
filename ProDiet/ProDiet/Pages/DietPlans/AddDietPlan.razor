@@ -212,12 +212,102 @@
             _patient = await iPatientStoresService.GetPatientData(PatientId);
             _dietPlan = new DietPlan() {PatientId = _patient.Id, PlanDaysCount = planDaysCount};
 
-        }        
+        }
+        if (_patient.BodyMeasurements!=null&& _patient.Interview.PALActivity!=null)
+        {
+            await CalculatePPM();
+            await CalculateCPM();
+    //if (_patient.Gender=="Kobieta")
+    //{
+    //    var ppm=665,09+(9,56*_patient.Weight)+(1,85*_patient.Height)-
+    //}
+
+        }
         
         await base.OnInitializedAsync();
     }
-    
 
+    private static int CalculateAge(DateTime dateOfBirth)  
+    {  
+        int age = 0;  
+        age = DateTime.Now.Year - dateOfBirth.Year;  
+        if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)  
+            age = age - 1;  
+  
+        return age;  
+    }
+
+    public float basex;
+    public float basew;
+    public float baseh;
+    public float basea;
+
+    public async Task CalculatePPM()
+    {
+        if (_patient.Height!=0 & _patient.Weight!=0)
+        {
+            int Age = CalculateAge(_patient.BirthDate);
+            if (_patient.Gender == "Kobieta")
+            {
+                float basex = 655f;
+                basew = _patient.Weight * 9.56f;
+                baseh = _patient.Height * 1.85f;
+                basea = (float)Age * 4.67f;
+                float ppm=basex+baseh+basew-basea;
+                _patient.PPM=ppm;
+            }
+            if (_patient.Gender == "Mężczyzna")
+            {
+                float basex = 66.47f;
+                basew = _patient.Weight * 13.75f;
+                baseh = _patient.Height * 5f;
+                basea = (float)Age * 6.75f;
+                float ppm=basex+baseh+basew-basea;
+                _patient.PPM=ppm;
+            }
+        }
+    }
+    public float cpm;
+    public async Task CalculateCPM()
+    {
+        
+        if (_patient.Interview.PALActivity == 1)
+        {
+            var cpm = _patient.PPM * 1.25f;
+            _patient.CPM = cpm;
+        }
+        if (_patient.Interview.PALActivity == 2)
+        {
+            var cpm = _patient.PPM * 1.4f;
+            _patient.CPM = cpm;
+        }
+        if (_patient.Interview.PALActivity == 3)
+        {
+            var cpm = _patient.PPM * 1.6f;
+            _patient.CPM = cpm;
+        }
+        if (_patient.Interview.PALActivity == 4)
+        {
+            var cpm = _patient.PPM * 1.75f;
+            _patient.CPM = cpm;
+        }
+        if (_patient.Interview.PALActivity == 5)
+        {
+            var cpm = _patient.PPM * 2f;
+            _patient.CPM = cpm;
+        }
+        if (_patient.Interview.PALActivity == 5)
+        {
+            var cpm = _patient.PPM * 2.2f;
+            _patient.CPM = cpm;
+        }
+        else
+        {
+            var cpm = 2700;
+            _patient.CPM = cpm;
+        }
+        
+    }
 
     public async Task OnDayCountChanged(int dayCount)
     {

@@ -29,9 +29,9 @@ namespace ProDiet.Models
         public float Waist { get; set; }
         [Range(30, 250)]
         public float Hips { get; set; }
-        [Range(25, 300)]
+        [Range(5, 300)]
         public float TotalBodyFat { get; set; }
-        [Range(25,300 )]
+        [Range(20,300 )]
         public float TotalBodyWater { get; set; }
         [Range(25, 300)]
         public float TotalBoneMineral { get; set; }
